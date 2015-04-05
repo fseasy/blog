@@ -1,0 +1,13 @@
+<header class="sinablogHead" id="sinablogHead">
+    <div class="topArea">
+        <a class="site-title" href="{{ site.baseurl }}/">{{ site.title }}</a>
+        <div class="blogDescription" id="blogDescription">
+            {{site.description}}
+        </div>
+        <nav class="site-nav">
+            <a href="{{ "/" | prehend site.baseurl }}">首页</a>
+            <a href="{{ "/list" | prehend site.baseurl }}">目录</a>
+            <a href="{{"/me" | prehead site.baseurl }}">关于我</a>
+        </nav>
+    </div>
+</header>

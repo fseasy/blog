@@ -10,3 +10,7 @@ github_username:  memeda
 
 # Build settings
 markdown: kramdown
+exclude: [_site]
+
+paginate: 2
+

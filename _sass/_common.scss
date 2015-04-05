@@ -1,0 +1,34 @@
+
+.sinabloga{background-image:none ; background-repeat:no-repeat ; background-position: center bottom ; width:100% ; clear : both}
+.sinablogb{background-image:none; background-repeat:no-repeat ; background-position: center top ; width:100% ; clear: both}
+.sinablogHead{width:100% ; height:240px ; clear:both ; margin: 0 auto ; position:relative ; z-index:100}
+
+.topArea{position:absolute ; top:50px ; left:10px ; width:80% ; background-image:none ; background-repeat:no-repeat ; background-position:left bottom }
+
+.site-nav{float:none ; margin:40px 0 20px 0; line-height:20px }
+.site-nav a,a:visited{display:block ; float:left ; color:#3679af ; text-decoration:none }
+.site-nav a:hover{text-decoration:underline}
+.site-nav a.active{font-weight:bold}
+.site-nav >a:not(:first-child){ border-left:1px dashed #ccc ; text-align:center ; padding-left:10px ; margin-left:10px}
+.site-nav:after{clear:both ; content:"" ; height:0 ; display:table}
+.contentpanel{border:1px solid #dedede ; border-top:2px solid #3fa7cb ; background:#fff ; padding:25px 20px ; margin-bottom:10px}
+.contentpanel ul>li{ border-bottom:1px solid #f0f0f0}
+
+
+.purple-topborder{border-top-color:purple }
+.shadow{box-shadow:1px 1px 2px #ddd}
+
+
+.site-title{float:none }
+.site-title:hover {text-decoration: none }
+.blogDescription{font-family:"微软雅黑","黑体" ; font-size:10px;}
+
+
+.post-excerpt{color:gray}
+.post-excerpt{text-indent:2em}
+
+.pagination{border:1px solid #dedede ; margin:10px 0 10px 0 ; padding:10px 25px ; border-top:1px dashed #ccc ; border-bottom: 1px dashed #dedede }
+.pagination .pre{float:left ; width:20% ; text-align:left}
+.pagination .nxt{float:left ; width:20% ; text-align:right}
+.pagination .num{text-align:center; float:left ; width: 60%}
+.pagination:after{clear:both ; display:table ; height:0 ; content:"" }

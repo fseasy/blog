@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+{% include sinabloghead.html %}
+
+<body>
+<div class="sinabloga">
+    <div class="sinablogb">
+        <div class="wrapper">
+            {% include sinablogheader.html  %}
+            <div class="contentpanel">
+                <h1 class="post-title">{{ page.title }}</h1>
+                <p class="post-meta">
+                {{ page.date | date: "%b %-d, %Y"  }}
+                {% if page.author %} • {{ page.author }}{% endif %}
+                {% if page.meta %} • {{ page.meta }}{% endif %}
+                </p>
+                <article class="post-content">
+                    {{content}}
+                </article>
+            </div>
+            {% include footer.html %}
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

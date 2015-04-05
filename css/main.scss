@@ -3,7 +3,8 @@
 ---
 @charset "utf-8";
 
-
+//pre_define
+$baseurl: '{{ site.baseurl }}' ;
 
 // Our variables
 $base-font-family: Helvetica, Arial, sans-serif;
@@ -45,5 +46,7 @@ $on-laptop:        800px;
 @import
         "base",
         "layout",
-        "syntax-highlighting"
+        "syntax-highlighting",
+        "common",
+        "busy"
 ;

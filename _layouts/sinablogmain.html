@@ -1,0 +1,18 @@
+<!DOCTYPE>
+<html lang="zh_CN">
+    {% include sinabloghead.html %}
+    <body>
+        <div class="sinabloga">
+            <div class="sinablogb">
+                <div class="wrapper">
+                    {% include sinablogheader.html %}
+                    <div class="contentpanel purple-topborder shadow">
+                    {{ content }}    
+                    </div>
+                    {% include pagination.html  %}
+                    {% include sinablogfooter.html %}
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
