@@ -1,6 +1,6 @@
 ---
 layout:  sinablogpage
-title:  [电影]超能陆战队
+title:  超能陆战队
 date:  2015-04-11
 categories:  作品 电影
 ---
