@@ -1,3 +1,4 @@
+hr{margin:20px 0 ; color:#868686 ;background-color:#868686}
 
 .sinabloga{background-image:none ; background-repeat:no-repeat ; background-position: center bottom ; width:100% ; clear : both}
 .sinablogb{background-image:none; background-repeat:no-repeat ; background-position: center top ; width:100% ; clear: both}
@@ -27,6 +28,8 @@
 .post-excerpt{color:gray}
 .post-excerpt{text-indent:2em}
 
+.post-content p{text-indent:2em}
+
 .pagination{border:1px solid #dedede ; margin:10px 0 10px 0 ; padding:10px 25px ; border-top:1px solid #ccc ; border-bottom: 1px solid #dedede }
 .pagination .pre{float:left ; width:20% ; text-align:left}
 .pagination .nxt{float:left ; width:20% ; text-align:right}
@@ -49,5 +52,5 @@
 .footer-col-right{
     height:50px ;
     padding-left:40px ;
-
+    border-left:1px solid #ccc ;
 }
