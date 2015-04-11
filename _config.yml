@@ -5,12 +5,16 @@ description: > # this means to ignore newlines until "baseurl:"
    我的个人空间 
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://memeda.github.io" # the base hostname & protocol for your site
-twitter_username: memeda
-github_username:  memeda
 
 # Build settings
 markdown: kramdown
 exclude: [_site]
 
-paginate: 2
+paginate: 5
 
+#social info
+github_username:  memeda
+weibo_username:  readonlyfile
+weibo_url:  "http://www.weibo.com/readolyfile" # 之前打错了，readonlyfile少了个n，orz
+zhihu_username: 小文件
+zhihu_url:  "http://www.zhihu.com/people/readOnlyFile"
