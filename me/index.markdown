@@ -3,7 +3,7 @@ layout: sinablogpage
 title: About Me
 date: 2015-04-14
 ---
-  
+```
   To laugh is to risk appearing a fool
   To weep is to risk appearing sentimental
   To reach out for another is to risk involvement
@@ -17,8 +17,8 @@ date: 2015-04-14
   He has forfeited his freedom
   Only a person who takes risks is free
                                       --Risks , Jeffrey Kastner
-
-> 我不是一个喜欢冒险的人。但是，总是在笑，哭；想要去感受别人，想要表达自己的感情；热血的时候喜欢说些真切的感受；也曾一直有荒谬的行为想去追求爱情。
+```
+我不是一个喜欢冒险的人。但是，总是在笑，哭；想要去感受别人，想要表达自己的感情；热血的时候喜欢说些真切的感受；也曾一直有荒谬的行为想去追求爱情。
 
 **或许我是一个愿意冒险的人。**
 
