@@ -5,6 +5,8 @@ date: 2015-04-14
 ---
 
 {% highlight c++ %}
+
+    Risks -- Jeffrey Kastne
     To laugh is to risk appearing a fool
     To weep is to risk appearing sentimental
     To reach out for another is to risk involvement
@@ -17,7 +19,7 @@ date: 2015-04-14
     Chained by his certitudes , he's a slave
     He has forfeited his freedom
     Only a person who takes risks is free
-                                      --Risks , Jeffrey Kastne
+                                     
 {% endhighlight %}
 
 我不是一个喜欢冒险的人。但是，总是在笑，哭；想要去感受别人，想要表达自己的感情；热血的时候喜欢说些真切的感受；也曾一直有荒谬的行为想去追求爱情。
