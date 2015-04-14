@@ -4,7 +4,7 @@ title: About Me
 date: 2015-04-14
 ---
 
-{% highlight ruby %}
+{% highlight c++ %}
     To laugh is to risk appearing a fool
     To weep is to risk appearing sentimental
     To reach out for another is to risk involvement
