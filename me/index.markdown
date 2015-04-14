@@ -12,7 +12,7 @@ date: 2015-04-14
     To reach out for another is to risk involvement
     To expose feelings is to risk rejection
     To place your dreams before the crowd is to risk ridicule
-    To love is to risk not being loved in reture
+    To love is to risk not being loved in return
     But risks must be taken because the greatest hazard in life is to risk nothing
     The person who risks nothing , does nothing , has nothing , is nothing
     He may aviod suffering and sorrow
