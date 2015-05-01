@@ -28,7 +28,14 @@
 
 .post-content p{text-indent:2em}
 
-.pagination{border:1px solid #dedede ; margin:10px 0 10px 0 ; padding:10px 25px ; border-top:1px solid #ccc ; border-bottom: 1px solid #dedede }
+.pagination{
+    width:100% ;
+    border:1px solid #dedede ;
+    margin:10px 0 10px 0 ; 
+    padding:10px 25px ; 
+    border-top:1px solid #ccc ; 
+    border-bottom: 1px solid #dedede 
+}
 .pagination .pre{float:left ; width:20% ; text-align:left}
 .pagination .nxt{float:left ; width:20% ; text-align:right}
 .pagination .num{text-align:center; float:left ; width: 60%}
