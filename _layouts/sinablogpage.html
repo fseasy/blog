@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-
+<head>
 {% include sinabloghead.html %}
-
+</head>
 <body>
 <div class="sinabloga">
     <div class="sinablogb">
@@ -14,6 +14,12 @@
                 {{ page.date | date: "%b %-d, %Y"  }}
                 {% if page.author %} • {{ page.author }}{% endif %}
                 {% if page.meta %} • {{ page.meta }}{% endif %}
+                {% if page.tags %}
+                    {% for t in page.tags %}{{t}} {% endfor %}
+                {% endif %}
+                {% if page.categories %}
+                    {% for category in page.categories %} {{category}} {% endfor %}
+                {% endif %}
                 </p>
                 <article class="post-content">
                     {{content}}

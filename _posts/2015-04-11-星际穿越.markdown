@@ -3,9 +3,11 @@ title: 星际穿越
 date: 2015-04-11
 layout: sinablogpage
 categories: 作品 电影
+tags: 高维空间 科幻 人性 家庭与自我实现
+onewords: 波澜壮阔！星际穿越，在高维空间反思人性与价值。
 ---
 
-----
+> 星际穿越，在高维空间反思人性与价值
 
 ##概述
 
