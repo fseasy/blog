@@ -13,10 +13,10 @@
             
             {% include sinablogheader.html %}
             <div class="row">
-                <div class="col-md-3 contentpanel">
+                <div class="col-md-3 contentpanel" id="navibar">
                     Tag
                 </div>
-                <div class="col-md-offset-1 col-md-8 contentpanel">
+                <div class="col-md-offset-1 col-md-8 contentpanel" id="listcontent">
                     Content
                 </div>
             </div>
@@ -25,6 +25,44 @@
         </div>
         </div>
         {% include postdata.html %}
+        <script src="{{ "/js/date_extend.js" | prepend: site.baseurl }}" type="text/javascript"></script>
+        <script type="text/javascript">
+            var category_idx = {} ,
+                date_idx ={} ,
+                onewords_info = {} ,
+                tag_idx = {} ;
+            // INIT Data  
+            var add_idx = function(set , item , post){
+                if(!Array.isArray(item)) item = [item ,] ;
+                for(var idx in item){
+                    var si = item[idx] ;
+                    if(set[si] == undefined){
+                        set[si] = [post,] ;
+                    }
+                    else {
+                        set[si].push(post) ;
+                    }
+                }
+            }
+            for(var post_idx in post_data){
+                var post = post_data[post_idx] ,
+                    categories = post.categories ,
+                    date_str = new Date(Date.parse(post['date'])).format('yyyy年MM月') , // Date.parse : 'May 30 , 2015' -> 1432915200000 ; New Date("14329...") 生成以该时间戳的时间对象 ， 调用extend里的format方法，构造成为该格式
+                    tags = post.tags ,
+                    onewords = post.onewords ;
+                add_idx(category_idx , categories , post) ;
+                add_idx(date_idx , date_str , post) ;
+                add_idx(tag_idx , tags , post) ;
+                onewords_info[onewords] = post.title ;
+            }
+            // DOM handler
+            var navi = document.getElementById('navibar') ,
+                list = document.getElementById('listcontent') ;
+            
+            var ul_dom = document.createElement('UL') ,
+                li_dom = document.createElement('LI') ;
+            
+        </script>
     </body>
 </html>
 
