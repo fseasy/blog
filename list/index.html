@@ -30,7 +30,7 @@
                 date_idx ={} ,
                 onewords_info = {} ,
                 tag_idx = {} ,
-                NAVI_TYPE_NAME = {'categoryTypeName':'Categories' , 'tagTypeName''Tags'   };
+                NAVI_TYPE_NAME = {'categoryTypeName':'Categories' , 'tagTypeName':'Tags'   };
             // INIT Data  
             var add_idx = function(set , item , post){
                 if(!Array.isArray(item)) item = [item ,] ;
@@ -82,12 +82,40 @@
                 
                 return li_dom ;
             }
-
+            var buildTagDom = function(tag , freq){
+                var tagDom = document.createElement('SPAN') ;
+                var styles = ["label-default" , "label-primary" , "label-success" , "label-info" , "label-warning" , "label-danger"] ;
+                var fonts = ["Microsoft YaHei" , "SimSun" , "Microsoft JhengHei" , "KaiTi_GB2312" , "YouYuan" , "STXingkai"] ;
+                var fontSizes = [12,14,16,18,20,30] ;
+                var fontWeights = [400,500,600,700] ;
+                var marginHValue = [2,4,6] ;
+                var marginVValue = [1,2,3] ;
+                var tipWords = ["出现了" + freq + "次" , "找到了"+ freq+"次" , "一共有" + freq + "个" ] ;
+                var getRandomItem = function(a){return a[Math.floor(Math.random()*a.length + 1) -1] + "" } ; 
+                var random_style = getRandomItem(styles) ;
+                var random_fontstyle = ["font:" , getRandomItem(fontWeights) , getRandomItem(fontSizes) + 'px', 
+                    getRandomItem(fonts)].join(' ') ;
+                var margin_style = ["margin:" , getRandomItem(marginHValue) + "px" , getRandomItem(marginVValue)+ "px"].join(" ") ;
+                var random_tips = getRandomItem(tipWords) ;
+                
+                tagDom.setAttribute("class" , ["label" , random_style].join(" ")) ;
+                tagDom.setAttribute('style' , ["display: inline-block" , random_fontstyle , margin_style].join(";")) ;
+                tagDom.setAttribute('title' , random_tips) ;
+                tagDom.innerHTML = tag ;
+                return tagDom ;
+            }
+            /* INIT DOM Elements , including post_dom , tags_dom , onewords_dom */
             /* We build all dom for every post , bind it to post_data */
             
             for(var idx in post_data){
                 post_data[idx]["dom"] = buildPostItem(post_data[idx]) ;
             }
+            
+            var tagDoms = (function(tag_idx){
+                var tagDom = [] ;
+                for(var tag in tag_idx)  tagDom.push(buildTagDom(tag , tag_idx[tag].length)) ;
+                return tagDom ;
+                })(tag_idx)
             
             /* INIT navi bar*/
             
@@ -95,7 +123,10 @@
                                     
                                     };
             var RESPONSE_ACTIVE_EVENT_ELEMENTS = [] ;
-            var buildNaviList = function(naviTypeName , itemList , naviId ){
+            var CATEGORY_ELEMENTS = [] ;
+            var CATEGORY_NAME_TO_ELEMENT = {} ;
+            var TAG_NAME_TO_ELEMENT = {} ;
+            var buildNaviList = function(naviTypeName , itemList , naviId ,name2ElementIdx){
                 // input > itemList , is the idx like category_idx , tags_idx and so on
                 var panel = document.createElement('DIV') ,
                     navi = document.createElement('UL') ,
@@ -122,6 +153,8 @@
                     link_dom.appendChild(badge) ;
 
                     navi.appendChild(link_dom) ;
+                    /* build the name to node index*/
+                    name2ElementIdx[idx] = link_dom ;
                 }
 
                 panel.appendChild(header) ;
@@ -130,14 +163,38 @@
                 return panel ;
             }
             
-            var categoryPanel = buildNaviList(NAVI_TYPE_NAME['categoryTypeName'] , category_idx ,  'category_panel') ;
-            navi.appendChild(categoryPanel) ;
+            var buildNaviOnlyHeader = function(typeName , naviId , name2ElementIdx){
+                var panel = document.createElement('DIV') ,
+                    header = document.createElement('DIV') ,
+                    link = document.createElement('A');
+            
+                panel.setAttribute('class' , 'panel panel-default clear-border clear-margin-horizontal') ;
+                panel.setAttribute('id' , naviId) ;
+                header.setAttribute('class' , 'panel-heading') ;
+                
+                link.setAttribute('href' , ["###",typeName].join('&')) ;
+                link.innerHTML = typeName ;
+                header.appendChild(link) ;
+                panel.appendChild(header) ;
+                name2ElementIdx[typeName] = link ;
+            
+                return panel ;
+            }
 
+            var categoryPanel = buildNaviList(NAVI_TYPE_NAME['categoryTypeName'] , category_idx ,  'category_panel' , CATEGORY_NAME_TO_ELEMENT) ;
+            navi.appendChild(categoryPanel) ;
+            
+            /* build Tag */
+
+            var tagPanel = buildNaviOnlyHeader(NAVI_TYPE_NAME['tagTypeName'] , 'tag_panel' , TAG_NAME_TO_ELEMENT) ;
+            navi.appendChild(tagPanel) ;
+
+            CATEGORY_ELEMENTS = categoryPanel.getElementsByTagName('A') ;
+            TAG_ELEMENTS = tagPanel.getElementsByTagName('A') ;
             /* add the right elements to the RESPONSE_ACTIVE_EVENT_ELEMENTS */
             (function(RESPONSE_ACTIVE_EVENT_ELEMENTS){
-                var category_res = categoryPanel.getElementsByTagName('A') ;
-                for(var i = 0 ; i < category_res.length ; ++i) RESPONSE_ACTIVE_EVENT_ELEMENTS.push(category_res[i]) ;
-            
+                for(var i = 0 ; i < CATEGORY_ELEMENTS.length ; ++i) RESPONSE_ACTIVE_EVENT_ELEMENTS.push(CATEGORY_ELEMENTS[i]) ;
+                for(var i = 0 ; i < TAG_ELEMENTS.length ; ++i) RESPONSE_ACTIVE_EVENT_ELEMENTS.push(TAG_ELEMENTS[i]) ;
              })(RESPONSE_ACTIVE_EVENT_ELEMENTS)
 
             // Event handler
@@ -151,7 +208,16 @@
                 }
                 return text.join(" ").trim() ;
             }
-            var setCategoryListByCategoryVal = function(target_val){
+            var helperGetNode = function(nodeTextValue , cadidateDoms){
+                // by  brute force
+                for(var i = 0 ; i < cadidateDoms.length ; ++i){
+                    if(helperGetTextValue(cadidateDoms[i]) == nodeTextValue) return cadidateDoms[i] ;
+                }
+                return null ;
+            }
+            var setCategoryList = function(target){
+                // input > target : DOM Element of category navi
+                var target_val = helperGetTextValue(target) ;
                 if(category_idx[target_val] == undefined) console.error("Error to find corresponding category date") ;
                 else{
                     // first , remove all the child of listContent
@@ -169,6 +235,14 @@
                 }
 
             }
+            var setTagList = function(){
+                // usging Global Variable tag_idx
+                while(list.childNodes.length){
+                    list.removeChild(list.lastChild) ;   
+                };
+                for(var idx in tagDoms) list.appendChild(tagDoms[idx]) ;
+            }
+
             var setActiveFace = function(ele){
                 ele.setAttribute('style' , NAVI_INNER_STYLE['list-active'].join(';') ) ; 
             }
@@ -187,34 +261,61 @@
                 setActiveFace(selectedElement) ;
             }
             
+            var changeListContent = function(selectedType , selectedEle){
+                if(selectedType == NAVI_TYPE_NAME['categoryTypeName']){
+                    setCategoryList(selectedEle) ;
+                }
+                if(selectedType == NAVI_TYPE_NAME['tagTypeName']) setTagList() ;
+                changeActiveState(selectedEle , RESPONSE_ACTIVE_EVENT_ELEMENTS) ;
+            }
+            
 
             // bind Event
             categoryPanel.onclick = function(e){ 
                 var target = e.target ;
                 if(target.nodeName != 'A') return false ;
-                var target_val = helperGetTextValue(target) ;
-                setCategoryListByCategoryVal(target_val) ;
+                setCategoryList(target) ;
                 changeActiveState(target , RESPONSE_ACTIVE_EVENT_ELEMENTS) ;
             } ;
-
+            tagPanel.onclick = function(e){
+                var target = e.target ;
+                if(target.nodeName != 'A') return false ;
+                setTagList() ;
+                changeActiveState(target , RESPONSE_ACTIVE_EVENT_ELEMENTS) ;
+            }
             // ON LOAD
             window.onload = function(){
                 // if we return from other page , the location href will store the previous info . we should restore it !
-                var queryStr = location.href.match(/###(.*)/)[1] , /* ['###queryStr' , 'queryStr'] */
-                    queryStrParts = queryStr.split('&') ,
-                    selectedEle ;
+                var queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1] , /* ['###queryStr' , 'queryStr'] */
+                    queryStrParts = queryStr.split('&').filter(function(item){return item != ""}) ,
+                    selectedEle , 
+                    selectedType ;
                 if(queryStrParts.length == 0){
                     var category_links = categoryPanel.getElementsByTagName('A') ;
-                    if(category_links.length != 0) selectedEle = catetory_links[0] ;
+                    if(category_links.length != 0) selectedEle = category_links[0] ;
                     else selectedEle = null ;
+                    selectedType = NAVI_TYPE_NAME['categoryTypeName'] ;
                 }
-                else if(queryStrParts.length == 1){
-                    
+                else if(queryStrParts.length >= 1){
+                    var queryType = queryStrParts[0] ;
+                    if(queryType == NAVI_TYPE_NAME['categoryTypeName']){
+                        var categoryLinks = categoryPanel.getElementsByTagName('A') ;
+                        if(queryStrParts.length == 1){
+                            if(categoryLinks.length > 0) selectedEle = categoryLinks[0] ;
+                            else selectedEle = null ;
+                        }
+                        else{
+                            var categoryText = queryStrParts[1] ;
+                            if(CATEGORY_NAME_TO_ELEMENT[categoryText] == undefined) selectedEle = null ;
+                            else selectedEle = CATEGORY_NAME_TO_ELEMENT[categoryText] ;
+                        }
+                        selectedType = queryType ;
+                    }
+                    else if(queryType == NAVI_TYPE_NAME['tagTypeName']){
+                        selectedType = NAVI_TYPE_NAME['tagTypeName'] ;
+                    }
                 }
-                else if(queryStrParts.length == 2){
-
-                }
-
+                changeListContent(selectedType , selectedEle) ;
             }
         </script>
     </body>
