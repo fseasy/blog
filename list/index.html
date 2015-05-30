@@ -13,8 +13,7 @@
             
             {% include sinablogheader.html %}
             <div class="row">
-                <div class="col-md-3 contentpanel" id="navibar">
-                    Tag
+                <div class="col-md-3 contentpanel clear-padding-horizontal" id="navibar">
                 </div>
                 <div class="col-md-offset-1 col-md-8 contentpanel" id="listcontent">
                     Content
@@ -30,7 +29,8 @@
             var category_idx = {} ,
                 date_idx ={} ,
                 onewords_info = {} ,
-                tag_idx = {} ;
+                tag_idx = {} ,
+                NAVI_TYPE_NAME = {'categoryTypeName':'Categories' , 'tagTypeName''Tags'   };
             // INIT Data  
             var add_idx = function(set , item , post){
                 if(!Array.isArray(item)) item = [item ,] ;
@@ -59,9 +59,163 @@
             var navi = document.getElementById('navibar') ,
                 list = document.getElementById('listcontent') ;
             
-            var ul_dom = document.createElement('UL') ,
-                li_dom = document.createElement('LI') ;
+            var buildPostItem = function(post){
+                var li_dom = document.createElement('LI') ,
+                    date_dom = document.createElement('SPAN') ,
+                    cont_dom = document.createElement('H3') ,
+                    excerpt_dom = document.createElement('P') ,
+                    link_dom = document.createElement('A') ;
+                date_dom.setAttribute('class' , 'post-meta') ;
+                date_dom.innerHTML = post.date ;
+                
+                link_dom.setAttribute('class' , 'post-link') ;
+                link_dom.setAttribute('href' , post.url) ;
+                link_dom.innerHTML = post.title ;
+
+                excerpt_dom.setAttribute('class' , 'post-excerpt') ;
+                excerpt_dom.innerHTML = post.excerpt || post.onewords ;
+                
+                cont_dom.appendChild(link_dom) ;
+                li_dom.appendChild(date_dom) ;
+                li_dom.appendChild(cont_dom) ;
+                li_dom.appendChild(excerpt_dom) ;
+                
+                return li_dom ;
+            }
+
+            /* We build all dom for every post , bind it to post_data */
             
+            for(var idx in post_data){
+                post_data[idx]["dom"] = buildPostItem(post_data[idx]) ;
+            }
+            
+            /* INIT navi bar*/
+            
+            var NAVI_INNER_STYLE = { 'list-active':["border-right:1px solid #3fa7cb" , 'margin-right:-1px' ] 
+                                    
+                                    };
+            var RESPONSE_ACTIVE_EVENT_ELEMENTS = [] ;
+            var buildNaviList = function(naviTypeName , itemList , naviId ){
+                // input > itemList , is the idx like category_idx , tags_idx and so on
+                var panel = document.createElement('DIV') ,
+                    navi = document.createElement('UL') ,
+                    header = document.createElement('DIV') ;
+                panel.setAttribute('class' , 'panel panel-default clear-border clear-margin-horizontal') ;
+                panel.setAttribute('id' , naviId ) ;
+                
+                header.setAttribute('class' , 'panel-heading ') ;
+                header.innerHTML = naviTypeName ;
+                
+                navi.setAttribute('class' , 'list-group') ;
+                
+                for(var idx in itemList){
+                    var item = itemList[idx] ,
+                        link_dom = document.createElement('A') ,
+                        badge = document.createElement('SPAN');
+                    link_dom.setAttribute('class' , 'list-group-item') ;
+                    link_dom.setAttribute('href' , ['###',naviTypeName,idx].join('&')) ;
+                    link_dom.innerHTML = idx ;
+                    
+                    badge.setAttribute('class' , 'badge') ;
+                    badge.innerHTML = item.length ;
+                    
+                    link_dom.appendChild(badge) ;
+
+                    navi.appendChild(link_dom) ;
+                }
+
+                panel.appendChild(header) ;
+                panel.appendChild(navi) ;
+                
+                return panel ;
+            }
+            
+            var categoryPanel = buildNaviList(NAVI_TYPE_NAME['categoryTypeName'] , category_idx ,  'category_panel') ;
+            navi.appendChild(categoryPanel) ;
+
+            /* add the right elements to the RESPONSE_ACTIVE_EVENT_ELEMENTS */
+            (function(RESPONSE_ACTIVE_EVENT_ELEMENTS){
+                var category_res = categoryPanel.getElementsByTagName('A') ;
+                for(var i = 0 ; i < category_res.length ; ++i) RESPONSE_ACTIVE_EVENT_ELEMENTS.push(category_res[i]) ;
+            
+             })(RESPONSE_ACTIVE_EVENT_ELEMENTS)
+
+            // Event handler
+            var helperGetTextValue = function(node){
+                var text = [] ;
+                for(var i = 0 ; i < node.childNodes.length ; ++i){
+                    var childNode = node.childNodes[i] ;
+                    if(childNode.nodeName == '#text' || childNode.nodeType === 3){
+                        text.push(childNode.nodeValue) ;
+                    }
+                }
+                return text.join(" ").trim() ;
+            }
+            var setCategoryListByCategoryVal = function(target_val){
+                if(category_idx[target_val] == undefined) console.error("Error to find corresponding category date") ;
+                else{
+                    // first , remove all the child of listContent
+                    while(list.childNodes.length){
+                        list.removeChild(list.lastChild) ;   
+                    };
+                    var ulDOM = document.createElement('ul')
+                    ulDOM.setAttribute('class' , 'post-list') ;
+                    
+                    list.appendChild(ulDOM) ;
+                    for(var i = 0 ; i < category_idx[target_val].length ; ++i){
+                        var post = category_idx[target_val][i] ;
+                        ulDOM.appendChild(post.dom) ;
+                    }
+                }
+
+            }
+            var setActiveFace = function(ele){
+                ele.setAttribute('style' , NAVI_INNER_STYLE['list-active'].join(';') ) ; 
+            }
+            var removeActiveFace = function(ele){
+                ele.removeAttribute('style') ;
+            }
+            var changeActiveState = function(selectedElement , candidateDoms){
+                // first , check selected Element is the valid DOM | brute force
+                var valid = false ;
+                for(var i = 0 ; i < candidateDoms.length ; ++i) if(selectedElement == candidateDoms[i]){ valid = true ; break ;}
+                if(!valid) return false ;
+
+                // canvel origin selected
+                for(var i = 0 ; i < candidateDoms.length ; ++i) removeActiveFace(candidateDoms[i]) ;
+                
+                setActiveFace(selectedElement) ;
+            }
+            
+
+            // bind Event
+            categoryPanel.onclick = function(e){ 
+                var target = e.target ;
+                if(target.nodeName != 'A') return false ;
+                var target_val = helperGetTextValue(target) ;
+                setCategoryListByCategoryVal(target_val) ;
+                changeActiveState(target , RESPONSE_ACTIVE_EVENT_ELEMENTS) ;
+            } ;
+
+            // ON LOAD
+            window.onload = function(){
+                // if we return from other page , the location href will store the previous info . we should restore it !
+                var queryStr = location.href.match(/###(.*)/)[1] , /* ['###queryStr' , 'queryStr'] */
+                    queryStrParts = queryStr.split('&') ,
+                    selectedEle ;
+                if(queryStrParts.length == 0){
+                    var category_links = categoryPanel.getElementsByTagName('A') ;
+                    if(category_links.length != 0) selectedEle = catetory_links[0] ;
+                    else selectedEle = null ;
+                }
+                else if(queryStrParts.length == 1){
+                    
+                }
+                else if(queryStrParts.length == 2){
+
+                }
+
+            }
         </script>
     </body>
 </html>
