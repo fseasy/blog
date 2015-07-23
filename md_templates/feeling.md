@@ -2,7 +2,7 @@
 layout: sinablogpage
 title: 
 date: 
-categories: 
+categories: 心情 
 tags: 
 onewords: 
 private: true
