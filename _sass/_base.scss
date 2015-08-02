@@ -1,13 +1,13 @@
 /**
  * Reset some basic elements
  */
-body, h1, h2, h3, h4, h5, h6,
+/*body, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, hr,
 dl, dd, ol, ul, figure {
     margin: 0;
     padding: 0;
 }
-
+*/
 
 
 /**
@@ -17,7 +17,7 @@ body {
     font-family: $base-font-family;
     font-size: $base-font-size;
     line-height: $base-line-height;
-    font-weight: 300;
+    /* font-weight: 300; */
     color: $text-color;
     background-color: $background-color;
     -webkit-text-size-adjust: 100%;
@@ -159,8 +159,8 @@ pre {
  * Wrapper
  */
 .wrapper {
-    max-width: -webkit-calc(950px - (#{$spacing-unit} * 2));
-    max-width:         calc(950px - (#{$spacing-unit} * 2));
+    max-width: -webkit-calc(1000px - (#{$spacing-unit} * 2));
+    max-width:         calc(1000px - (#{$spacing-unit} * 2));
     margin-right: auto;
     margin-left: auto;
     padding-right: $spacing-unit;
