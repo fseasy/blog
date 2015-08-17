@@ -145,7 +145,8 @@ content:"";
 }
 
 .footer-col-half {
-width:calc(50% - ( #{$spacing-unit} / 2 ) ) ;
+width: -webkit-calc(50% - (#{$spacing-unit} / 2));
+width:         calc(50% - (#{$spacing-unit} / 2));
 }
 
 .footer-col-left {
