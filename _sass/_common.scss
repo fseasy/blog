@@ -145,7 +145,7 @@ content:"";
 }
 
 .footer-col-half {
-width:calc(50%-(#{$spacing-unit}/2)) 0 40px;
+width:calc(50% - ( #{$spacing-unit} / 2 ) ) ;
 }
 
 .footer-col-left {
