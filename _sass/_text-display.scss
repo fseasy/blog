@@ -6,3 +6,25 @@ blockquote:not(:first-child) {
     text-indent:0;
 }
 
+.post-content {
+    h1,h2,h3,h4,h5,h6{
+        font-family:"SimHei" , "STHeiti", "Apple LiGothic Medium" , "SimSun" , "STSong" , "Microsoft YaHei"  ;
+    }
+    h1,h2{
+        height : 50px ;
+        line-height : 50px ;
+    }
+    h3{
+        height : 40px ;
+        line-height : 40px ;
+        border-bottom : 1px solid #ccc ;
+    }
+    h4{
+        height : 30px ;
+        line-height : 30px ;
+    }
+    h5,h6{
+        height : 24px ;
+        line-height : 24px ;
+    }
+}
