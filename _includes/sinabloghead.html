@@ -3,10 +3,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
 <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
-<meta name="description" content="{% if page %} 
+<meta name="description" content="{% if page %}
                                       {% if page.date %}{{ page.date | date: "%b %-d, %Y"  }}{% endif %}
-                                      {% if page.excerpt %}{{ page.excerpt | strip_html }}{% endif %}
-                                      {% if page.onewords %}{{ page.onewords }}{% endif %}
+                                      {% if page.excerpt %}；{{ page.excerpt | strip_html }}{% endif %}
+                                      {% if page.onewords %}……{{ page.onewords }}{% endif %}
                                   {% else %}
                                       {{ site.description }}
                                   {% endif %}">
