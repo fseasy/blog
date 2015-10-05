@@ -10,7 +10,7 @@ url: "http://memeda.github.io" # the base hostname & protocol for your site
 markdown: kramdown
 exclude: [_site]
 
-paginate: 5
+paginate: 10
 
 #social info
 github_username:  memeda
