@@ -2,22 +2,25 @@
 layout: mathpage
 ---
 
-#MathJax Demo测试
+<h1 class="text-center">MathJax Demo测试</h1>
 
 <blockquote>
 本页面来自MathJax在Github上的<a href="https://github.com/mathjax/MathJax/blob/master/test/sample-dynamic-2.html">demo</a>.
 </blockquote>
 
-Type text in the box below:<br/>
+<p>输入包含MathJax代码的HTML
 
-<textarea id="MathInput" cols="60" rows="10" style="margin-top:5px">
+<textarea id="MathInput" class="form-control" rows="6">
+$ $
 </textarea>
-<br/><br/>
-Preview is shown here:
-<div id="MathPreview" style="border:1px solid; padding: 3px; width:80%; margin-top:5px"></div>
-<div id="MathBuffer" style="border:1px solid; padding: 3px; width:80%; margin-top:5px; 
+
+<p>效果预览
+
+<div id="MathPreview" style="min-height:500px ; width : 90% ; margin : auto ; border:1px solid #ccc ;"></div>
+<div id="MathBuffer" style="min-height:500px ; width : 90% ; margin : auto ; border:1px solid #ccc ;
 visibility:hidden; position:absolute; top:0; left: 0"></div>
 
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
   Preview = {
