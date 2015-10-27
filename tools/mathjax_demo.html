@@ -104,7 +104,7 @@ Preview.callback = MathJax.Callback(["CreatePreview",Preview]);
 Preview.callback.autoReset = true;  // make sure it can run more than once
 Preview.Init();
 
-$("#MathInput").bind('keyup' , Preview.Update ) ;
+$("#MathInput").bind('keyup' , function(){ Preview.Update() ; } ) ;
 
 })
 </script>
