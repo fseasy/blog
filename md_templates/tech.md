@@ -1,8 +1,8 @@
 ---
-layout: sinablogpage
+layout: mathpage
 title: 
 date: 
-categories: 
+categories: 技术 
 tags: 
 onewords: 
 ---
