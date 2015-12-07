@@ -1,7 +1,7 @@
 ---
 layout: mathpage
-title: 就 《Parsing natural Scene and natural Language with Recursive Neural Networks》 谈RNN
-date: 2015-12-87
+title: Parsing natural Scene and natural Language with Recursive Neural Networks 论文阅读
+date: 2015-12-7
 categories: 技术 
 tags: Recursive
 onewords: 就 《Parsing natural Scene and natural Language with Recursive Neural Networks》 谈 Recursive Neural Networks
