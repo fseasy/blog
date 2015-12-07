@@ -1,10 +1,10 @@
 ---
 layout: mathpage
 title: 就 《Parsing natural Scene and natural Language with Recursive Neural Networks》 谈RNN
-date: 
+date: 2015-12-87
 categories: 技术 
-tags: 
-onewords: 
+tags: Recursive
+onewords: 就 《Parsing natural Scene and natural Language with Recursive Neural Networks》 谈 Recursive Neural Networks
 ---
 > 因为准备深度学习小组本次关于Recursive Neural Networks（在不导致歧义的情况下，后文均将其简称为RNNs，）的主题，阅读了这篇关于使用RNNs做图片切分、标注以及自然语言结构分析的文章。
 
@@ -25,7 +25,7 @@ RNNs需要做的，主要包含3个工作：
 1.  原始输入向量的转换
 
     如果原始输入是图片（矩阵），那么使用前人的方法，将图片分为K份，每份抽取119个特征（包含颜色、外观、形状等），用F\_i来表示。让F\_i特征向量经过一个隐层和激活函数，得到n维的向量。这样一个图片就表示为了K个n维空间中的向量。形式化的表示，F\_i 维度为 119 * 1 ，隐层权值W\_sem 为 n*119 , b 为n维向量，则 a\_i = f( W\_sem · F\_i + b) ，其中f函数这里就去sigmoid函数。得到的向量称为激活向量，维度为 n * 1 。
-    如果原始输入是句子，那么首先句子分词，设有K个词，将每个词表示为One-Hot，然后再从WordEmbeding中取出对应的列，就得到了RNNs的n维向量输入。形式化的说，使用维度为|V| * 1 的e_k 向量表示原始句子的词，其中第k行为1，其余为0；WordEmbeding表为L ， 维度为n*|V|，那么L 与 e_k的内积结果就是该词的Embeding表示，即RNNs的输入，维度为n*1 。
+    如果原始输入是句子，那么首先句子分词，设有K个词，将每个词表示为One-Hot，然后再从WordEmbeding中取出对应的列，就得到了RNNs的n维向量输入。形式化的说，使用维度为\|V\| * 1 的e\_k 向量表示原始句子的词，其中第k行为1，其余为0；WordEmbeding表为L ， 维度为n\*\|V\|，那么L 与 e\_k的内积结果就是该词的Embeding表示，即RNNs的输入，维度为n\*1 。
 
 2.  基于贪心方法递归构建树
     
