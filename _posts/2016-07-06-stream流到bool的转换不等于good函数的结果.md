@@ -6,7 +6,7 @@ categories: 技术
 tags: C++ 实践
 onewords: 当到达EOF时，good函数立刻变为false，但是stream转为bool仍可能为真。
 ---
-> 当到达EOF时，good函数立刻变为false，但是stream转为bool仍可能为真。
+> 当到达EOF时，good函数立刻变为false，但是stream转为bool仍可能为真。stream到bool的转换与good不等价，而与fail && bad等价。
 
 ## 情景
 
