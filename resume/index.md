@@ -1,11 +1,9 @@
 ---
 layout: sinablogpage
-title: 简历-Resume
+title: 简历 resume
 permalink: /resume/
 ---
 
-### 简历
-
 [中文](/assets/resume/xuwei_cn.pdf)
 
-[英文](/assets/resume/xuwei_en.pdf)
+[English](/assets/resume/xuwei_en.pdf)
