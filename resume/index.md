@@ -4,7 +4,7 @@ title: 简历-Resume
 permalink: /resume/
 ---
 
-###简历
+### 简历
 
 [中文](/assets/resume/xuwei_cn.pdf)
 
