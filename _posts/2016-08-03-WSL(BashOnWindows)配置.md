@@ -119,7 +119,7 @@ WSL也被叫做 `Bash on Windows`, Github上有一个可以提Issues的[项目](
 
     一条命令：
 
-        sudo /usr/sbin/sshd # 其实我做这步是用的是： sudo /etc/init.d/sshd start
+        sudo /usr/sbin/sshd # 其实我做这步是用的是： sudo /etc/init.d/ssh start
 
     启动之后，保持窗口开启，我们使用XShell来登陆。
 
@@ -171,7 +171,7 @@ WSL也被叫做 `Bash on Windows`, Github上有一个可以提Issues的[项目](
         # 按Ctrl+X退出，会提示保存，一定要修改保存的文件名，把 `sshd.tmp`中的`.tmp`删去
         # 因为按照README中的内容，如果有`.`，那么这个文件就无效
         # 关于为何？我也不算很懂。反正上述一定要保证没有错误。
-        # 因为这个文件已搞错，sudo就不能使了。sudo不能使了，那么你就改不了这个文件了！这不就
+        # 因为这个文件一搞错，sudo就不能使了。sudo不能使了，那么你就改不了这个文件了！这不就
         # 成一个环了？我当时就懵了，不知道该怎么办——直到我找到了第一种方法。对，
         # 直接以root登陆就好了。
         # 总之，个人还是倾向第二种吧，因为以后来说更加安全。
@@ -195,7 +195,7 @@ WSL也被叫做 `Bash on Windows`, Github上有一个可以提Issues的[项目](
         set ws=wscript.createobject("wscript.shell")
         ws.run shellPath & " /start",0
 
-    写完，直接点 `runinbackground.vbe`, 如果不保错，且此时在你看不到任何打开的Bash的情况下XShell可以连上，那么恭喜，真的没有问题了！
+    写完，直接点 `runinbackground.vbe`, 如果不保错，且此时在你看不到任何打开的Bash的情况下XShell可以连上，那么恭喜，真的没有问题了！如果报文件找不到，那么肯定是文件名命名与脚本不一致，或者复制时有特殊（不可见）字符！请手打或者plain模式（查看HTML源码）复制。
 
     参考： [How to run sshd as a windows service ?](https://github.com/Microsoft/BashOnWindows/issues/612)
 
@@ -217,7 +217,7 @@ WSL也被叫做 `Bash on Windows`, Github上有一个可以提Issues的[项目](
 
     5. 完成。
 
-    如果有更多需求，就找到刚刚建立的任务，然后选择属性，进行配置就好。
+    如果有更多需求，就找到刚刚建立的任务，然后选择属性，进行配置就好。比如可以配置禁用只有交流电源时才启用任务、警用任务运行3天后自动关闭等。
 
     注意属性里的`隐藏`，应该不是指`隐藏窗口`，因为试过没有用...
 
