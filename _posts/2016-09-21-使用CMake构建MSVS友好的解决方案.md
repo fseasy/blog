@@ -33,9 +33,9 @@ onewords: 使用CMake构建出VS友好的项目。
 
     **对于有编译目标的单元**（即有`ADD_EXECUTABLE`或者`ADD_LIBRARY`），那么我们通过一下命令可以把这个编译单元放到某个目录下：
 
-        SET_PROPERTY(TARGET trivial PROPERTY FOLDER "libiraries")      
+        SET_PROPERTY(TARGET trivial PROPERTY FOLDER "libraries")      
 
-    如上，`SET_PPRPERTY`第一个参数`TARGET`是固定值,第二个`trivial`就是编译单元的名称，第三个`PROPERTY`，第四个`FOLDER`都是固定值，第五个`libiraries`是要放到的目录下。
+    如上，`SET_PPRPERTY`第一个参数`TARGET`是固定值,第二个`trivial`就是编译单元的名称，第三个`PROPERTY`，第四个`FOLDER`都是固定值，第五个`libiraries`是要放到的目录下。目录支持层级结构，这里用`/`来划分层级结构，如`libraries/cnn`。
 
     **对于无编译目标的单元**（比如按功能区分的头文件），使用以下命令来使得其在MSVS显示中能够分组：
 
