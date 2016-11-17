@@ -98,3 +98,140 @@ Python官方文档[with-statement](https://docs.python.org/3/reference/compound_
 
 强调，as对象赋值，不是`EXPR`的值，而是`__enter__`返回的值；其次，`__exit__`必然会被调用，只是传入的参数可能是None，或者是发生的异常信息。
 
+## 为类（对象）加入with语句的支持
+
+基于对上面`with`原理的了解，我们可以很简单地写出基础的支持`with`语句的类。以下是一个实例，同时也能够加深理解：
+
+    class MgrInteface(object):
+        def __enter__(self):
+            print("Enter called")
+            return "returned object from __enter__(self)"
+
+        def __exit__(self, type, value, traceback):
+            if type is None:
+                print("no exception.")
+                print("doing clear")
+            else:
+                print("exception occured. supress or raise.")
+                if type is IOError:
+                    print("catch IOError")
+                    return True
+                else:
+                    print("{} not catch. will be raise.".format(str(type)))
+                    return False
+
+    def main():
+        with MgrInteface() as s:
+            print("'as' vlaue is: {}".format(s))
+            raise IndexError
+            raise IOError
+
+    if __name__ == "__main__":
+        main()
+
+这种实现是非常简单、直观的。不过Python语言的贡献者们觉得这样还是不够方便。或者说，其应用场景有限（只能用于类），于是有了`context manager`。
+
+## 为函数加入with语句的支持（使用contextmanager decorator）
+
+`contextmanager`是`contextlib`包里的一个函数，是装饰器的实现。[官方文档](https://docs.python.org/3/library/contextlib.html#contextlib.contextmanager)里给出的定义是：`contextmanager`是一个用于定义 with语句中用到的上下文管理器 的工厂函数，其是一个装饰器。使用此函数可以不必单独创建一个类或者定义`__enter__`和`__exit__`函数，只需作用于一个**特定格式的生成器函数**就能创建一个上下文管理器。
+
+上面是一个总的定义，下面开始相对细致的介绍一下。不过`contextmanager`很精妙（就是说很复杂...），所以先介绍一下怎么用，然后再说其背后的实现。
+
+### 使用contextmanager来创建上下文管理器对象
+
+
+上面的定义中，强调了**特定格式的生成器函数**，是因为如果我们要使用`contextmanager`，只需要定义一个满足此“特定格式”的函数即可——这是我们唯一需要做的地方。
+
+这种格式是怎样的？
+
+直接把官网的例子拿过来：
+
+    from contextlib import contextmanager
+
+    @contextmanager
+    def tag(name):
+        print("<%s>" % name)
+        yield
+        print("</%s>" % name)
+
+    with tag("H1"):
+        print("title")
+
+    ---- output ---
+
+    <H1>
+    title
+    </H1>
+
+从这个函数中我们可以总结出该格式： 以`yield`分段，前面部分是`__enter__`的逻辑，后面部分是`__exit__`的逻辑。
+
+为什么用`yield`（生成器）？因为生成器运行到`yield`就会终止，并且返回`yield`的值；下次再调用该函数，从会从`yield`之后继续调用！是不是很神奇？通过生成器的巧妙运用，就在一个函数中实现了两个函数需要实现的逻辑！这应该是该`contextmanager`与`with`语句交互的底层逻辑了，即with语句实际调用的都在这一个函数中定义了。而在此底层逻辑之上，又是怎样封装起来使得其能够与`with`兼容，就是下一小节介绍的内容了。
+
+上面的例子是简化的版本，因为为了完整、异常安全，一般需要加上一个`try...finally`块，看下tensorflow中`Graph.as_default()`是怎么实现的吧：
+    
+    # tensorflow/python/ops.py
+    
+    def as_default(self):
+      return _default_graph_stack.get_controller(self)
+    
+    # tf使用2个空格缩进
+    # as_default其实是另一个函数的调用
+
+    =>
+    
+    # 真实的调用
+    # 使用contextmanager装饰器，不用看具体代码，看整体的框架即可
+    
+    @contextlib.contextmanager
+    def get_controller(self, default):
+    """A context manager for manipulating a default stack."""
+        try: 
+          self.stack.append(default)
+          yield default
+        finally:
+          if self._enforce_nesting:
+            if self.stack[-1] is not default:
+              raise AssertionError(
+                  "Nesting violated for default stack of %s objects"
+                  % type(default))
+            self.stack.pop()
+          else:
+            self.stack.remove(default)
+
+从上面的代码中可以看到，其使用了`try...finally`块，其中`try`块包含的就是`__enter__`部分，`finally`块包含`__exit__`部分。其实从这里看出，`try...finally`块也不是必须的——只要`__enter__`部分确定不会抛出异常。
+
+以上，我们就实现了用`contextmanager`装饰器来为一个函数增加with语句支持。回顾一下关键点，即只需要保证这个函数中包含一个`yield`语句（生成器），然后用contextlib.contextmanager装饰即可。
+
+### 追踪contextmanager的背后
+
+“源码之下，了无秘密”，让我们带着侯捷老师的教诲（...），去看下源代码实现。
+
+首先看下`contextmanager`装饰器实现：
+
+    # contextlib.py
+
+    def contextmanager(func):
+        @wraps(func)
+        def helper(*args, **kwds):
+            return _GeneratorContextManager(func, args, kwds)
+        return helper
+
+首先，这是一个标准的基于函数实现的装饰器（其实我也是刚刚才懂的...）。
+
+> 插入装饰器的介绍
+
+咳，为了完整地记录下调研过程，再插入一下装饰器的本质：
+
+    @decorator_name
+    def func(*k, *kw):
+        ...
+    =>
+    # 把被装饰函数作为@xxx中的`xxx`函数的参数传入（并调用该函数），
+    # 返回的结果再覆盖原来的函数名。
+    func = decorator_name(func) # 传入、调用、覆盖
+
+看到了吗——装饰器的本质就是这么简单。如果多个装饰器嵌套，那么就是嵌套调用（没有见到，就不深究了.）！解释一下，首先装饰器的本质是一个 返回可调用*对象* 的*对象*。这个*对象*既可以是函数，也可以是实现了`__call__`的类对象。装饰器对象，一般接受一个函数名（函数指针）作为参数，返回一个针对此函数封装的可调用对象，并用此对象再覆盖掉原来的函数名。 装饰器应该是来自于设计模式中的装饰器模式，通俗来说就是——我们不仅仅是大自然的搬运工（调用其他函数），我们还在自然水的基础上消毒（在此之外还做一些额外的工作）。
+
+> 结束装饰器的介绍
+
+接上，经过`contextmanager`装饰器作用后，我们的原函数已经变成了`_GeneratorContextManager(func, args, kwds)`
