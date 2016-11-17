@@ -232,6 +232,82 @@ Python官方文档[with-statement](https://docs.python.org/3/reference/compound_
 
 看到了吗——装饰器的本质就是这么简单。如果多个装饰器嵌套，那么就是嵌套调用（没有见到，就不深究了.）！解释一下，首先装饰器的本质是一个 返回可调用*对象* 的*对象*。这个*对象*既可以是函数，也可以是实现了`__call__`的类对象。装饰器对象，一般接受一个函数名（函数指针）作为参数，返回一个针对此函数封装的可调用对象，并用此对象再覆盖掉原来的函数名。 装饰器应该是来自于设计模式中的装饰器模式，通俗来说就是——我们不仅仅是大自然的搬运工（调用其他函数），我们还在自然水的基础上消毒（在此之外还做一些额外的工作）。
 
+此外，上述`helper`还有个装饰器`@wraps`, 查文档可知该装饰器完成文档的更新——即用户看`__doc__`或者帮助时，不要让他们看到空荡荡的被替换了对象的文档，而是依然返回原函数的文档。这样一来装饰器就完全对用户不可见了。
+
 > 结束装饰器的介绍
 
-接上，经过`contextmanager`装饰器作用后，我们的原函数已经变成了`_GeneratorContextManager(func, args, kwds)`
+接上，经过`contextmanager`装饰器作用后，我们的原函数已经变成了`_GeneratorContextManager(func, args, kwds)`（即原函数名指向的对象已经不再是原来那个函数，而是装饰器函数contextmanager返回的这个对象实例了）。简要看下这个对象（类）是怎么定义的：
+
+    class _GeneratorContextManager(ContextDecorator):
+        def __init__(self, func, *args, **kwds):
+            self.gen = func(*args, **kwds)
+            ...
+
+        def __enter__(self):
+            try:
+                return next(self.gen)
+            except StopIteration:
+                raise RuntimeError("generator didn't yield") from None
+
+        def __exit__(self, type, value, traceback):
+            if type is None:
+                try:
+                    next(self.gen)
+                except StopIteration:
+                    return
+                else:
+                    raise RuntimeError("generator didn't stop")
+            else:
+                if value is None:
+                    # Need to force instantiation so we can reliably
+                    # tell if we get the same exception back
+                    value = type()
+                try:
+                    self.gen.throw(type, value, traceback)
+                    raise RuntimeError("generator didn't stop after throw()")
+                except StopIteration as exc:
+                    # Suppress the exception *unless* it's the same exception that
+                    # was passed to throw().  This prevents a StopIteration
+                    # raised inside the "with" statement from being suppressed
+                    return exc is not value
+                except:
+                    # only re-raise if it's *not* the exception that was
+                    # passed to throw(), because __exit__() must not raise
+                    # an exception unless __exit__() itself failed.  But throw()
+                    # has to raise the exception to signal propagation, so this
+                    # fixes the impedance mismatch between the throw() protocol
+                    # and the __exit__() protocol.
+                    #
+                    if sys.exc_info()[1] is not value:
+                        raise
+
+在这个类里终于看到了熟悉的`__enter__`和`__exit__`, 与最开始介绍的基础版本，看看在这里它们都是怎么工作的吧：
+
+`__enter__`，调用`gen`的`next()`方法，并返回`next()`值。其中`gen`就是`func(...)`, 我们知道`func`是我们最开始定义的带`yield`的函数，比如那个我们从官方文档上copy下来的生成封闭HTML标签的函数：
+    
+    @contextmanager
+    def tag(name):
+        print("<%s>" % name)
+        yield
+        print("</%s>" % name)
+
+我们知道调用带`yield`的函数，其返回的就是一个`生成器`,即`gen`就是一个生成器。正如前面所言，在`__enter__`中调用了该生成器的`next()`方法, 则函数会执行到`yield`的位置，返回该值，并且停住，等待下次`next()`的调用（后面看到，下次调用就是在`__exit__`中）。这时，`__eneter__`就完成了任务。所以，`yield`和之前的部分，在`__enter__`中被执行了。也即是说相对于基本的`__enter__`, 用`contextmanager`装饰的函数中，`yield`及之前的部分就是等价的逻辑。
+
+在`__exit__`的逻辑，和传统的`__exit__`是类似的——先判断由`with`传入的信息，看是否有异常发生，如果无，则调用`next()`，即函数中`yield`之后的部分被执行，且因为后面不再有`yield`，故当函数后部分正常执行后，会抛出`StopIteration`异常，捕获之；如果没有抛出迭代停止的异常，要么是发生了其他异常，这时在原函数就会抛出；要么是继续`yield`, 故这里抛出`RuntimeError`，说明该函数没有符合格式要求。如果在`with`块中有异常，还是要调用`gen`来执行后续的收尾工作。不过后面的异常处理就没有太看明白了。主要是生成器的`throw`操作具体会做什么，没有再深入的研究。
+
+
+ok，再次感觉说得非常啰嗦。总结一下，这个部分还是非常巧妙的。关键点就是利用了生成器可以`返回值、停住、下次在停住位置之后继续`的性质，然后再在`__enter__`和`__exit__`中分别利用该性质，从而完成了在一个函数中实现本应该在两个函数中分步完成的逻辑。实在是妙啊！当然，这中间的各种特性，如装饰器、生成器，返回函数对象等，还是让我在整个过程中常常陷入混淆。现在还是笔用得少，把结果记在纸上，真的会清晰很多。
+
+## 问题如何解决
+
+就是代码里一个其实可以忽略的请求，导致了这差不多一天的调研及记录，然而让我们回过头来，看看当我们理解了`Graph.as_default()`, `tf.device()`背后的秘密之后，能够解决我们之前的问题呢：如何在一个地方写配置，然后在多处调用，且与`with`语句兼容？
+
+在跟踪的过程中还是有思路的：
+
+首先既然要兼容`with`,那么必然有`__enter__`和`__exit__`逻辑，至于具体是用类、还是用contextmanager装饰的函数，这个倒无所谓。
+
+`__enter__`逻辑里，我们分别显式调用`as_default()`和`device()`返回的mgr的`__enter__`即可，并且还返回`as_default()`的返回值（即`Graph`）.
+
+`__exit__`逻辑里，分别显式调用各自的`__exit__`即可，注意调用顺序与`__enter__`相反（应该是相反的吧，或许也是无所谓的——只要这两个资源是独立的，不过我看`as_default`其实真正是在把图放到一个栈里了，没有去看`device`在做什么。反序应该最稳）。
+
+文章终于写完，花了一天，想想对于结果驱动的项目而言，这个时间开销必然是多余的。此外，在深入与赶紧脱离泥潭的纠结里，烦躁也会产生。现在各种调度还是把握不好啊。
