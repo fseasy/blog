@@ -12,6 +12,9 @@ kramdown:
   input: GFM
   syntax_highlighter: rouge
 
+gems:
+  - jekyll-paginate
+
 exclude: [_site]
 # gems: [jekyll-paginate]
 paginate: 10
