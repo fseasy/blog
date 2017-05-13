@@ -13,7 +13,7 @@ kramdown:
   syntax_highlighter: rouge
 
 exclude: [_site]
-gems: [jekyll-paginate]
+# gems: [jekyll-paginate]
 paginate: 10
 
 #social info
