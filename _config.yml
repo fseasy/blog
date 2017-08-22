@@ -1,8 +1,8 @@
 # Site settings
-title: 小文件
+title: 鱼虾一整碗
 email: readonlyfile@hotmail.com
 description: > # this means to ignore newlines until "baseurl:"
-   To love oneself is the beginning of a lifelong romance . 
+   “小舢板，划呀划  小纸伞，遮雨也遮月光” 
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "https://memeda.github.io" # the base hostname & protocol for your site
 
