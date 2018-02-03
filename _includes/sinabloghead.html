@@ -8,9 +8,9 @@
                                         if page.title %}{{ page.title }} | {% endif %}{% 
                                         if page.excerpt %}{{ page.excerpt | strip_html }} | {% endif %}{% 
                                         if page.onewords %}{{ page.onewords }}{% endif %}{% 
-                                     else %}
-                                      {{ site.description }}
-                                  {% endif %}">
+                                      else %}{{ 
+                                        site.description }}{% 
+                                      endif %}">
 
 <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
