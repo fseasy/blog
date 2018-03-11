@@ -19,8 +19,8 @@ onewords: module是什么；Package是什么
 
 本文主要由以下内容组成， 
 
-a. Module相关：Module是什么；module相关的知识
-b. Package相关：Package是什么；import相关的知识；如何去组织package；开发实践（开发Package时怎么才能方便测试？）
+1. Module相关：Module是什么；module相关的知识
+2. Package相关：Package是什么；import相关的知识；如何去组织package；开发实践（开发Package时怎么才能方便测试？）
 
 ### Module
 
@@ -138,15 +138,15 @@ Package是Module的集合，`a way of structuring Python’s module namespace by
 
 假设`surround.py`要引入`echo.py`，
 
-a. 如果是 `import sound.effects.echo` 显然是绝对引用
-b. 如果是 `import echo`，那么是隐式相对引用
-c. 如果是 `from . import echo`，那么是显式相对引用。
+1. 如果是 `import sound.effects.echo` 显然是绝对引用
+2. 如果是 `import echo`，那么是隐式相对引用
+3. 如果是 `from . import echo`，那么是显式相对引用。
 
 再举一个例子，假设 `sourround.py`要引入`wavread.py`, 那么
 
-a. 绝对引用： `import sound.formats.wavread`
-b. 隐式相对引用： 不可能
-c. 显式相对引用： `from ..formats import wavread`
+1. 绝对引用： `import sound.formats.wavread`
+2. 隐式相对引用： 不可能
+3. 显式相对引用： `from ..formats import wavread`
 
 可以看到绝对引用和显式相对引用是功能完善的，而隐式相对引用，实际是很弱，仅仅是为了方便！但是我认为，也正是因为这种方便，让我们混淆了Package和Scripts的引入概念。
 
@@ -156,7 +156,7 @@ c. 显式相对引用： `from ..formats import wavread`
 
 虽然名字是`absolute_import`，但是其真正含义是**禁止隐式相对引用**.
 
-用了`from __future__ import absolute_import`的Module, 如果把这个Module当作Scripts来运行，常常报这个错： ` ValueError: Attempted relative import in non-package. `. 原因就是前面说到的，相对引用的概念只存在于Package下（依赖于`module.__name__`来路由位置），Scripts是没有这个东西的。
+用了`from __future__ import absolute_import`的Module, 如果把这个Module当作Scripts来运行，常常报这个错： `ValueError: Attempted relative import in non-package`. 原因就是前面说到的，相对引用的概念只存在于Package下（依赖于`module.__name__`来路由位置），Scripts是没有这个东西的。
 
 **所以，一定要清楚，你写的Module是Package的一部分，还是Scripts**。二者不要想得兼。自己以前总是混写，以后得规范了。
 
