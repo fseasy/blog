@@ -104,9 +104,21 @@ Package是Module的集合，`a way of structuring Python’s module namespace by
 
 #### `__init__.py`中的内容
 
-`__init__.py`可以是一个空文件，仅仅表示这个文件夹对应到一个Package;不过，它也可以作为这个package初始化代码存放的地方。
+`__init__.py`可以是一个空文件，仅仅表示这个文件夹对应到一个Package;不过，它也可以作为这个package初始化代码存放的地方。`__init__.py`中定义的名字是被放在该package的符号表中的。如果一个package里有sub-package, 只有把这个sub-package一import的方式放到`__init__.py`中，才能通过package名字访问到该sub-package。例如：
+
+
+    package
+        setup.py
+        package
+            __init__.py
+            sub_package.py
+                __init__.py
+
+
+必须在`package/package/__init__.py`里写上`import package.sub_package as sub_package`之后，才能在外部的Scripts中这样访问sub-package: `import package; package.sub_package`, 否则在package上是看不到sub_package的！当然，可以这样做： `import package.sub_package`，这是直接通过path引入sub-package，而不是通过package符号表的方式去索引。这大概也是非常容易混淆的点。
 
 此外，它还有一个特别的变量`__all__`，它是一个list，只在`from package import *`这种语法出现的时候有意义——相当于在`import *`时人为覆盖了由Python自己枚举的`__all__`. 特别的，Python自己枚举的`__all__`也不是全部的module，而是a. 在`__init__.py`里定义的names； b. 在之前已经显式import进来的属于该package的子模块。不知道自己理解（翻译）对不对，或者说又没有解释清楚——可以参考[import * from a package](https://docs.python.org/2/tutorial/modules.html#importing-from-a-package). 在生产代码中，永远不要使用`import *`，它是代码可读性降低，同时可能让你implicitly覆盖掉import进来的名字。
+
 
 #### 绝对引用，相对引用（隐式相对引用，显式相对引用）
 
@@ -158,13 +170,15 @@ Package是Module的集合，`a way of structuring Python’s module namespace by
 
 用了`from __future__ import absolute_import`的Module, 如果把这个Module当作Scripts来运行，常常报这个错： `ValueError: Attempted relative import in non-package`. 原因就是前面说到的，相对引用的概念只存在于Package下（依赖于`module.__name__`来路由位置），Scripts是没有这个东西的。
 
-**所以，一定要清楚，你写的Module是Package的一部分，还是Scripts**。二者不要想得兼。自己以前总是混写，以后得规范了。
+**所以，一定要清楚，你写的Module是Package的一部分，还是用来作为Scripts运行的**。二者不要想得兼。自己以前总是混写，以后得规范了。
 
 推荐方法如ref的文章所言，Package的Module内用绝对引用或显式相对引用，内部定义一个main函数，然后再写一个scripts调用。当然，这个main放在scripts里也不错。
 
 #### 如何去组织Package
 
 来自[How To Package Your Python Code](http://python-packaging.readthedocs.io/en/latest/index.html), 不赘述。
+
+此外，[Building and Distributing Packages with Setuptools](http://setuptools.readthedocs.io/en/latest/setuptools.html)是更加详细的setup教程。
 
 #### 开发实践
 
