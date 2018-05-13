@@ -3,3 +3,4 @@ _site
 pages.sublime-project
 pages.sublime-workspace
 .jekyll-metadata
+.vscode
