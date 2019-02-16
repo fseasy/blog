@@ -1,0 +1,42 @@
+---
+layout: sinablogmain 
+---
+
+<div style="border-left:4px solid orange; margin-left: -20px; margin-bottom: 20px; padding-left: 10px">
+    <h1>激活卡片</h1>
+</div>
+
+<div class="row">
+    <div class="col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+        <div class="thumbnail shadow" style="padding: 8px">
+            <div id="card0" >
+                <div class="front">
+                    <img src="{% link /assets/img/fun/card/ren_xing_wang_wei_front_side.png %}">
+                </div>
+                <div class="back">
+                    <img src="{% link /assets/img/fun/card/ren_xing_wang_wei_back_side.png %}">
+                </div>
+            </div>
+            <div style="margin: 20px -8px -4px -8px; border-top: 1px solid #eee;" class="bg-warning">
+                <div class="caption">
+                    <h2 style="color: orange">卡片：任性妄为</h2>
+                    <p>使用此卡，好好可以按照自己的喜好或者不按照自己的喜好做任何不破坏感情基础的事情，刚刚对此不能生气
+                    <p>拥有数量<span class="text-danger">1</span>张
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<script src="{% link /js/jquery.flip.min.js %}"></script>
+
+<script>
+$(function(){
+    $("#card0").flip({
+        autoSize: false
+    });
+});
+</script>
