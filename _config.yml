@@ -2,7 +2,7 @@
 title: 鱼虾一整碗
 email: readonlyfile@hotmail.com
 description: > # this means to ignore newlines until "baseurl:"
-   “小舢板，划呀划  小纸伞，遮雨也遮月光” 
+  三天打鱼，两天晒网，两天再抓虾
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "https://memeda.github.io" # the base hostname & protocol for your site
 

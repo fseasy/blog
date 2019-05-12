@@ -26,41 +26,30 @@
                 </article>
             </div>
             <div class="media-func">
-                <!-- JiaThis Button BEGIN -->
-                <div class="jiathis_style">
-                    <a class="jiathis_button_qzone"></a>
-                    <a class="jiathis_button_tsina"></a>
-                    <a class="jiathis_button_weixin"></a>
-                    <a class="jiathis_button_douban"></a>
-                    <a class="jiathis_button_pocket"></a>
-                    <a class="jiathis_button_evernote"></a>
-                    <a class="jiathis_button_ydnote"></a>
-                    <a class="jiathis_button_email"></a>
-                </div>
-                <!-- UY BEGIN -->
-                <!-- <div id="uyan_frame"></div> -->
+                <div id="disqus_thread"></div>
+                <script>
+                
+                /**
+                *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+                *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
+                var disqus_config = function () {
+                    this.page.url = "{{ site.url }}{{ page.url }}";  // Replace PAGE_URL with your page's canonical URL variable
+                    this.page.identifier = "{{ page.url }}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+                };
+                (function() { // DON'T EDIT BELOW THIS LINE
+                var d = document, s = d.createElement('script');
+                s.src = 'https://fishshrimp.disqus.com/embed.js';
+                s.setAttribute('data-timestamp', +new Date());
+                (d.head || d.body).appendChild(s);
+                })();
+                </script>
+                <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+            
             </div>
-            <!-- 多说评论框 start -->
-            <!-- 已废弃
-                <div class="ds-thread" data-thread-key="{{ page.id }}" 
-                data-title="{% if page.title  %}{{ page.title}}{% else %}{{site.title}}{% endif %}" 
-                data-url="{{ page.url | prepend: site.baseurl | prepend: site.url }}"></div> -->
-            <!-- 多说评论框 end -->
             {% include sinablogfooter.html %}
         </div>
     </div>
 </div>
-<!-- scripts -->
-<!-- JiaThis Button BEGIN -->
-<script type="text/javascript" >
-var jiathis_config={
-    summary:"",
-    shortUrl:false,
-    hideMore:true
-}
-</script>
-<script type="text/javascript" src="http://v3.jiathis.com/code_mini/jia.js?uid=2056015" charset="utf-8"></script>
-<!-- JiaThis Button END -->
 
 </body>
 
