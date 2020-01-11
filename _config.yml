@@ -16,7 +16,7 @@ gems:
   - jekyll-paginate
 
 exclude: [_site]
-# gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 paginate: 10
 
 #social info

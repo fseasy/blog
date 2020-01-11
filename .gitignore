@@ -4,3 +4,4 @@ pages.sublime-project
 pages.sublime-workspace
 .jekyll-metadata
 .vscode
+.jekyll-cache
