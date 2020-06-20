@@ -1,16 +1,30 @@
+{% capture title_val %}
+  {% if page.title %}
+    {{ page.title }}
+  {% else %}
+    {{ site.title }}
+  {% endif %}
+{% endcapture %}
+
+{% capture description_val %}
+  {% if page %}
+    {% if page.onewords %}
+      {{ page.onewords }}
+    {% elsif page.excerpt %}
+      {{ page.excerpt | strip_html }}
+    {% else %}
+      {{ page.content | strip_html | truncatewords: 100, " >>" }}
+    {% endif %}
+  {% else %}
+    {{ site.description }}
+  {% endif %}
+{% endcapture %}
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width initial-scale=1" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-<title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
-<meta name="description" content="{% if page %}{% 
-                                        if page.date %}{{ page.date | date: "%b %-d, %Y"  }} | {% endif %}{% 
-                                        if page.title %}{{ page.title }} | {% endif %}{% 
-                                        if page.excerpt %}{{ page.excerpt | strip_html }} | {% endif %}{% 
-                                        if page.onewords %}{{ page.onewords }}{% endif %}{% 
-                                      else %}{{ 
-                                        site.description }}{% 
-                                      endif %}">
+<title>{{ title_val | strip }}</title>
+<meta name="description" content="{{ description_val | strip }}">
 
 <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">

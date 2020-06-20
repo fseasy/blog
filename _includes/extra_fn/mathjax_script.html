@@ -1,0 +1,24 @@
+<!-- Mathjax -->
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            processEscapes: true ,
+            //skipTags: ["script","noscript","style","textarea","pre","code"] ,
+            skipTags: ["script","noscript","style","textarea"]
+        } ,
+        jax: ["input/TeX", "output/HTML-CSS"],
+        TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
+        "HTML-CSS": {
+                scale : 100 , 
+                //availableFonts: ["Asana","consolas","mono","Tex"],
+                preferredFonts: null ,
+                webFont:"STIX-Web",
+                //imageFont:"consolas",
+                //undefinedFamily:"consolas,STIXGeneral,'Arial Unicode MS',serif" ,
+                mtextFontInherit: true 
+        }
+    });
+</script>

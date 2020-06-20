@@ -4,6 +4,33 @@ For Web Service
 
 ### 更新
 
+#### 2020.06.20
+
+本来打算增加一个目录的，结果发现mathpage layout里的东西都过时了（还在使用jiathis, duoshuo...），
+瞬间决定之前写得还是挺烂的……
+
+1. 通过搜索，找到了 [share.js](https://github.com/overtrue/share.js/), 挺漂亮的，而且定制化也很强
+    
+    - 发现只有通过`data-xxx`才能配置成功，通过js里配置不成功
+    - 微信分享有问题，变成一个文件…… 
+
+2. 把share.js、disqus、mathjax、google-code-prettify 全给放到独立的html里，通过include引入，好了太多
+3. 忘了当时代码高亮的逻辑了：config里使用了rouge、又用了google-code-prettify，不知道哪个起效；而且style不好看
+
+    - 明确了： rouge是起效了的，会生成`highlighter-rouge`的div, 但是高亮效果不符合预期： 
+        我是期望直接四个空格就高亮代码，但是`rouge`需要你用`liquid`的格式写出这个代码是什么语言，才能正确高亮；
+        否则就只有一个边框，里面就是个白底黑字。
+
+    - google-code-prettify可以很好自动高亮，但是需要`css class==prettyprint`的元素才起效；
+        于是拿js处理了下rouge的结果，给`<pre>`tag增加了code-prettify需要的class，这样就可以直接高亮了
+
+    - 修改google-code-prettify的样式，这个 
+        [demo](https://raw.githack.com/google/code-prettify/master/styles/index.html)
+      可以查看样式。其中的 `li.L0,li.L1...`就是定义每行样式的。之前就是把除第4的元素设为一样，
+      第4行设为其他背景，这样就出现了每5行背景颜色不同的效果——然而我并不喜欢这个效果……
+      只需要把这块的特殊处理注释掉，就可以保持每行的背景是一样的了。
+
+
 #### 2020.05.30 
 
 惭愧，过去一年并没有更新什么…… 接下来还是多看、多记录吧！

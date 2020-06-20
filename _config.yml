@@ -15,16 +15,14 @@ kramdown:
 gems:
   - jekyll-paginate
 
+plugins: 
+  - jekyll-paginate
+
 exclude: [_site]
-plugins: [jekyll-paginate]
 paginate: 10
 
 #social info
 github_username:  memeda
-weibo_username:  readonlyfile
-weibo_url:  "http://www.weibo.com/readolyfile" # 之前打错了，readonlyfile少了个n，orz
-zhihu_username: 小文件
-zhihu_url:  "http://www.zhihu.com/people/readOnlyFile"
 
 #FILE_STORING
 storing_path: "http://memedafilestoring.github.io/data"
