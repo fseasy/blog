@@ -4,7 +4,7 @@ For Web Service
 
 ### 更新
 
-#### 2020.06.20
+#### 2020.06.20 - 
 
 本来打算增加一个目录的，结果发现mathpage layout里的东西都过时了（还在使用jiathis, duoshuo...），
 瞬间决定之前写得还是挺烂的……
@@ -12,7 +12,7 @@ For Web Service
 1. 通过搜索，找到了 [share.js](https://github.com/overtrue/share.js/), 挺漂亮的，而且定制化也很强
     
     - 发现只有通过`data-xxx`才能配置成功，通过js里配置不成功
-    - 微信分享有问题，变成一个文件…… 
+    - 微信分享有问题，变成一个文件…… => 发现原来这个是本地测试的原因——放到github上就没有问题了——因为localhost微信打不开啊 = =
 
 2. 把share.js、disqus、mathjax、google-code-prettify 全给放到独立的html里，通过include引入，好了太多
 3. 忘了当时代码高亮的逻辑了：config里使用了rouge、又用了google-code-prettify，不知道哪个起效；而且style不好看
@@ -29,6 +29,79 @@ For Web Service
       可以查看样式。其中的 `li.L0,li.L1...`就是定义每行样式的。之前就是把除第4的元素设为一样，
       第4行设为其他背景，这样就出现了每5行背景颜色不同的效果——然而我并不喜欢这个效果……
       只需要把这块的特殊处理注释掉，就可以保持每行的背景是一样的了。
+
+4. 在虚拟机，WSL，树莓派 Model 4B 三个环境上测试jekyll全新生成的时间！
+
+    之前一直在虚拟机上做本机测试，觉得jekyll generating实在太慢了，闲来无事，想benchmark一下。
+    以当前仓库的全新generating的速度（耗时）为评估值； 
+    附属效果： 构建一套与Github Pages官方一致的构建环境，同时找到时间最优的构建机器。
+
+    **构建环境信息：**
+
+    1. Github上构建本地测试环境的说明: 
+        [testing-locally](https://help.github.com/en/github/working-with-github-pages/testing-your-github-pages-site-locally-with-jekyll)
+
+    2. Github的依赖环境： [Dependency versions](https://pages.github.com/versions/)
+
+    **安装环境：**
+
+    - 虚拟机：
+    
+        1. 原来有jekyll环境，是4.0的； 这里先卸载掉！
+
+            ```shell
+            gem uninstall jekyll # 或者按提示
+            ```
+
+        2. 需要先装ruby, jekyll要求 2.50及以上； 虚拟机上是 2.51, 已经OK
+
+            [使用清华Ruhy Gems源](https://mirrors.tuna.tsinghua.edu.cn/help/rubygems/)
+
+            设置ruby本地目录：
+
+            ```shell
+            mkdir ~/.ruby
+            echo 'export GEM_HOME=$HOME/.ruby/' >> ~/.bashrc
+            echo 'export PATH="$PATH:$HOME/.ruby/bin"' >> ~/.bashrc
+            source ~/.bashrc
+            ```
+
+        3. 安装 bundler. 
+
+            ```shell
+            gem install -V bundler
+            ```
+        
+        4. 安装 `github-pages` gem，这个会构建jekyll等相关依赖环境！
+
+            写一个Gemfile 文件，内容
+
+            ```gem
+            # https://jekyllrb.com/docs/github-pages/
+            source "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"
+            gem "github-pages", group: :jekyll_plugins
+            ```
+
+    - WSL: 这个与虚拟机类似；只是因为WSL是ubuntu 14.04, ruby版本只有2.4，需要再装下ruby；
+
+        [安装 rbenv](https://gorails.com/setup/ubuntu/14.04)
+
+        使用 `git clone https://github.com/andorchen/rbenv-china-mirror.git ~/.rbenv/plugins/rbenv-china-mirror`
+        替换ruby源；
+
+    - 树莓派 Model 4B: 
+
+        ruby是2.5.5的，可以跟虚拟机一样装；
+
+
+    **测试：
+
+    执行 `bundle exec jekyll serve`
+
+    | Env    | Time |
+    |--------|------|
+    |虚拟机   | ~42s  |
+    |WSL     |   |
 
 
 #### 2020.05.30 
