@@ -7,7 +7,7 @@ For Web Service
 #### 2020.06.20 - 
 
 本来打算增加一个目录的，结果发现mathpage layout里的东西都过时了（还在使用jiathis, duoshuo...），
-瞬间决定之前写得还是挺烂的……
+瞬间觉得之前写得还是挺烂的……
 
 1. 通过搜索，找到了 [share.js](https://github.com/overtrue/share.js/), 挺漂亮的，而且定制化也很强
     
@@ -82,6 +82,12 @@ For Web Service
             gem "github-pages", group: :jekyll_plugins
             ```
 
+            使用以下命令安装依赖（包括jekyll等等）
+
+            ```shell
+            bundle install
+            ```
+
     - WSL: 这个与虚拟机类似；只是因为WSL是ubuntu 14.04, ruby版本只有2.4，需要再装下ruby；
 
         [安装 rbenv](https://gorails.com/setup/ubuntu/14.04)
@@ -93,16 +99,23 @@ For Web Service
 
         ruby是2.5.5的，可以跟虚拟机一样装；
 
+        需要先安装 `sudo apt install ruby-dev`, 不然编译安装依赖的时候找不到头文件。
 
-    **测试：
+
+    **测试：**
 
     执行 `bundle exec jekyll serve`
 
-    | Env    | Time |
-    |--------|------|
-    |虚拟机   | ~42s  |
-    |WSL     |   |
+    | Env            | Time(s) | 备注 |
+    |----------------|-------|--------|
+    |虚拟机           | 42  | 耗时比较稳定  |
+    |WSL             | 24  | 第一次花了31s，后面基本是21 - 24s |
+    |树莓派 Model 4B  | 18  | 耗时很稳定  |
 
+    **结论：**
+
+    虚拟机性能最差！WSL性能不太稳定；树莓派最好！尴尬，我的y470真的不行了…… 幸好最近不用写什么大程序。
+    
 
 #### 2020.05.30 
 
