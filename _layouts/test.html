@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+{% include sinabloghead.html %}
+</head>
+<body>
+<div class="sinabloga">
+    <div class="sinablogb">
+        <div class="wrapper">
+            {% include sinablogheader.html  %}
+            <div class="contentpanel">
+                <h1 class="post-title">{{ page.title }}</h1>
+                <p class="post-meta">
+                {{ page.date | date: "%b %-d, %Y"  }}
+                {% if page.author %} • {{ page.author }}{% endif %}
+                {% if page.meta %} • {{ page.meta }}{% endif %}
+                {% if page.tags %}
+                    {% for t in page.tags %}{{t}} {% endfor %}
+                {% endif %}
+                {% if page.categories %}
+                    {% for category in page.categories %} {{category}} {% endfor %}
+                {% endif %}
+                </p>
+                <!-- TOC -->
+                <div class="content-navigation-toc">
+                    <div class="content-navigation-header">
+                        <span class="octicon octicon-list-unordered"></span>&nbsp;Toc
+                    </div>
+                    <div class="content-navigation-list toc" id="toc"></div>
+                </div>
+
+                <article class="post-content">
+                    {{content}}
+                </article>
+            </div>
+            <div class="media-func">
+                {% include extra_fn/share_js_tag.html %}
+                <div class="content-sep"></div>
+                {% include extra_fn/disqus_tag.html %}
+            </div>
+            {% include sinablogfooter.html %}
+        </div>
+    </div>
+</div>
+
+{% include extra_fn/share_js_script.html %}
+{% include extra_fn/mathjax_script.html %}
+{% include extra_fn/google_code_prettify_script.html %}
+{% include extra_fn/disqus_script.html %}
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% link /js/third-party/toc.js %}" ></script>
+<script>
+    $(document).ready(function() {
+        $('#toc').toc();
+    });
+</script>
+
+</body>
+</html>
