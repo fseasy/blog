@@ -9,6 +9,14 @@ For Web Service
 本来打算增加一个目录的，结果发现mathpage layout里的东西都过时了（还在使用jiathis, duoshuo...），
 瞬间觉得之前写得还是挺烂的……
 
+**预期功能：**
+
+1. 文章显示目录
+2. 分享功能
+3. 把TAG页独立为tab页；将“目录”改为“分类”，同时增加搜索（谷歌搜索）能力
+4. meta元素显示优化； 引用显示优化； 代码显示优化；
+5. mobil 
+
 1. 通过搜索，找到了 [share.js](https://github.com/overtrue/share.js/), 挺漂亮的，而且定制化也很强
     
     - 发现只有通过`data-xxx`才能配置成功，通过js里配置不成功
