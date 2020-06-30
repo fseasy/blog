@@ -6,40 +6,66 @@
 <body>
 <div class="sinabloga">
     <div class="sinablogb">
-        <div class="wrapper">
-            {% include sinablogheader.html  %}
-            <div class="contentpanel">
-                <h1 class="post-title">{{ page.title }}</h1>
-                <p class="post-meta">
-                {{ page.date | date: "%b %-d, %Y"  }}
-                {% if page.author %} • {{ page.author }}{% endif %}
-                {% if page.meta %} • {{ page.meta }}{% endif %}
-                {% if page.tags %}
-                    {% for t in page.tags %}{{t}} {% endfor %}
-                {% endif %}
-                {% if page.categories %}
-                    {% for category in page.categories %} {{category}} {% endfor %}
-                {% endif %}
-                </p>
-                <!-- TOC -->
-                <div class="content-navigation-toc">
-                    <div class="content-navigation-header">
-                        <span class="octicon octicon-list-unordered"></span> Toc
-                    </div>
-                    <div class="content-navigation-list toc" id="toc"></div>
+        <!-- <div class="wrapper"> -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    {% include sinablogheader.html  %}
                 </div>
+            </div>
 
-                <article class="post-content">
-                    {{content}}
-                </article>
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="contentpanel">
+                        <h1 class="post-title">{{ page.title }}</h1>
+                        <p class="post-meta">
+                        {{ page.date | date: "%b %-d, %Y"  }}
+                        {% if page.author %} • {{ page.author }}{% endif %}
+                        {% if page.meta %} • {{ page.meta }}{% endif %}
+                        {% if page.tags %}
+                            {% for t in page.tags %}{{t}} {% endfor %}
+                        {% endif %}
+                        {% if page.categories %}
+                            {% for category in page.categories %} {{category}} {% endfor %}
+                        {% endif %}
+                        </p>
+                        <!-- TOC -->
+                        <div class="content-navigation-toc">
+                            <div class="content-navigation-header">
+                                <span class="octicon octicon-list-unordered"></span> Toc
+                            </div>
+                            <div class="content-navigation-list toc"></div>
+                        </div>
+        
+                        <article class="post-content">
+                            {{content}}
+                        </article>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <!-- TOC -->
+                    <div class="content-navigation-toc">
+                        <div class="content-navigation-header">
+                            <span class="octicon octicon-list-unordered"></span> Toc
+                        </div>
+                        <div class="content-navigation-list toc" ></div>
+                    </div>
+                </div>
             </div>
-            <div class="media-func">
-                {% include extra_fn/share_js_tag.html %}
-                <div class="content-sep"></div>
-                {% include extra_fn/disqus_tag.html %}
+
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="media-func">
+                        {% include extra_fn/share_js_tag.html %}
+                        <div class="content-sep"></div>
+                        {% include extra_fn/disqus_tag.html %}
+                    </div>
+                    {% include sinablogfooter.html %}
+                </div>
             </div>
-            {% include sinablogfooter.html %}
+
         </div>
+        <!-- </div> -->
     </div>
 </div>
 
@@ -49,7 +75,7 @@
 <link rel="stylesheet" href="{% link /js/third-party/toc/hack_toc.css %}">
 <script>
     $(document).ready(function() {
-        $('#toc').toc({
+        $('.toc').toc({
             "title": ""
         });
     });
