@@ -1,4 +1,6 @@
 // https://github.com/ghiculescu/jekyll-table-of-contents
+// do some modyfing!
+// 1. adapt to bootstrap v3.
 (function($){
   $.fn.toc = function(options) {
     var defaults = {
@@ -52,7 +54,9 @@
 
     var get_level = function(ele) { return parseInt(ele.nodeName.replace("H", ""), 10); };
     var highest_level = headers.map(function(_, ele) { return get_level(ele); }).get().sort()[0];
-    var return_to_top = '<i class="icon-arrow-up back-to-top"> </i>';
+    var return_to_top = '<button class="btn btn-link btn-sm toc-totop-btn back-to-top">\
+                            <span class="glyphicon glyphicon-menu-up"></span> \
+                         </button>';
 
     var level = get_level(headers[0]),
       this_level,
@@ -66,7 +70,7 @@
     .each(function(_, header) {
       this_level = get_level(header);
       if (!settings.noBackToTopLinks && this_level === highest_level) {
-        $(header).addClass('top-level-header').after(return_to_top);
+        $(header).addClass('top-level-header').append(return_to_top);
       }
       if (this_level === level) // same level as before; same indenting
         html += "<li class=\"" + settings.classes.item + "\">" + createLink(header);

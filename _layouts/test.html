@@ -24,7 +24,7 @@
                 <!-- TOC -->
                 <div class="content-navigation-toc">
                     <div class="content-navigation-header">
-                        <span class="octicon octicon-list-unordered"></span>&nbsp;Toc
+                        <span class="octicon octicon-list-unordered"></span> Toc
                     </div>
                     <div class="content-navigation-list toc" id="toc"></div>
                 </div>
@@ -43,18 +43,24 @@
     </div>
 </div>
 
+<!-- NEW -->
+{% include third_resource/jquery.html %}
+<script src="{% link /js/third-party/toc/toc.js %}" ></script>
+<link rel="stylesheet" href="{% link /js/third-party/toc/hack_toc.css %}">
+<script>
+    $(document).ready(function() {
+        $('#toc').toc({
+            "title": ""
+        });
+    });
+</script>
+{% include third_resource/bootstrap_js.html %}
+<!-- END -->
+
 {% include extra_fn/share_js_script.html %}
 {% include extra_fn/mathjax_script.html %}
 {% include extra_fn/google_code_prettify_script.html %}
 {% include extra_fn/disqus_script.html %}
-
-<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{% link /js/third-party/toc.js %}" ></script>
-<script>
-    $(document).ready(function() {
-        $('#toc').toc();
-    });
-</script>
 
 </body>
 </html>

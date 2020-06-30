@@ -24,6 +24,8 @@ For Web Service
     - 发现只有通过`data-xxx`才能配置成功，通过js里配置不成功
     - 微信分享有问题，变成一个文件…… => 发现原来这个是本地测试的原因——放到github上就没有问题了——因为localhost微信打不开啊 = =
 
+    因为share.js的CDN下载可能存在问题，导致目录的价值也延缓了…… 应该把目录加载放到这个之前！
+
 2. 把share.js、disqus、mathjax、google-code-prettify 全给放到独立的html里，通过include引入，好了太多
 3. 忘了当时代码高亮的逻辑了：config里使用了rouge、又用了google-code-prettify，不知道哪个起效；而且style不好看
 
@@ -126,6 +128,33 @@ For Web Service
 
     虚拟机性能最差！WSL性能不太稳定；树莓派最好！尴尬，我的y470真的不行了…… 幸好最近不用写什么大程序。
     
+
+
+
+
+5. 目录功能 & 对其做修改
+
+    使用 [jekyll-table-of-content](https://github.com/ghiculescu/jekyll-table-of-contents).
+    
+    这里称其为 toc.js. 
+    需要对其做一些改动！
+    
+    1. 我们用的是 bootstrap v3，而toc.js 用的是 v2, 所以（1）点击回到顶部的图标无法显示
+
+        ```html
+        <!-- 将这些放到 header 的元素下-->
+        <button class="btn btn-link btn-sm toc-totop-btn back-to-top">
+            <span class="glyphicon glyphicon-menu-up"></span>
+        </button>
+
+        <!-- self css -->
+        .toc-totop-btn {
+            margin-bottom: -5px;
+            margin-left: -15px;
+            color: grey;
+        }
+        ```
+
 
 #### 2020.05.30 
 
