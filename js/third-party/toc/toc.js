@@ -25,7 +25,9 @@
 
     function createLink (header) {
       var innerText = (header.textContent === undefined) ? header.innerText : header.textContent;
-      return "<a href='#" + fixedEncodeURIComponent(header.id) + "'>" + innerText + "</a>";
+      // DONT't EncodeURI, because for Chinese, it will cause bootstrap scroll-spy fail.
+      //return "<a href='#" + fixedEncodeURIComponent(header.id) + "'>" + innerText + "</a>";
+      return "<a href='#" + header.id + "'>" + innerText + "</a>";
     }
 
     var headers = $(settings.headers).filter(function() {

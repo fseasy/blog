@@ -154,6 +154,15 @@ For Web Service
             color: grey;
         }
         ```
+    
+    2. 使用 boostrap js里的 scroll-spy功能（滚动跟踪）来实现侧边目录的动态对应
+
+        遇到些问题：
+        
+        a. bootstrap的样式必须设置好(`nav nav-tabs` 或者其他)，开始只设置了`nav`，怎么都不行……
+        b. 中文header报错 —— 因为 toc.js 里面创建link的时候做了 `EncodeURIComponent`， 中文
+            被encode了，这对浏览器而言是ok的；然而这个bootstrap就不行了——它应该就是直接字面匹配的；
+            所以，修改了toc.js，把encode给去掉了——或许会导致锚失效？不管了……
 
 
 #### 2020.05.30 

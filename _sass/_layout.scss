@@ -86,8 +86,6 @@
     }
 }
 
-
-
 /**
  * Site footer
  */
@@ -158,8 +156,6 @@
     }
 }
 
-
-
 /**
  * Page content
  */
@@ -189,8 +185,6 @@
     display: block;
     font-size: 24px;
 }
-
-
 
 /**
  * Posts
@@ -254,3 +248,29 @@
         font-weight:bold ;
     }
 }
+
+/* side-bar nav.*/
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+    .post-sidebar .nav > .active > ul {
+      display: block;
+    }
+    /* Widen the fixed sidebar */
+    .post-sidebar.affix,
+    .post-sidebar.affix-bottom {
+      width: 213px;
+    }
+    .post-sidebar.affix {
+      position: fixed; /* Undo the static from mobile first approach */
+      top: 20px;
+    }
+    .post-sidebar.affix-bottom {
+      position: absolute; /* Undo the static from mobile first approach */
+    }
+    .post-sidebar.affix-bottom .post-sidenav,
+    .post-sidebar.affix .post-sidenav {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  }

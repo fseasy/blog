@@ -16,7 +16,7 @@
 
             <div class="row">
                 <div class="col-md-offset-2 col-md-8">
-                    <div class="contentpanel">
+                    <div class="contentpanel" >
                         <h1 class="post-title">{{ page.title }}</h1>
                         <p class="post-meta">
                         {{ page.date | date: "%b %-d, %Y"  }}
@@ -42,13 +42,13 @@
                         </article>
                     </div>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" id="navbar-example">
                     <!-- TOC -->
-                    <div class="content-navigation-toc">
+                    <div data-spy="affix" data-offset-top="0"  class="content-navigation-toc">
                         <div class="content-navigation-header">
                             <span class="octicon octicon-list-unordered"></span> Toc
                         </div>
-                        <div class="content-navigation-list toc" ></div>
+                        <nav class="content-navigation-list toc" ></nav>
                     </div>
                 </div>
             </div>
@@ -76,11 +76,21 @@
 <script>
     $(document).ready(function() {
         $('.toc').toc({
-            "title": ""
+            title: "",
+            listType: "ul",
+            classes: {
+                list: "nav nav-pills nav-stacked",
+                item: ""
+            }
         });
     });
 </script>
 {% include third_resource/bootstrap_js.html %}
+
+<script>
+$('body').scrollspy({ target: '#navbar-example' })
+</script>
+
 <!-- END -->
 
 {% include extra_fn/share_js_script.html %}
