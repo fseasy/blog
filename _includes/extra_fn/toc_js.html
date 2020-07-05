@@ -1,0 +1,61 @@
+
+<link rel="stylesheet" href="{% link /js/third-party/toc/toc.css %}">
+
+{% include third_resource/bootstrap_js.html %}
+<script src="{% link /js/third-party/toc/toc.js %}" ></script>
+
+<script>
+    $(document).ready(function() {
+        // init the TOC
+        $('#toc-nav').toc({
+            title: "",
+            listType: "ul",
+            classes: {
+                list: "nav",
+                item: ""
+            },
+            showEffect: 'none', 
+            noBackToTopLinks: true
+        });
+
+        $('#toc-content').toc({
+            title: "",
+            listType: "ul",
+            classes: {
+                list: "",
+                item: ""
+            },
+            showEffect: 'none', 
+            noBackToTopLinks: true
+        });
+
+        // make side-nav container sticky (affix)
+        (function($) {
+            var side_nav = $(".side-nav");
+            var main_content = $(".contentpanel"),
+                main_content_top = main_content.offset().top,
+                main_content_margin_bottom = 
+                    parseInt(main_content.css("margin-bottom"), 0);
+            side_nav.affix({
+                offset: {
+                    top: function() {
+                        var pre_change_len = 20;
+                        return main_content_top - pre_change_len;
+                    },
+                    bottom: function() {
+                        var main_content_bottom = main_content_top + 
+                            main_content.outerHeight(true) -
+                            main_content_margin_bottom;
+                        var bottom_offset = $(document).height() - main_content_bottom;
+                        return bottom_offset;
+                    }
+                },
+                target: $(window)
+            })
+        })(window.jQuery)
+
+        // scroll spy to the nav
+        $('body').scrollspy({ target: '.side-nav' })
+    });
+   
+</script>

@@ -17,11 +17,11 @@
     },
     settings = $.extend(defaults, options);
 
-    function fixedEncodeURIComponent (str) {
-      return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
-        return '%' + c.charCodeAt(0).toString(16);
-      });
-    }
+    // function fixedEncodeURIComponent (str) {
+    //   return encodeURIComponent(str).replace(/[!'()*]/g, function(c) {
+    //     return '%' + c.charCodeAt(0).toString(16);
+    //   });
+    // }
 
     function createLink (header) {
       var innerText = (header.textContent === undefined) ? header.innerText : header.textContent;

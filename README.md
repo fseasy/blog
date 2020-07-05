@@ -11,11 +11,13 @@ For Web Service
 
 **预期功能：**
 
-1. 文章显示目录
+1. 文章显示目录 [doing]
 2. 分享功能 [done]
 3. 把TAG页独立为tab页；将“目录”改为“分类”，同时增加搜索（谷歌搜索）能力
-4. meta元素显示优化； 引用显示优化； 代码显示优化；
+4. meta元素显示优化； 引用显示优化； 代码显示优化； 
 5. 移动设备显示优化： 头部显示，底部显示；
+
+参考博客： https://github.com/bit-ranger/blog
 
 **实现细节：**
 
@@ -139,7 +141,7 @@ For Web Service
     这里称其为 toc.js. 
     需要对其做一些改动！
     
-    1. 我们用的是 bootstrap v3，而toc.js 用的是 v2, 所以（1）点击回到顶部的图标无法显示
+    1. 我们用的是 bootstrap v3，而toc.js 用的是 v2, 所以点击回到顶部的图标无法显示 => 【放弃；意义不大，不使用此功能】
 
         ```html
         <!-- 将这些放到 header 的元素下-->
@@ -155,7 +157,7 @@ For Web Service
         }
         ```
     
-    2. 使用 boostrap js里的 scroll-spy功能（滚动跟踪）来实现侧边目录的动态对应
+    2. 使用 boostrap js里的 scroll-spy功能（滚动跟踪）来实现侧边目录的动态对应，使用affix来实现侧边目录sticky功能 【done】
 
         遇到些问题：
         
@@ -163,6 +165,57 @@ For Web Service
         b. 中文header报错 —— 因为 toc.js 里面创建link的时候做了 `EncodeURIComponent`， 中文
             被encode了，这对浏览器而言是ok的；然而这个bootstrap就不行了——它应该就是直接字面匹配的；
             所以，修改了toc.js，把encode给去掉了——或许会导致锚失效？不管了……
+        c. affix和scroll-spy是在页面loaded的时候执行的；而引入的Dsiqus插件在无代理的情况下总是下载失败，到时长时间页面难以loaded.
+           这导致上述功能长时间无法execute. 解决方法一种是让这两个功能立刻执行，然而这不太可能——要改bootstrap.js. 另一种就是
+           让disqus插件慢点执行——或者说在loaded之后再执行。显然第二种更简单——因为只需要在disqus插件上包装一下就好咯。
+           想起之前用来模仿的页面，加载disqus是要点击一个按钮再加载的，想想这样挺合理的。于是就让disqus在点击按钮后才加载。
+           这样挺好的。 
+        d. affix不符合预期；照理应该基于其父元素(content)来决定top的offset（初始应该是0），然而却发现是基于body的，top是
+           header的高度，这样就不对了。【done】
+
+           尝试用css3的 sticky 来实现，发现这更是一个大坑…… 关键是要找sticky的跟踪
+           对象，但是这个对象是隐式推导的，似乎还只有`overflow`这个属性来控制，
+           而且似乎这个属性
+           要考虑 parent-path 上的所有 overflow 属性。我们的side-nav太下层了，
+           不知道是不是parent设置有问题，导致sticky不work.
+           我担心之前css对overflow有修改，
+           于是把所有的css都去掉了，在纯粹的html上尝试sticky, 但行为依然是不符合预期的：
+           放在有的层级下就可以，放在原来的位置就不行. 实在难受，试了一下午，放弃…… 
+
+           我看bootstrap的demo用的js来实现这个affix (也不是按照文档里说的data-spy来实现)，看看我们也能不能这么来做？
+
+           done. 
+           
+           照着bootstrap affix 的 live demo，再查了一下，就好了。还是不认真，白走了 css sticky的弯路了。
+
+           bootstrap的 affix 需要设置 .affix 和 .affix-bottom 样式 ，如
+
+           ```
+           .affix {
+               position: fixed;
+               top: 0;
+           }
+           .affix-bottom {
+               position: absolute;
+           }
+           ```
+
+           其中之前没有设置 `affix-bottom`，导致affix有问题，内嵌style会多一个`position: relative`，导致触发 `affix-bottom`后，
+           往回`affix`就失效了；
+           搜到了github上的issue，发现不认真的不止我一个 = =
+
+    3. 通过formatter开关是否要生成目录 [TODO]
+    4. 目录有2个，分别是“内容顶部”和“侧边导航”。 显示逻辑如下：【TODO】
+        
+        a. 内容顶部的目录在开启生成目录的时候总是显示； 
+        
+        b. "侧边导航"目录若设备太窄，不显示
+        
+        c. 若设备宽度足够，默认不显示；同时在“内容顶部”显示一个“移动到右侧”的按钮；
+            
+            a. 当点击该按钮时，“内容顶部”目录消失，“侧边导航”目录显示
+            b. “侧边导航”右上方有一个“关闭”按钮，点击后，关闭“侧边导航”目录，“内容顶部”目录显示。
+            c. 若“侧边导航”宽度太少，可考虑在此动态变化过程中改变容器size；
 
 
 #### 2020.05.30 

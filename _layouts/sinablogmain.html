@@ -6,10 +6,14 @@
     <body>
         <div class="sinabloga">
             <div class="sinablogb">
-                <div class="wrapper">
-                    {% include sinablogheader.html %}
-                    <div class="contentpanel purple-topborder shadow">
-                    {{ content }}    
+                <div class="container-fluid">
+                    
+                    {% include sinablogheader.html  %}
+
+                    <div class="row">
+                        <div class="col-md-offset-2 col-md-8 contentpanel purple-topborder shadow">
+                            {{ content }} 
+                        </div>   
                     </div>
                     {% include pagination.html  %}
                     {% include sinablogfooter.html %}

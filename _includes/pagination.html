@@ -1,30 +1,37 @@
+{% capture pagenation_content %}
+    {% if paginator.total_pages > 1 %}
+    <div class="pagination shadow">
+        <div class="pre">
+        {% if paginator.previous_page %}
+        <a href="{{paginator.previous_page_path | prepend: site.baseurl | replace: '//','/'}}">上一页</a>
+        {% else %}
+        <span>上一页</span>
+        {% endif %}
+        </div>
+        <div class="num">
+        {% for page in (1..paginator.total_pages) %}
+        {% if page == paginator.page %}
+        <em>{{ page }}</em>
+        {% elsif page == 1 %}
+        <a href="{{ '/index.html' | prehend: site.baseurl}}">{{page}}</a>
+        {% else %}
+        <a href="{{ site.paginate_path | prehend: site.baseurl | replace: '//','/' | replace: ':num',page}}">{{page}}</a>
+        {% endif %}
+        {% endfor %}
+        </div>
+        <div class="nxt">
+        {% if paginator.next_page %}
+        <a href="{{paginator.next_page_path | prehend: site.baseurl | replace: '//','/'}}">下一页</a>
+        {% else %}
+        <span>下一页</span>
+        {% endif %}
+    </div>
+    </div>
+    {% endif %}
+{% endcapture %}
 
-{% if paginator.total_pages > 1 %}
-<div class="pagination shadow">
-    <div class="pre">
-    {% if paginator.previous_page %}
-    <a href="{{paginator.previous_page_path | prepend: site.baseurl | replace: '//','/'}}">上一页</a>
-    {% else %}
-    <span>上一页</span>
-    {% endif %}
+<div class="row">
+    <div class="col-md-offset-2 col-md-8" style="padding-left: 0; padding-right: 0;">
+        {{ pagenation_content }}
     </div>
-    <div class="num">
-    {% for page in (1..paginator.total_pages) %}
-    {% if page == paginator.page %}
-    <em>{{ page }}</em>
-    {% elsif page == 1 %}
-    <a href="{{ '/index.html' | prehend: site.baseurl}}">{{page}}</a>
-    {% else %}
-    <a href="{{ site.paginate_path | prehend: site.baseurl | replace: '//','/' | replace: ':num',page}}">{{page}}</a>
-    {% endif %}
-    {% endfor %}
-    </div>
-    <div class="nxt">
-    {% if paginator.next_page %}
-    <a href="{{paginator.next_page_path | prehend: site.baseurl | replace: '//','/'}}">下一页</a>
-    {% else %}
-    <span>下一页</span>
-    {% endif %}
 </div>
-</div>
-{% endif %}
