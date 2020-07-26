@@ -11,7 +11,7 @@
             {% include sinablogheader.html  %}
 
             <div class="row">
-                <div class="col-md-offset-2 col-md-8 contentpanel">
+                <div class="contentpanel col-md-offset-2 col-md-8 col-xs-12 col-sm-12">
                     <h1 class="post-title">{{ page.title }}</h1>
                     <p class="post-meta">
                     {{ page.date | date: "%b %-d, %Y"  }}
@@ -32,7 +32,7 @@
                         {{content}}
                     </article>
                 </div>
-                <div class="col-md-2">
+                <div class="right-side col-md-2 hidden-xs hidden-sm">
                     {% include extra_fn/toc_side_nav_tag.html %}
                 </div>
             </div>

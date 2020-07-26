@@ -12,9 +12,78 @@
   color: grey;
 }
 
+.toc_change {
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.toc_change:hover {
+  cursor: pointer;
+}
+
+
 /* COMPONENT 1: content-top */
 
+.toc_bar {
+  font-size: 24px;
+}
+
+#toc-content ol {
+  counter-reset: li; /* Initiate a counter */
+  list-style: none; /* Remove default numbering */
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+  margin: 0.2em 0;
+}
+
+#toc-content ol>li {
+  margin: 0.5em 0;
+}
+
+#toc-content ol ol {
+  margin: 0 0 0 0.2em; /* Add some left margin for inner lists */
+}
+
+.rounded-list a{
+  position: relative;
+  display: block;
+  text-decoration: none;
+}
+
+.rounded-list a:hover{
+}
+
+.rounded-list a:before{
+  content: counter(li);
+  counter-increment: li;
+  position: absolute;
+  left: -2.5em;
+  background: #87ceeb;
+  height: 1.5em;
+  width: 1.5em;
+  line-height: 1.5em;
+  text-align: center;
+  border-radius: 1.5em;
+}
+
+.rounded-list li li a:before {
+  content: counter(li);
+  counter-increment: li;
+  position: absolute;
+  left: -2em;
+  background: #87ceeb;
+  height: 1em;
+  width: 1em;
+  line-height: 1em;
+  text-align: center;
+  border-radius: 1em;
+}
+
 /* COMPONENT 2: side-bar nav.*/
+
+.nav_toc_bar {
+  font-size: 16px;
+  color: #767676;
+}
 
 /* Show and affix the side nav when space allows it */
 @media (min-width: 992px) {

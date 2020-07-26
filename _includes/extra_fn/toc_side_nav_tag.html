@@ -1,2 +1,8 @@
-<nav class="side-nav nav-list" id="toc-nav">
+<!-- DON't USE .hidden class of Bootstrap, because it has the highest priority, and `show` not work -->
+<nav class="side-nav nav-list" style="display: none;">
+    <div class="nav_toc_bar">
+        目录
+        <span class="glyphicon glyphicon-pushpin toc_change text-primary hidden-xs hidden-sm" title="收起侧边栏目录到主页面"></span> 
+    </div>
+    <div id="toc-nav"></div>
 </nav>
