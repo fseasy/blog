@@ -1,5 +1,5 @@
 ---
-layout: sinablogpage
+layout: post
 title: 一步之遥
 date: 2015-04-20
 categories: 作品 电影

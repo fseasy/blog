@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: Python文档学习与记录——Modules
 date: 2018-03-10
 categories: 技术 

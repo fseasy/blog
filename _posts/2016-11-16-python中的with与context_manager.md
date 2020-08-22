@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: Python中的with与上下文管理装饰器contextmanager
 date: 2016-11-16
 categories: 技术 

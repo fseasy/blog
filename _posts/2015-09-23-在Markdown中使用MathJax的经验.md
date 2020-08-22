@@ -1,5 +1,5 @@
 ---
-layout: sinablogpage
+layout: post
 title: 在Markdown中使用Mathjax的经验
 date: 2015-09-23
 categories: 总结

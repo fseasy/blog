@@ -1,5 +1,5 @@
 ---
-layout: sinablogpage
+layout: post
 title:  "Welcome to Jekyll!"
 date:   2015-04-04 20:30:59
 categories: jekyll update

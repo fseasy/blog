@@ -1,16 +1,11 @@
 /*
+  split TOC style from layout because it is linked to some javascript
     Toc has 2 components:
     1. in content top
     2. in side-bar (side-nav)
 */
 
-/* HACK for toc.js inner style */
-
-.toc-totop-btn {
-  margin-bottom: -5px;
-  margin-left: -10px;
-  color: grey;
-}
+/* button switch between content-top and side-bar */
 
 .toc_change {
   font-size: 14px;
@@ -25,57 +20,7 @@
 /* COMPONENT 1: content-top */
 
 .toc_bar {
-  font-size: 24px;
-}
-
-#toc-content ol {
-  counter-reset: li; /* Initiate a counter */
-  list-style: none; /* Remove default numbering */
-  text-shadow: 0 1px 0 rgba(255,255,255,.5);
-  margin: 0.2em 0;
-}
-
-#toc-content ol>li {
-  margin: 0.5em 0;
-}
-
-#toc-content ol ol {
-  margin: 0 0 0 0.2em; /* Add some left margin for inner lists */
-}
-
-.rounded-list a{
-  position: relative;
-  display: block;
-  text-decoration: none;
-}
-
-.rounded-list a:hover{
-}
-
-.rounded-list a:before{
-  content: counter(li);
-  counter-increment: li;
-  position: absolute;
-  left: -2.5em;
-  background: #87ceeb;
-  height: 1.5em;
-  width: 1.5em;
-  line-height: 1.5em;
-  text-align: center;
-  border-radius: 1.5em;
-}
-
-.rounded-list li li a:before {
-  content: counter(li);
-  counter-increment: li;
-  position: absolute;
-  left: -2em;
-  background: #87ceeb;
-  height: 1em;
-  width: 1em;
-  line-height: 1em;
-  text-align: center;
-  border-radius: 1em;
+  font-size: $base-font-size;
 }
 
 /* COMPONENT 2: side-bar nav.*/
@@ -90,7 +35,7 @@
   /* Widen the fixed sidebar */
   .side-nav.affix {
     position: fixed;
-    top: 20px;
+    top: 10px;
   }
   .side-nav.affix-bottom {
     position: absolute;
@@ -99,7 +44,7 @@
 
 /* First level of nav */
 .nav-list {
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 20px;
 }
 
@@ -107,7 +52,7 @@
 .nav-list .nav > li > a {
   display: block;
   padding: 4px 20px;
-  font-size: 16px;
+  font-size: $base-font-size;
   font-weight: 500;
   color: #767676;
 }

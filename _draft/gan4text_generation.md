@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: GAN for Text Generation
 date: 2020-03-09
 categories: 技术 

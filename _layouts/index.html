@@ -1,22 +1,22 @@
 <!DOCTYPE>
 <html lang="zh_CN">
     <head>
-    {% include sinabloghead.html %}
+    {% include head.html %}
     </head>
     <body>
         <div class="sinabloga">
             <div class="sinablogb">
-                <div class="container-fluid">
+                <div class="container">
                     
-                    {% include sinablogheader.html  %}
+                    {% include page_header.html  %}
 
                     <div class="row">
-                        <div class="col-md-offset-2 col-md-8 contentpanel purple-topborder shadow">
+                        <div class="contentpanel purple-topborder shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
                             {{ content }} 
                         </div>   
                     </div>
                     {% include pagination.html  %}
-                    {% include sinablogfooter.html %}
+                    {% include page_footer.html %}
                 </div>
             </div>
         </div>

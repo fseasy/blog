@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: 使用CMake构建MSVS友好的解决方案
 date: 2016-09-29
 categories: 技术 

@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: Windows Subsystem for Linux(WSL)的配置
 date: 2016-08-03
 categories: 技术 

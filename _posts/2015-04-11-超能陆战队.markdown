@@ -1,8 +1,8 @@
 ---
-layout:  sinablogpage
-title:  超能陆战队
-date:  2015-04-11
-categories:  作品 电影
+layout: page
+title: 超能陆战队
+date: 2015-04-11
+categories: 作品 电影
 tags: 萌萌哒 大白 治愈 动画 肉体与精神哪个更重要
 onewords: 大白萌萌哒胖胖哒~最后引人思考：肉体与精神，谁才是我们最关注的~
 ---

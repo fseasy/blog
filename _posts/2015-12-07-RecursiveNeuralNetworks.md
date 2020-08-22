@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: Parsing natural Scene and natural Language with Recursive Neural Networks 论文阅读
 date: 2015-12-7
 categories: 技术 

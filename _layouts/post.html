@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% include sinabloghead.html %}
+    {% include head.html %}
 </head>
 <body>
 <div class="sinabloga">
     <div class="sinablogb">
-        <div class="container-fluid">
+        <div class="container">
 
-            {% include sinablogheader.html  %}
+            {% include page_header.html  %}
 
             <div class="row">
-                <div class="contentpanel col-md-offset-2 col-md-8 col-xs-12 col-sm-12">
+                <div class="contentpanel shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
                     <h1 class="post-title">{{ page.title }}</h1>
                     <p class="post-meta">
                     {{ page.date | date: "%b %-d, %Y"  }}
@@ -32,7 +32,7 @@
                         {{content}}
                     </article>
                 </div>
-                <div class="right-side col-md-2 hidden-xs hidden-sm">
+                <div class="right-side col-md-1 hidden-xs hidden-sm">
                     {% include extra_fn/toc_side_nav_tag.html %}
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     {% include extra_fn/disqus_tag.html %}
                 </div>
             </div>
-            {% include sinablogfooter.html %}
+            {% include page_footer.html %}
 
         </div>
     </div>

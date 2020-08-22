@@ -7,7 +7,7 @@
 $baseurl: '{{ site.baseurl }}' ;
 
 // Our variables
-$base-font-family: 'Microsoft YaHei' , Consolas , Helvetica, Arial, sans-serif;
+$base-font-family: 'Open Sans','Helvetica Neue',Arial,'Hiragino Sans GB','Microsoft YaHei','WenQuanYi Micro Hei',sans-serif;
 $base-font-size:   16px;
 $small-font-size:  $base-font-size * 0.875;
 $base-line-height: 1.8;
@@ -40,17 +40,10 @@ $screen-md-min:    992px; // as bootsrap
     }
 }
 
-
-
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
-        // "bootstrap",
-        "base",
         "layout",
         "syntax-highlighting",
-        "common",
-        "text-display" ,
-//        "busy"
         "windmill",
         // for TOC style
         "toc"

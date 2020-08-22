@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: stream流到bool的转换不等于good函数的结果
 date: 2016-07-06
 categories: 技术 

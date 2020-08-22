@@ -1,5 +1,5 @@
 ---
-layout: sinablogpage
+layout: post
 title: 简历 resume
 permalink: /resume/
 ---

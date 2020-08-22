@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: Tensorflow Embedding操作
 date: 2017-04-13
 categories: 技术 

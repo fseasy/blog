@@ -18,9 +18,9 @@ $(document).ready(function() {
 
     $('#toc-content').toc({
         title: "",
-        listType: "ol",
+        listType: "ul",
         classes: {
-            list: "rounded-list",
+            list: "",
             item: ""
         },
         showEffect: 'none', 
@@ -43,7 +43,7 @@ $(document).ready(function() {
         side_nav.affix({
             offset: {
                 top: function() {
-                    var pre_change_len = 20;
+                    var pre_change_len = 10;
                     return main_content_top - pre_change_len;
                 },
                 bottom: function() {
@@ -69,6 +69,10 @@ $(document).ready(function(){
     var SWITCH_CLASS = ".toc_change";
     var SIDE_NAV_CLASS = ".side-nav",
         CONETNT_TOC_CLASS = ".content_toc_wrapper";
+    var ORIGIN_CONTENT_WIDE_CLASS = "col-md-10",
+        NEW_CONTENT_WIDE_CLASS = "col-md-7",
+        ORIGIN_SIDE_WIDE_CLASS = "col-md-1",
+        NEW_SIDE_WIDE_CLASS = "col-md-3";
     var content_panel = $(".contentpanel"),
         right_side = $(".right-side");
 
@@ -78,13 +82,13 @@ $(document).ready(function(){
             // smaller the content-panel and extend the side
             $(CONETNT_TOC_CLASS).hide();
             $(SIDE_NAV_CLASS).show();
-            content_panel.addClass("col-md-7").removeClass("col-md-8");
-            right_side.addClass("col-md-3").removeClass("col-md-2");
+            content_panel.addClass(NEW_CONTENT_WIDE_CLASS).removeClass(ORIGIN_CONTENT_WIDE_CLASS);
+            right_side.addClass(NEW_SIDE_WIDE_CLASS).removeClass(ORIGIN_SIDE_WIDE_CLASS);
         } else {
             $(SIDE_NAV_CLASS).hide();
             $(CONETNT_TOC_CLASS).show();
-            content_panel.addClass("col-md-8").removeClass("col-md-7");
-            right_side.addClass("col-md-2").removeClass("col-md-3");
+            content_panel.addClass(ORIGIN_CONTENT_WIDE_CLASS).removeClass(NEW_CONTENT_WIDE_CLASS);
+            right_side.addClass(ORIGIN_SIDE_WIDE_CLASS).removeClass(NEW_SIDE_WIDE_CLASS);
         }
     });
 });

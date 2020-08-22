@@ -1,5 +1,5 @@
 ---
-layout: mathpage
+layout: post
 title: 
 date: 
 categories: 技术 

@@ -1,3 +1,12 @@
-
-.sinablogb{background-image:url(#{$baseurl}/assets/theme/windmill_head.jpg)}
-.sinabloga{background-image:url(#{$baseurl}/assets/theme/windmill_foot.jpg)}
+.sinablogb {
+    background-image: url(#{$baseurl}/assets/theme/windmill_head.jpg);
+    @include media-query($on-laptop) {
+        background-image: none;
+    }
+}
+.sinabloga {
+    background-image: url(#{$baseurl}/assets/theme/windmill_foot.jpg);
+    @include media-query($on-laptop) {
+        background-image: none;
+    }
+}

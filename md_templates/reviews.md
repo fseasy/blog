@@ -1,5 +1,5 @@
 ---
-layout: sinablogpage
+layout: post
 title:
 date: 
 categories: WLR 作品 
