@@ -1,0 +1,67 @@
+---
+layout: index
+---
+
+<div id="tags_table">
+</div>
+
+<script src="{{ '/js/load_all_postdata.js' | prepend: site.baseurl }}" type="text/javascript"></script>
+<script>
+    var tag2posts = (function () {
+        var tag2posts = {};
+        for (var post_idx in post_data) {
+            var post = post_data[post_idx],
+                tags = post.tags;
+            for (var idx in tags) {
+                var tag = tags[idx];
+                if (tag2posts[tag] == undefined) {
+                    tag2posts[tag] = [post,];
+                }
+                else {
+                    tag2posts[tag].push(post);
+                }
+            }
+        }
+        return tag2posts;
+    })();
+
+    var buildTagDom = function (tag, posts) {
+        var tagDom = document.createElement('SPAN');
+        var styles = ["label-default", "label-primary", "label-success", "label-info", "label-warning", "label-danger"];
+        var fonts = ["Microsoft YaHei", "SimSun", "Microsoft JhengHei", "KaiTi_GB2312", "YouYuan", "STXingkai"];
+        var fontSizes = [12, 14, 16, 18, 20, 30];
+        var fontWeights = [400, 500, 600, 700];
+        var marginHValue = [2, 4, 6];
+        var marginVValue = [1, 2, 3];
+        var freq = posts.length;
+
+        var titles = posts.map(p => p.title),
+            titleTipStr = "''" + titles.join(", ") + "'";
+        var tipWords = ["出现了" + freq + "次, 在" + titleTipStr, 
+            "在" + titleTipStr + "中找到了" + freq + "次", 
+            "一共有" + freq + "个, 分别在" + titleTipStr];
+        var getRandomItem = function (a) { return a[Math.floor(Math.random() * a.length + 1) - 1] + "" };
+        var random_style = getRandomItem(styles);
+        var random_fontstyle = ["font:", getRandomItem(fontWeights), getRandomItem(fontSizes) + 'px',
+            getRandomItem(fonts)].join(' ');
+        var margin_style = ["margin:", getRandomItem(marginHValue) + "px", getRandomItem(marginVValue) + "px"].join(" ");
+        var random_tips = getRandomItem(tipWords);
+
+        tagDom.setAttribute("class", ["label", random_style].join(" "));
+        tagDom.setAttribute('style', ["display: inline-block", random_fontstyle, margin_style].join(";"));
+        tagDom.setAttribute('title', random_tips);
+        tagDom.innerHTML = tag;
+        return tagDom;
+    }
+
+    var tagDoms = (function (tag2posts) {
+        var tagDom = [];
+        for (var tag in tag2posts) tagDom.push(buildTagDom(tag, tag2posts[tag]));
+        return tagDom;
+    })(tag2posts);
+
+    (function(idName, tagDoms){
+        var container = document.getElementById(idName);
+        for (var idx in tagDoms) container.appendChild(tagDoms[idx]);
+    })("tags_table", tagDoms);
+</script>

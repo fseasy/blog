@@ -11,8 +11,12 @@
                 <nav class="site-nav">
                     <a href="{{ "/" | prehend site.baseurl }}">首页</a>
                     <a href="{{ "/list" | prehend site.baseurl }}">目录</a>
+                    <a href="{{ "/tags" | prehend site.baseurl }}">标签</a>
                     <a href="{{"/me" | prehead site.baseurl }}">关于我</a>
                 </nav>
+            </div>
+            <div class="search-box">
+                {% include extra_fn/google_search.html %}
             </div>
         </header>
     </div>

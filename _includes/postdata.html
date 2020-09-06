@@ -21,7 +21,8 @@ post_data=[
                             {% endif %}
                         {% endfor  %}
                 ] ,
-            "onewords" : "{% if post.onewords %}{{post.onewords | escape }}{% endif %}"
+            "onewords" : "{% if post.onewords %}{{post.onewords | escape }}{% endif %}",
+            "excerpt"  : "{{ post.excerpt | strip_html }}"
     }
     {% if forloop.last == false %}
     ,

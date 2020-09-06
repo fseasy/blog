@@ -1,24 +1,11 @@
 <!-- Mathjax -->
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [['$','$'], ['\\(','\\)']],
-            processEscapes: true ,
-            //skipTags: ["script","noscript","style","textarea","pre","code"] ,
-            skipTags: ["script","noscript","style","textarea"]
-        } ,
-        jax: ["input/TeX", "output/HTML-CSS"],
-        TeX: {equationNumbers: {autoNumber: ["AMS"], useLabelIds: true}},
-        "HTML-CSS": {
-                scale : 100 , 
-                //availableFonts: ["Asana","consolas","mono","Tex"],
-                preferredFonts: null ,
-                webFont:"STIX-Web",
-                //imageFont:"consolas",
-                //undefinedFamily:"consolas,STIXGeneral,'Arial Unicode MS',serif" ,
-                mtextFontInherit: true 
+<script>
+    MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
         }
-    });
+    };
 </script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    id="MathJax-script"></script>

@@ -56,7 +56,7 @@ WSL也被叫做 `Bash on Windows`, Github上有一个可以提Issues的[项目](
         加上
         noeb vb t_vb=
     
-    做个广告，我的轻量级vim配置,[即下即用](https://github.com/memeda/VIM-plugin-and-config)。
+    做个广告，我的轻量级vim配置,[即下即用](https://github.com/fseasy/VIM-plugin-and-config)。
 
 上面配置后，大部分情况下就不响了。
 

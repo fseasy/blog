@@ -1,95 +1,113 @@
-
 {% include third_resource/bootstrap_js.html %}
-<script src="{% link /js/third-party/toc/toc.js %}" ></script>
+<script src="{% link /js/third-party/toc/toc.js %}"></script>
 
 <script>
-$(document).ready(function() {
-    // init the TOC
-    $('#toc-nav').toc({
-        title: "",
-        listType: "ul",
-        classes: {
-            list: "nav",
-            item: ""
-        },
-        showEffect: 'none', 
-        noBackToTopLinks: true
-    });
-
-    $('#toc-content').toc({
-        title: "",
-        listType: "ul",
-        classes: {
-            list: "",
-            item: ""
-        },
-        showEffect: 'none', 
-        noBackToTopLinks: true
-    });
-});
-</script>
-
-<script>
-$(document).ready(function() {
-    // make side-nav container sticky (affix) and spy scrolling.
-    (function($) {
-        var side_nav = $(".side-nav");
-        var main_content = $(".contentpanel"),
-            main_content_top = main_content.offset().top,
-            main_content_margin_bottom = 
-                parseInt(main_content.css("margin-bottom"), 0);
-        
-        // set affix style
-        side_nav.affix({
-            offset: {
-                top: function() {
-                    var pre_change_len = 10;
-                    return main_content_top - pre_change_len;
+    $(document).ready(function () {
+        var makeToc = function (minHeaderNum) {
+            // init the TOC
+            var navTocMakeStatus = $('#toc-nav').toc({
+                listType: "ul",
+                classes: {
+                    list: "nav",
+                    item: ""
                 },
-                bottom: function() {
-                    var main_content_bottom = main_content_top + 
-                        main_content.outerHeight(true) -
-                        main_content_margin_bottom;
-                    var bottom_offset = $(document).height() - main_content_bottom;
-                    return bottom_offset;
-                }
-            },
-            target: $(window)
-        });
+                minimumHeaders: minHeaderNum,
+                showEffect: 'none'
+            });
 
-        // scroll-listening: set expand according to scroll
-        $('body').scrollspy({target: ".side-nav"}); 
-    })(window.jQuery)
-});
-</script>
+            var contentTocMakeStatus = $('#toc-content').toc({
+                listType: "ul",
+                classes: {
+                    list: "",
+                    item: ""
+                },
+                minimumHeaders: minHeaderNum,
+                showEffect: 'none'
+            });
 
-<script>
-$(document).ready(function(){
-    // switch content TOC & side-nav TOC
-    var SWITCH_CLASS = ".toc_change";
-    var SIDE_NAV_CLASS = ".side-nav",
-        CONETNT_TOC_CLASS = ".content_toc_wrapper";
-    var ORIGIN_CONTENT_WIDE_CLASS = "col-md-10",
-        NEW_CONTENT_WIDE_CLASS = "col-md-7",
-        ORIGIN_SIDE_WIDE_CLASS = "col-md-1",
-        NEW_SIDE_WIDE_CLASS = "col-md-3";
-    var content_panel = $(".contentpanel"),
-        right_side = $(".right-side");
-
-    $(SWITCH_CLASS).click(function() {
-        if ($(SIDE_NAV_CLASS).is(":hidden")) {
-            // close the content & show the nav
-            // smaller the content-panel and extend the side
-            $(CONETNT_TOC_CLASS).hide();
-            $(SIDE_NAV_CLASS).show();
-            content_panel.addClass(NEW_CONTENT_WIDE_CLASS).removeClass(ORIGIN_CONTENT_WIDE_CLASS);
-            right_side.addClass(NEW_SIDE_WIDE_CLASS).removeClass(ORIGIN_SIDE_WIDE_CLASS);
+            return navTocMakeStatus && contentTocMakeStatus;
+        };
+        
+        // A var from liquid template
+        var buildTocCmd = "{{ post.toc }}";
+        var CONTENT_TOC_CLASS = ".content_toc_wrapper";
+        if (buildTocCmd == "enable") {
+            // always make 
+            if (makeToc(0)) {
+                $(CONTENT_TOC_CLASS).show();
+            }
+        } else if (buildTocCmd == "disable") {
+            // do nothing.
         } else {
-            $(SIDE_NAV_CLASS).hide();
-            $(CONETNT_TOC_CLASS).show();
-            content_panel.addClass(ORIGIN_CONTENT_WIDE_CLASS).removeClass(NEW_CONTENT_WIDE_CLASS);
-            right_side.addClass(ORIGIN_SIDE_WIDE_CLASS).removeClass(NEW_SIDE_WIDE_CLASS);
+            // not set, or other vlaue.
+            if (makeToc(4)) {
+                $(CONTENT_TOC_CLASS).show();
+            }
         }
     });
-});
+</script>
+
+<script>
+    $(document).ready(function () {
+        // make side-nav container sticky (affix) and spy scrolling.
+        (function ($) {
+            var side_nav = $(".side-nav");
+            var main_content = $(".contentpanel"),
+                main_content_top = main_content.offset().top,
+                main_content_margin_bottom =
+                    parseInt(main_content.css("margin-bottom"), 0);
+
+            // set affix style
+            side_nav.affix({
+                offset: {
+                    top: function () {
+                        var pre_change_len = 10;
+                        return main_content_top - pre_change_len;
+                    },
+                    bottom: function () {
+                        var main_content_bottom = main_content_top +
+                            main_content.outerHeight(true) -
+                            main_content_margin_bottom;
+                        var bottom_offset = $(document).height() - main_content_bottom;
+                        return bottom_offset;
+                    }
+                },
+                target: $(window)
+            });
+
+            // scroll-listening: set expand according to scroll
+            $('body').scrollspy({ target: ".side-nav" });
+        })(window.jQuery)
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        // switch content TOC & side-nav TOC
+        var SWITCH_CLASS = ".toc_change";
+        var SIDE_NAV_CLASS = ".side-nav",
+            CONTENT_TOC_CLASS = ".content_toc_wrapper";
+        var ORIGIN_CONTENT_WIDE_CLASS = "col-md-10",
+            NEW_CONTENT_WIDE_CLASS = "col-md-7",
+            ORIGIN_SIDE_WIDE_CLASS = "col-md-1",
+            NEW_SIDE_WIDE_CLASS = "col-md-3";
+        var content_panel = $(".contentpanel"),
+            right_side = $(".right-side");
+
+        $(SWITCH_CLASS).click(function () {
+            if ($(SIDE_NAV_CLASS).is(":hidden")) {
+                // close the content & show the nav
+                // smaller the content-panel and extend the side
+                $(CONTENT_TOC_CLASS).hide();
+                $(SIDE_NAV_CLASS).show();
+                content_panel.addClass(NEW_CONTENT_WIDE_CLASS).removeClass(ORIGIN_CONTENT_WIDE_CLASS);
+                right_side.addClass(NEW_SIDE_WIDE_CLASS).removeClass(ORIGIN_SIDE_WIDE_CLASS);
+            } else {
+                $(SIDE_NAV_CLASS).hide();
+                $(CONTENT_TOC_CLASS).show();
+                content_panel.addClass(ORIGIN_CONTENT_WIDE_CLASS).removeClass(NEW_CONTENT_WIDE_CLASS);
+                right_side.addClass(ORIGIN_SIDE_WIDE_CLASS).removeClass(NEW_SIDE_WIDE_CLASS);
+            }
+        });
+    });
 </script>

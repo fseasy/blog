@@ -50,6 +50,10 @@ figure,
   margin-bottom: $spacing-unit / 2;
 }
 
+blockquote {
+  border-left: 3px solid #3fa7cb;
+}
+
 /**
  * Images
  */
@@ -160,6 +164,13 @@ img {
   display: table;
 }
 
+.search-box {
+  position: absolute;
+  width: 300px;
+  right: 20px;
+  top: 10px;
+}
+
 // pagenation
 
 .pagination {
@@ -228,6 +239,17 @@ ul.post-list {
 .post-meta {
   font-size: $small-font-size;
   color: $grey-color;
+  margin-bottom: 25px;
+}
+
+.post-graph {
+  font-size: $small-font-size * 0.8;
+  margin-left: 20px;
+  margin-right: 10px;
+}
+
+.post-graph:first-of-type {
+  margin-left: 0;
 }
 
 a.post-link {
