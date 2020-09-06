@@ -15,7 +15,7 @@ layout: index
 <script src="{{ '/js/date_extend.js' | prepend: site.baseurl }}" type="text/javascript"></script>
 <script type="text/javascript">
     var category_idx = {},
-        NAVI_TYPE_NAME = { 'categoryTypeName': 'Categories'};
+        NAVI_TYPE_NAME = { 'categoryTypeName': 'Categories' };
     // INIT Data  
     var add_idx = function (set, item, post) {
         if (!Array.isArray(item)) item = [item,];
@@ -197,37 +197,44 @@ layout: index
         changeActiveState(target, RESPONSE_ACTIVE_EVENT_ELEMENTS);
     };
     // ON LOAD
-    window.onload = function () {
-        // if we return from other page , the location href will store the previous info . we should restore it !
-        var queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1], /* ['###queryStr' , 'queryStr'] */
-            queryStrParts = queryStr.split('&').filter(function (item) { return item != "" }),
-            selectedEle,
-            selectedType;
-        if (queryStrParts.length == 0) {
-            var category_links = categoryPanel.getElementsByTagName('A');
-            if (category_links.length != 0) selectedEle = category_links[0];
-            else selectedEle = null;
-            selectedType = NAVI_TYPE_NAME['categoryTypeName'];
-        }
-        else if (queryStrParts.length >= 1) {
-            var queryType = queryStrParts[0];
-            if (queryType == NAVI_TYPE_NAME['categoryTypeName']) {
-                var categoryLinks = categoryPanel.getElementsByTagName('A');
-                if (queryStrParts.length == 1) {
-                    if (categoryLinks.length > 0) selectedEle = categoryLinks[0];
-                    else selectedEle = null;
-                }
-                else {
-                    var categoryText = queryStrParts[1];
-                    if (CATEGORY_NAME_TO_ELEMENT[categoryText] == undefined) selectedEle = null;
-                    else selectedEle = CATEGORY_NAME_TO_ELEMENT[categoryText];
-                }
-                selectedType = queryType;
+    (function () {
+        var original_onload = window.onload;
+        window.onload = function () {
+            if (original_onload) {
+                original_onload();
             }
-            else if (queryType == NAVI_TYPE_NAME['tagTypeName']) {
-                selectedType = NAVI_TYPE_NAME['tagTypeName'];
+            // if we return from other page , the location href will store the previous info . we should restore it !
+            var queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1], /* ['###queryStr' , 'queryStr'] */
+                queryStrParts = queryStr.split('&').filter(function (item) { return item != "" }),
+                selectedEle,
+                selectedType;
+            if (queryStrParts.length == 0) {
+                var category_links = categoryPanel.getElementsByTagName('A');
+                if (category_links.length != 0) selectedEle = category_links[0];
+                else selectedEle = null;
+                selectedType = NAVI_TYPE_NAME['categoryTypeName'];
             }
+            else if (queryStrParts.length >= 1) {
+                var queryType = queryStrParts[0];
+                if (queryType == NAVI_TYPE_NAME['categoryTypeName']) {
+                    var categoryLinks = categoryPanel.getElementsByTagName('A');
+                    if (queryStrParts.length == 1) {
+                        if (categoryLinks.length > 0) selectedEle = categoryLinks[0];
+                        else selectedEle = null;
+                    }
+                    else {
+                        var categoryText = queryStrParts[1];
+                        if (CATEGORY_NAME_TO_ELEMENT[categoryText] == undefined) selectedEle = null;
+                        else selectedEle = CATEGORY_NAME_TO_ELEMENT[categoryText];
+                    }
+                    selectedType = queryType;
+                }
+                else if (queryType == NAVI_TYPE_NAME['tagTypeName']) {
+                    selectedType = NAVI_TYPE_NAME['tagTypeName'];
+                }
+            }
+            changeListContent(selectedType, selectedEle);
         }
-        changeListContent(selectedType, selectedEle);
-    }
+    })();
+
 </script>

@@ -1,3 +1,22 @@
-
-<script async src="https://cse.google.com/cse.js?cx=26e60c09848764b68"></script>
+<script async src="https://cse.google.com/cse.js?cx=26e60c09848764b68" id="search_load_script"></script>
 <div class="gcse-search"></div>
+
+<script>
+    (function () {
+        var onload_fn = window.onload;
+        window.onload = function () {
+            if (onload_fn) {
+                onload_fn();
+            }
+            var cses = document.getElementsByClassName("gsc-control-cse");
+            if (cses.length < 1) {
+                console.log(cses.length)
+                return;
+            }
+            var cse = cses[0];
+            cse.style["background-color"] = "rgba(0, 0, 0, 0)";
+            cse.style["border-color"] = "rgba(0, 0, 0, 0)";
+        };
+
+    })();
+</script>
