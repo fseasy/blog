@@ -166,9 +166,13 @@ img {
 
 .search-box {
   position: absolute;
-  width: 300px;
-  right: 20px;
-  top: 120px;
+  top: 60px;
+  right: 0;
+  width: 250px;
+  @include media-query($on-laptop) {
+    top: 5px;
+    width: 170px;
+  }
 }
 
 // pagenation
