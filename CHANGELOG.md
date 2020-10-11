@@ -1,6 +1,30 @@
 # 更新
 
-## 2020.06.20 - 
+## 2020.10.11
+
+1. 改变ul/ol下的list的缩进
+
+    看这个 https://developer.mozilla.org/zh-CN/docs/Web/Guide/CSS/Consistent_list_indentation
+
+    为了兼容，需要同时设置margin-left, padding-left，其中一个生效即可
+    距离默认都是40px；
+
+    我们需要减少这个距离，就需要改成em的相对距离! 设置为1.3em.
+
+    > 后来发现，这个间距最后是否显示OK，跟使用的字体息息相关……
+
+2. 改变字体
+
+    标题用黑体；正文用微软雅黑；引用用楷体（但是显示太差了）。
+
+    > 发现Windows下渲染的确太差了，太粗糙。
+
+3. 改变一些间距
+
+    标题间距，li间距
+
+
+## 2020.06.20 - 2020.09.13
 
 本来打算增加一个目录的，结果发现mathpage layout里的东西都过时了（还在使用jiathis, duoshuo...），
 瞬间觉得之前写得还是挺烂的……

@@ -7,7 +7,43 @@
 $baseurl: '{{ site.baseurl }}' ;
 
 // Our variables
-$base-font-family: 'Open Sans','Helvetica Neue',Arial,'Hiragino Sans GB','Microsoft YaHei','WenQuanYi Micro Hei',sans-serif;
+$body-font-family: 
+    -apple-system, //针对 Web 页面
+    BlinkMacSystemFont,  //针对 Mac Chrome 页面
+    SFProDisplay-Regular, //针对微信小程序
+    'Helvetica Neue',
+    Arial,
+    'PingFang SC',
+    'Microsoft YaHei',
+    'WenQuanYi Micro Hei',
+    // general
+    'sans-serif';
+
+$header-font-family: 
+    -apple-system, //针对 Web 页面
+    BlinkMacSystemFont,  //针对 Mac Chrome 页面
+    SFProDisplay-Regular, //针对微信小程序
+    'Helvetica Neue',
+    'Times New Roman',
+    'Hiragino Sans GB',
+    'Heiti SC',
+    SimHei,
+    'WenQuanYi Micro Hei',
+    // general
+    'sans-serif';
+
+$blockquote-font-family: 
+    -apple-system, //针对 Web 页面
+    BlinkMacSystemFont,  //针对 Mac Chrome 页面
+    SFProDisplay-Regular, //针对微信小程序
+    'Helvetica Neue',
+    consolas,
+    STKaiti,
+    KaiTi,
+    'WenQuanYi Micro Hei',
+    // general
+    'sans-serif';
+
 $base-font-size:   16px;
 $small-font-size:  $base-font-size * 0.875;
 $base-line-height: 1.8;
