@@ -11,3 +11,7 @@ For Web Service.
 3. 呼吁大众
 
 [CHANGELOG](CHANGELOG.md)
+
+## 其他
+
+1. 小技巧：Markdown的blockquote, 如果想换行，可以在最原始文本一行的末尾加**2个额外空格**，就可以！([ref](https://stackoverflow.com/questions/26991997/multiple-line-quote-in-markdown))
