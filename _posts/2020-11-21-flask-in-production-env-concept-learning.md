@@ -130,4 +130,4 @@ Flask 就是一个支持 WSGI 接口的 Web Framework. 所以，基于它构建�
 
 参考链接：
 
-`[1`]: [HTTP请求是如何到应用程序的？-三级结构](https://juejin.cn/post/6844903863229612040#heading-1)
+\[1\]: [HTTP请求是如何到应用程序的？-三级结构](https://juejin.cn/post/6844903863229612040#heading-1)
