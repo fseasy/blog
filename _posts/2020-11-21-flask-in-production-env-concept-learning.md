@@ -48,6 +48,8 @@ Flask 就是一个支持 WSGI 接口的 Web Framework. 所以，基于它构建�
 
 ## 支持 WSGI 的服务器
 
+> Flask 自带一个 WSGI 服务器，没有看代码，不确定是否是用的 Python 自带的 wsgiref. 官网说仅适用于调试。
+
 按照文档，推荐的服务器有：
 
 1. Gunicorn
@@ -72,8 +74,60 @@ Flask 就是一个支持 WSGI 接口的 Web Framework. 所以，基于它构建�
 
    **eventlet**
 
-   一个基于事件循环（ Linux 下是epoll， Mac 下是 kqueue, Windows 下是 libevent）实现的协程库。
+   一个基于事件循环（ Linux 下是epoll， Mac 下是 kqueue, Windows 下是 libevent）实现的(网络)协程 (Coroutines) 库。
 
-   这个库，目标是 *Green the World...*, 可怕。
+   内部实现了 GreenThread, GreenPool 以及 网络请求相关的协程包。 这个库，目标是 *Green the World...*
 
-   ****
+   > 底层的事件循环的库，有 libevent (最古老、广泛), libev（设计更简练、性能更好，但 Windows 上不好）, 
+   libuv （开发 node 时重新写的，基于 libuv + IOCP 解决 Windows 上的性能问题）,  libhv （国人写的，近期很多宣传…） 
+
+   **greenlet**
+
+   一个 C 写的、在 Python 中应用的轻量级协程库，被 Gevent 依赖。
+
+   greenlet 是 stackless-python 的附产品。
+
+   **Gevent**
+
+   前面已经提到，Gevent 就是应用于 Python 上、在 greenlet 基础上构建的一套 high-level 的网络协程库。
+
+   可以认为， eventlet 和 Gevent 是等价的东西。 可查看 [eventlet-vs-greenlet-vs-gevent][egg_vs]
+
+
+   [egg_vs]: https://stackoverflow.com/questions/36834234/eventlet-vs-greenlet-vs-gevent
+
+   参考链接： 
+
+   \[1\]: [简单对比 Libevent、libev、libuv](https://developer.aliyun.com/article/611321)
+
+2. uWSGI
+
+   C 写的 Web 服务器，目标是建立一个创建主题服务的全栈工具！ 名称里 WSGI 是为了致敬该项目里第一个开发完成的插件——即支持 Python 
+   WSGI 接口的插件。
+
+   核心包含 配置、进程管理、sockets创建、监控、日志、共享内存区、ipc 等，似乎是个大轮子……
+
+3. Gevent
+
+   前面介绍 Gunicorn 时已经介绍了。也可以单独作为服务器。
+
+4. Twisted Web
+
+   是一个 HTTP server（可以被作为 lib 依赖，也可以独立跑）； 
+   是一个 HTML 模板引擎；
+   是一个 HTTP client 库。
+
+综上，这些都是推荐的、用来在生产环境跑 Flask 应用服务的 Web 服务器。
+
+## 前端搭配 代理服务器（nginx）
+
+利用 Web 服务器 运行 Flask 应用后，如果流量依然很大，可以再在前端搭1个nginx服务器。
+
+作用应该有2：
+
+1. 负载均衡 （假设有后面有多个 Web 服务器实例）
+2. 更快地处理静态文件（例如 js, css, img 等文件，并不需要将压力打到 Web 服务器上，而是直接利用“更”高性能、可靠的 nginx 做负载）
+
+参考链接：
+
+`[1`]: [HTTP请求是如何到应用程序的？-三级结构](https://juejin.cn/post/6844903863229612040#heading-1)
