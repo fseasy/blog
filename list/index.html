@@ -198,43 +198,38 @@ layout: index
     };
     // ON LOAD
     (function () {
-        var original_onload = window.onload;
-        window.onload = function () {
-            if (original_onload) {
-                original_onload();
-            }
-            // if we return from other page , the location href will store the previous info . we should restore it !
-            var queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1], /* ['###queryStr' , 'queryStr'] */
-                queryStrParts = queryStr.split('&').filter(function (item) { return item != "" }),
-                selectedEle,
-                selectedType;
-            if (queryStrParts.length == 0) {
-                var category_links = categoryPanel.getElementsByTagName('A');
-                if (category_links.length != 0) selectedEle = category_links[0];
-                else selectedEle = null;
-                selectedType = NAVI_TYPE_NAME['categoryTypeName'];
-            }
-            else if (queryStrParts.length >= 1) {
-                var queryType = queryStrParts[0];
-                if (queryType == NAVI_TYPE_NAME['categoryTypeName']) {
-                    var categoryLinks = categoryPanel.getElementsByTagName('A');
-                    if (queryStrParts.length == 1) {
-                        if (categoryLinks.length > 0) selectedEle = categoryLinks[0];
-                        else selectedEle = null;
-                    }
-                    else {
-                        var categoryText = queryStrParts[1];
-                        if (CATEGORY_NAME_TO_ELEMENT[categoryText] == undefined) selectedEle = null;
-                        else selectedEle = CATEGORY_NAME_TO_ELEMENT[categoryText];
-                    }
-                    selectedType = queryType;
-                }
-                else if (queryType == NAVI_TYPE_NAME['tagTypeName']) {
-                    selectedType = NAVI_TYPE_NAME['tagTypeName'];
-                }
-            }
-            changeListContent(selectedType, selectedEle);
+
+        // if we return from other page , the location href will store the previous info . we should restore it !
+        var queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1], /* ['###queryStr' , 'queryStr'] */
+            queryStrParts = queryStr.split('&').filter(function (item) { return item != "" }),
+            selectedEle,
+            selectedType;
+        if (queryStrParts.length == 0) {
+            var category_links = categoryPanel.getElementsByTagName('A');
+            if (category_links.length != 0) selectedEle = category_links[0];
+            else selectedEle = null;
+            selectedType = NAVI_TYPE_NAME['categoryTypeName'];
         }
+        else if (queryStrParts.length >= 1) {
+            var queryType = queryStrParts[0];
+            if (queryType == NAVI_TYPE_NAME['categoryTypeName']) {
+                var categoryLinks = categoryPanel.getElementsByTagName('A');
+                if (queryStrParts.length == 1) {
+                    if (categoryLinks.length > 0) selectedEle = categoryLinks[0];
+                    else selectedEle = null;
+                }
+                else {
+                    var categoryText = queryStrParts[1];
+                    if (CATEGORY_NAME_TO_ELEMENT[categoryText] == undefined) selectedEle = null;
+                    else selectedEle = CATEGORY_NAME_TO_ELEMENT[categoryText];
+                }
+                selectedType = queryType;
+            }
+            else if (queryType == NAVI_TYPE_NAME['tagTypeName']) {
+                selectedType = NAVI_TYPE_NAME['tagTypeName'];
+            }
+        }
+        changeListContent(selectedType, selectedEle);
     })();
 
 </script>

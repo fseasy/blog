@@ -1,0 +1,15 @@
+<!-- because of GFW, some google resource (say, cse) can be recheachable and make the window 
+    loading for may seconds!
+    it block the window.onload, and affect the experience even though we have make the script be async.
+    so we here use window.stop to quilick stop the loading action.
+-->
+
+<script>
+(function(){
+    var _WAIT_MS = 2800;
+    setTimeout(function(){
+        console.debug("window stop quickly in ", _WAIT_MS)
+        window.stop();
+    }, _WAIT_MS)
+})()
+</script>
