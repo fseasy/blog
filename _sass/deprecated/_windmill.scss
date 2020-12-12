@@ -1,11 +1,11 @@
 .sinablogb {
-    background-image: url(#{$baseurl}/assets/theme/windmill_head.jpg);
+    background-image: none;
     @include media-query($on-laptop) {
         background-image: none;
     }
 }
 .sinabloga {
-    background-image: url(#{$baseurl}/assets/theme/windmill_foot.jpg);
+    background-image: none;
     @include media-query($on-laptop) {
         background-image: none;
     }
