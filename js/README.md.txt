@@ -18,6 +18,8 @@
 
     然后使用`{{ postdata | strip_newlines | remove: ' ' }}`来去除空行（回车）和空白符。效果不错。
 
+    ==> 使用 `remove: ' '` 后，日期间的空白也被删除了，后面去掉了这个。
+
 # PS
 
 Pages里的Jekyll更新后突然解析这里的MD文件了... 都没有加yaml头啊，没办法，改成.txt后缀了。

@@ -1,6 +1,6 @@
 {% capture title_val %}
   {% if page.title %}
-    {{ page.title }}
+    {{ page.title }} - {{ site.title }}
   {% else %}
     {{ site.title }}
   {% endif %}
@@ -12,6 +12,8 @@
       {{ page.onewords }}
     {% elsif page.excerpt %}
       {{ page.excerpt | strip_html }}
+    {% elsif page.index_name %}
+      {{ site.title }} - {{ page.index_name }} {{ paginator.page }}
     {% else %}
       {{ page.content | strip_html | truncatewords: 100, " >>" }}
     {% endif %}
@@ -25,9 +27,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>{{ title_val | strip }}</title>
 <meta name="description" content="{{ description_val | strip }}">
-
-
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
-
 {% include third_resource/bootstrap_css.html %}
 <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">

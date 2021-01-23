@@ -2,7 +2,7 @@
 layout: post
 title: 飘（Gone With The Wind）
 date: 2014-04-05
-categories: 作品 书籍
+categories:  书籍
 tags: 爱情启蒙
 onewords: 乱世下一个女人的处事与爱情。
 ---

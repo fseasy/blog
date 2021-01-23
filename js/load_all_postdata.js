@@ -2,4 +2,4 @@
 ---
 
 {% include postdata.html %}
-{{ postdata | strip_newlines | remove: ' ' }}
+{{ postdata | strip_newlines}}

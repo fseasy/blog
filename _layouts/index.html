@@ -1,24 +1,28 @@
-<!DOCTYPE>
-<html lang="zh_CN">
-    <head>
-    {% include head.html %}
-    </head>
-    <body>
-        <div class="sinabloga">
-            <div class="sinablogb">
-                <div class="container">
-                    
-                    {% include page_header.html  %}
+<!doctype html>
 
-                    <div class="row">
-                        <div class="contentpanel purple-topborder shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
-                            {{ content }} 
-                        </div>   
-                    </div>
-                    {% include pagination.html  %}
-                    {% include page_footer.html %}
+<html lang="zh_CN">
+
+<head>
+{% include head.html %}
+</head>
+
+<body>
+    <div class="sinabloga">
+        <div class="sinablogb">
+            <div class="container">
+                
+                {% include page_header.html  %}
+
+                <div class="row">
+                    <div class="contentpanel purple-topborder shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
+                        {{ content }} 
+                    </div>   
                 </div>
+                {% include pagination.html  %}
+                {% include page_footer.html %}
             </div>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

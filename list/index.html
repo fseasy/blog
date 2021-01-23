@@ -1,5 +1,7 @@
 ---
 layout: index
+index_name: 索引目录
+title: 索引目录
 ---
 
 
@@ -79,8 +81,7 @@ layout: index
     var RESPONSE_ACTIVE_EVENT_ELEMENTS = [];
     var CATEGORY_ELEMENTS = [];
     var CATEGORY_NAME_TO_ELEMENT = {};
-    var buildNaviList = function (naviTypeName, itemList, naviId, name2ElementIdx) {
-        // input > itemList , is the idx like category_idx , tags_idx and so on
+    var buildNaviList = function (naviTypeName, category2items, naviId, name2ElementIdx) {
         var panel = document.createElement('DIV'),
             navi = document.createElement('UL'),
             header = document.createElement('DIV');
@@ -92,22 +93,31 @@ layout: index
 
         navi.setAttribute('class', 'list-group');
 
-        for (var idx in itemList) {
-            var item = itemList[idx],
+        var categoryItemPairs = Object.keys(category2items).map(function(key) {
+            return [key, category2items[key]];
+        });
+        categoryItemPairs.sort(function(first, second) {
+            return second[1].length - first[1].length;
+        });
+
+        for (var idx in categoryItemPairs) {
+            var k2v = categoryItemPairs[idx],
+                category = k2v[0],
+                items = k2v[1],
                 link_dom = document.createElement('A'),
                 badge = document.createElement('SPAN');
             link_dom.setAttribute('class', 'list-group-item');
-            link_dom.setAttribute('href', ['###', naviTypeName, idx].join('&'));
-            link_dom.innerHTML = idx;
+            link_dom.setAttribute('href', ['###', naviTypeName, category].join('&'));
+            link_dom.innerHTML = category;
 
             badge.setAttribute('class', 'badge');
-            badge.innerHTML = item.length;
+            badge.innerHTML = items.length;
 
             link_dom.appendChild(badge);
 
             navi.appendChild(link_dom);
             /* build the name to node index*/
-            name2ElementIdx[idx] = link_dom;
+            name2ElementIdx[category] = link_dom;
         }
 
         panel.appendChild(header);

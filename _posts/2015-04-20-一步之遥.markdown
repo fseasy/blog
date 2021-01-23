@@ -2,7 +2,7 @@
 layout: post
 title: 一步之遥
 date: 2015-04-20
-categories: 作品 电影
+categories:  电影
 tags: 理解不了的高级电影 热闹 歌舞
 onewords: 不能让别人玷污你爱的东西！
 ---
