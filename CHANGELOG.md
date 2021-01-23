@@ -1,5 +1,12 @@
 # 更新
 
+## 2021.01.23
+
+1. 修复了索引页 `description` 设置错误的 BUG；优化索引页的 title 显示（Tab名字 + site名字）；
+2. 优化 /list 的 categories 排序，现在按数量排序；优化 /list 下日期显示，现在不会把空格删除了；删除了「作品」这个 category 
+3. 修改 site title 为 「鱼虾写字」；更新 abount-me
+4. 删除 `_includes`, `_layouts` 中标记为 deprecated 的文件
+
 ## 2020.10.11
 
 1. 改变ul/ol下的list的缩进
