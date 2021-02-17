@@ -1,3 +1,4 @@
+---
 layout: index
 title: 宝藏
 index_name: 宝藏
