@@ -7,6 +7,7 @@ index_name: 宝藏
 <style type="text/css">
 .contentpanel h2 {
     color: #333;
+    font-size: 20px;
 }
 </style>
 
@@ -15,9 +16,6 @@ index_name: 宝藏
 ## 历史
 
 1. [【史图馆】文明发展史 第四版](https://www.bilibili.com/video/BV1vb41127Bp/)
-   
-   > “ps做图，premiere合成视频”， “耗时三年左右” ，“一人完成”，  
-   “这系视频改变了我的一生（一点也不夸张）”...
 
 2. [沙盘推演：长征 百丈关战役（合集）](https://www.bilibili.com/video/BV1ip4y1p7TE) 
 
