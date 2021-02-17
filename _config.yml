@@ -2,7 +2,7 @@
 title: 鱼虾写字
 email: readonlyfile@hotmail.com
 description: > # this means to ignore newlines until "baseurl:"
-  不要害怕，专心抓鱼
+  其实很简单，不必太悲观
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "https://fseasy.github.io" # the base hostname & protocol for your site
 
