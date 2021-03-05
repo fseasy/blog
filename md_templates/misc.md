@@ -2,7 +2,7 @@
 layout: post
 title: 
 date: 
-categories: EVENT 事件
+categories: 杂谈
 tags: 
 ---
 > 
