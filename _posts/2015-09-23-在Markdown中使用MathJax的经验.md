@@ -2,14 +2,13 @@
 layout: post
 title: 在Markdown中使用Mathjax的经验
 date: 2015-09-23
-categories: 总结
+categories: 技术
 tags: Markdown MathJax
 onewords: 在Markdown中使用Mathjax的经验
 ---
 > 本文主要讲在Markdown中使用Mathjax的经验 。
 
 一些说明： 文中提到的Markdown，在某些语境下指Markdown渲染器，而所有的渲染器，都指GITHUB PAGES上的默认渲染器。
-
 
 
 之所以要提及Markdown中写Mathjax这么一回事，是因为二者共用一些特殊符号，对这些特殊符号会做相应的处理。我们的原始文本，首先经过Markdown渲染器，原始内容中的一些特殊符号会出现一些变化；显示到浏览器端后，MathJax通过JavaScript来处理内容中包含公式的地方，通过改变DOM内容来渲染公式。由于Markdown中使用的特殊符号，一般都是数学公式的子集，所以当内容包含大量数学公式时，往往一些难以想象的问题就出现了。

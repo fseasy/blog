@@ -2,7 +2,7 @@
 layout: post
 title: 树莓派上基于docker搭建shadowsocks客户端
 date: 2020-09-06
-categories: 经验
+categories: 技术
 tags: 树莓派 shadowsocks
 ---
 > 偶尔访问github困难，需要在树莓派上搭建一个ssclient，发现有用树莓派+docker搭建的，觉得有点意思，但是没有具体步骤。揉一揉网上的教程搭起来了，这里把过程记录一下。
