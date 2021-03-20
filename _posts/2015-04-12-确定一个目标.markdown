@@ -2,7 +2,7 @@
 title: 确定一个目标
 date: 2015-04-12
 layout: post
-categories: 心情
+categories: 杂谈
 tags: 扯淡 不必做目标，静下心来努力就好
 onewords: 一个字，扯淡。
 private: true
