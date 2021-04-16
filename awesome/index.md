@@ -34,7 +34,6 @@ index_name: 宝藏
 8. [vividfree](http://vividfree.github.io/about)
 9. [semocean](http://www.semocean.com/)
 10. [小蛋子](https://xv44586.github.io/about/)
-11. 
 
 ## 肉体相关
 
