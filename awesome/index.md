@@ -11,7 +11,6 @@ index_name: 宝藏
 }
 </style>
 
-世界遍布垃圾，这里记录曾发现的宝藏入口。宝藏不仅是资源，更是背后的创造者。
 
 ## 历史
 
@@ -27,7 +26,15 @@ index_name: 宝藏
 
 1. [yihui](https://yihui.org/)
 2. [xta0.me](https://xta0.me/)
-3. [matrix67](http://www.matrix67.com)
+3. [matrix67](http://www.matrix67.com)， [奇特的17问](http://yyyyyyyyyyyyyyyyy.com/)
+4. [枕边书](https://zhenbianshu.github.io/)
+5. [Know Thyself](http://gitlinux.net/)
+6. [CastellanZhang's blog](http://castellanzhang.github.io/)
+7. [十年饮冰，思想造物](https://yongyuan.name/cn/)
+8. [vividfree](http://vividfree.github.io/about)
+9. [semocean](http://www.semocean.com/)
+10. [小蛋子](https://xv44586.github.io/about/)
+11. 
 
 ## 肉体相关
 
