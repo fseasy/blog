@@ -5,3 +5,5 @@ pages.sublime-workspace
 .jekyll-metadata
 .vscode
 .jekyll-cache
+Gemfile
+Gemfile.lock
