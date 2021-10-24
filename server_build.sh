@@ -1,5 +1,5 @@
 #!/bin/sh
 
 cp Gemfile.US Gemfile
-bundle update -V
+bundle update
 bundle exec jekyll build
