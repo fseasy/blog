@@ -1,0 +1,25 @@
+name: banwagon-server-deploy-updates
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  deploy-updates:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: DeployUpdates
+      uses: appleboy/ssh-action@master # 使用ssh 连接服务器
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        port: ${{ secrets.PORT }}
+        script: | # 执行命令(已ssh)
+          cd /root/deploy/fseasy.github.io
+          git pull
+          sh server_build.sh
