@@ -28,5 +28,6 @@
 <title>{{ title_val | strip }}</title>
 <meta name="description" content="{{ description_val | strip }}">
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
+<link rel="shortcut icon" href="{{ 'favicon.ico' | prepend: site.baseurl }}">
 {% include third_resource/bootstrap_css.html %}
 <link rel="stylesheet" href="{{ "/css/main.css" | prepend: site.baseurl }}">
