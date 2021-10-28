@@ -11,16 +11,9 @@ index_name: 宝藏
 }
 </style>
 
+## 世界边缘
 
-## 历史
-
-1. [【史图馆】文明发展史 第四版](https://www.bilibili.com/video/BV1vb41127Bp/)
-
-2. [沙盘推演：长征 百丈关战役（合集）](https://www.bilibili.com/video/BV1ip4y1p7TE) 
-
-## 电影
-
-1. [【电影史话07】他被称为电影之神！库布里克作品全解读](https://www.bilibili.com/video/BV1Ly4y1U7Ji)
+1. LAM 蓝莓姐妹: [这种病只有女性会得，最初全国只有三个病友，自称“蓝梅姐妹”](https://mp.weixin.qq.com/s/ctbLwaia7VsVTcOifOxVcQ)
 
 ## 博客
 
@@ -35,7 +28,18 @@ index_name: 宝藏
 9. [semocean](http://www.semocean.com/)
 10. [小蛋子](https://xv44586.github.io/about/)
 
-## 肉体相关
+
+## 历史
+
+1. [【史图馆】文明发展史 第四版](https://www.bilibili.com/video/BV1vb41127Bp/)
+
+2. [沙盘推演：长征 百丈关战役（合集）](https://www.bilibili.com/video/BV1ip4y1p7TE) 
+
+## 电影
+
+1. [【电影史话07】他被称为电影之神！库布里克作品全解读](https://www.bilibili.com/video/BV1Ly4y1U7Ji)
+
+## 其他
 
 1. [如何用保险保障自己的一生？](https://www.zhihu.com/question/22316395/answer/100909780)
 

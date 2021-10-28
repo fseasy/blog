@@ -20,6 +20,6 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: | # 执行命令(已ssh)
-          cd /root/deploy/fseasy.github.io
+          cd /root/deploy/blog
           git pull
           sh server_build.sh
