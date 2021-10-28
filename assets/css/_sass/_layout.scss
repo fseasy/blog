@@ -149,9 +149,9 @@ img {
 }
 
 .blog-description {
-  font-family: Consolas, Helvetica, Arial, sans-serif;
-  font-size: 12px;
+  font-size: $base-font-size;
 }
+
 .site-nav {
   float: none;
   line-height: 20px;
