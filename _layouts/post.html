@@ -6,55 +6,51 @@
 </head>
 
 <body>
-    <div class="sinabloga">
-        <div class="sinablogb">
-            <div class="container">
+    <div class="container">
 
-                {% include page_header.html  %}
+        {% include page_header.html  %}
 
-                <div class="row">
-                    <div class="contentpanel shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
-                        <h1 class="post-title">{{ page.title }}</h1>
-                        <p class="post-meta">
-                            <span class="glyphicon glyphicon-time post-graph"></span>
-                            {{ page.date | date: "%Y-%m-%d" }}
-                            <span class="glyphicon glyphicon-th post-graph"></span>
-                            {% if page.categories %}
-                                {% for category in page.categories %} 
-                                    <span>{{category}} </span>
-                                {% endfor %}
-                            {% endif %}
-                            <span class="glyphicon glyphicon-tags post-graph"></span>
-                            {% if page.tags %}
-                                {% for t in page.tags %}
-                                    <span> {{t}} </span>
-                                {% endfor %}
-                            {% endif %}
-                        </p>
-                        <!-- TOC -->
-                        {% include extra_fn/toc_content_top_tag.html %}
-                        <!-- post-content -->
-                        <article class="post-content">
-                            {{content}}
-                        </article>
-                    </div>
-                    <div class="right-side col-md-1 hidden-xs hidden-sm">
-                        {% include extra_fn/toc_side_nav_tag.html %}
-                    </div>
-                </div>
-
-                <div class="content-sep"></div>
-
-                <div class="row media-func">
-                    <div class="col-md-offset-1 col-md-10">
-                        {% include extra_fn/share_js_tag.html %}
-                        {% include extra_fn/disqus_tag.html %}
-                    </div>
-                </div>
-                {% include page_footer.html %}
-
+        <div class="row">
+            <div class="contentpanel shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
+                <h1 class="post-title">{{ page.title }}</h1>
+                <p class="post-meta">
+                    <span class="glyphicon glyphicon-time post-graph"></span>
+                    {{ page.date | date: "%Y-%m-%d" }}
+                    <span class="glyphicon glyphicon-th post-graph"></span>
+                    {% if page.categories %}
+                        {% for category in page.categories %} 
+                            <span>{{category}} </span>
+                        {% endfor %}
+                    {% endif %}
+                    <span class="glyphicon glyphicon-tags post-graph"></span>
+                    {% if page.tags %}
+                        {% for t in page.tags %}
+                            <span> {{t}} </span>
+                        {% endfor %}
+                    {% endif %}
+                </p>
+                <!-- TOC -->
+                {% include extra_fn/toc_content_top_tag.html %}
+                <!-- post-content -->
+                <article class="post-content">
+                    {{content}}
+                </article>
+            </div>
+            <div class="right-side col-md-1 hidden-xs hidden-sm">
+                {% include extra_fn/toc_side_nav_tag.html %}
             </div>
         </div>
+
+        <div class="content-sep"></div>
+
+        <div class="row media-func">
+            <div class="col-md-offset-1 col-md-10">
+                {% include extra_fn/share_js_tag.html %}
+                {% include extra_fn/disqus_tag.html %}
+            </div>
+        </div>
+        {% include page_footer.html %}
+
     </div>
 
     {% include extra_fn/toc_js.html %}

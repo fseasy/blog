@@ -1,20 +1,28 @@
 /**
     framework
 */
-.sinabloga {
-  background-image: none;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  width: 100%;
-  clear: both;
-}
+// .sinabloga {
+//   background-image: none;
+//   background-repeat: no-repeat;
+//   background-position: center bottom;
+//   width: 100%;
+//   clear: both;
+// }
 
-.sinablogb {
-  background-image: none;
-  background-repeat: no-repeat;
-  background-position: center top;
-  width: 100%;
-  clear: both;
+// .sinablogb {
+//   background-image: none;
+//   background-repeat: no-repeat;
+//   background-position: center top;
+//   width: 100%;
+//   clear: both;
+// }
+
+// set container size
+
+@media (min-width: 1400px) {
+  .container {
+    width: 1280px;
+  }
 }
 
 // GLOBAL
