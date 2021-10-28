@@ -2,7 +2,11 @@
   {% if page.title %}
     {{ page.title }} - {{ site.title }}
   {% else %}
-    {{ site.title }}
+    {% if paginator.page and paginator.page > 1 %}
+      第 {{ paginator.page }} 页 - {{ site.title }}
+    {% else %}
+      {{ site.title }}
+    {% endif %}
   {% endif %}
 {% endcapture %}
 

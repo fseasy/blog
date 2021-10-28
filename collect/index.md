@@ -1,7 +1,7 @@
 ---
 layout: index
-title: 宝藏
-index_name: 宝藏
+title: 收藏
+index_name: 收藏
 ---
 
 <style type="text/css">
