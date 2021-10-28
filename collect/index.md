@@ -51,6 +51,18 @@ index_name: 收藏
 
 1. [【电影史话07】他被称为电影之神！库布里克作品全解读](https://www.bilibili.com/video/BV1Ly4y1U7Ji)
 
+
+## 音乐
+
+1. Hotel California
+2. Bohemia Rhapsody (@电影 *Bohemia Rhapsody（波西米亚狂想曲）*)
+3. Yellow + Deep Blue (@电影 *Boyhood（少年时代）*)
+4. 红楼梦序曲 + 紫菱洲歌 (@电视剧 《红楼梦 87版》)
+5. 推开世界的门 （@纪录片 《人生第一次》）
+6. 火车叨位去 + 梯田 + 稻香 + 爸我回来了 + 红模仿 + 困兽之斗 + 止战之殇 ... 
+7. Tonight, I feel close to you + 我不难过 + 世说心语 + 逃亡 + 我怀念的 + 我要的幸福 ...
+8. The Real Folks Blues + 直到世界的尽头 + 好想大声说爱你 + 只凝视着你 + 曾经透明的世界 + 月亮的大小 + Speed of Flow + Again + Let it Out + and I'm home + Take Me Home, Country Road ...
+
 ## 其他
 
 1. [如何用保险保障自己的一生？](https://www.zhihu.com/question/22316395/answer/100909780)
