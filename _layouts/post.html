@@ -46,7 +46,11 @@
         <div class="row media-func">
             <div class="col-md-offset-1 col-md-10">
                 {% include extra_fn/share_js_tag.html %}
-                {% include extra_fn/disqus_tag.html %}
+                {% comment %}
+                    // disable disqus, use isso.
+                    // {% include extra_fn/disqus_tag.html %}
+                {% endcomment %}
+                {% include extra_fn/isso_tag.html %}
             </div>
         </div>
         {% include page_footer.html %}
@@ -57,8 +61,10 @@
     {% include extra_fn/share_js_script.html %}
     {% include extra_fn/mathjax_script.html %}
     {% include extra_fn/google_code_prettify_script.html %}
-    {% include extra_fn/disqus_script.html %}
-
+    {% comment %}
+        // now use self-host comments 
+        // {% include extra_fn/disqus_script.html %}
+    {% endcomment %}
 </body>
 
 </html>
