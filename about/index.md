@@ -47,6 +47,8 @@ index_name: 关于
 
 目前，本博客的宗旨为：**传递情感，记录经验，呼吁大众**
 
+这里也记录一些更优秀并激励我的博客：[yihui](https://yihui.org/), [leovan](https://leovan.me/cn/)
+
 ## 历史版本
 
 [关于我](me.html)
