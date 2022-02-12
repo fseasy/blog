@@ -79,8 +79,8 @@ $screen-md-min:    992px; // as bootsrap
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
         "layout",
-        "syntax-highlighting",
-        // "windmill",
         // for TOC style
-        "toc"
+        "toc",
+        // code highlight
+        "code_style_native"
 ;

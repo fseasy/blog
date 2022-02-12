@@ -94,7 +94,10 @@ Bash 有原生的补全策略， 看起来就是：
 这个功能本身的 bug 还是挺多的，可配置性也差。所以，作为普通的开发，我在找到上述问题的原因后，
 毫无心理负担的关闭了`bash-completion`，并不担心它将会带来任何的效率降低。 
 
+> PS: 还查了下，如果想让 `zsh` 的自动补全方式向 `bash` 靠齐，可以查看 [How do I make zsh completion act more like bash completion?][4], 可以避免按`Tab`时出现选择框（从type模式变为选择模式，且回退代价大），这对我挺有用的！
+
 [bc_github]: https://github.com/scop/bash-completion
 [1]: https://stackoverflow.com/questions/22033261/bash-will-not-auto-complete-tab-with-files
 [2]: https://superuser.com/questions/421397/disable-bashs-programmable-autocompletion-based-on-command
 [3]: https://askubuntu.com/questions/443186/whats-the-use-of-complete-command
+[4]: https://serverfault.com/questions/109207/how-do-i-make-zsh-completion-act-more-like-bash-completion?newreg=0cf72fc4660f4339a37b7f2908ab6c3c
