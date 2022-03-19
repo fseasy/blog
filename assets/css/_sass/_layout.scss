@@ -70,7 +70,7 @@ ul {
 
 li>p {
   text-indent: 0;
-  margin: 2px 0;
+  margin: 5px 0;
 }
 
 li {
@@ -78,8 +78,12 @@ li {
 }
 
 blockquote {
-  border-left: 3px solid #3fa7cb;
+  border-left: 3px solid $brand-color;
   font-family: $blockquote-font-family;
+}
+
+strong {
+  color: $strong-text-color;
 }
 
 /**
@@ -118,7 +122,7 @@ img {
 
 .sina-blog-head {
   width: 100%;
-  height: 240px;
+  height: 160px;
   clear: both;
   position: relative;
   z-index: 10;
@@ -130,7 +134,7 @@ img {
 
 .topArea {
   position: absolute;
-  top: 50px;
+  top: 20px;
   left: 0;
   background-image: none;
   background-repeat: no-repeat;
@@ -243,7 +247,7 @@ img {
 
 .contentpanel {
   border: 1px solid #dedede;
-  border-top: 2px solid #3fa7cb;
+  border-top: 2px solid $brand-color;
   background: #fff;
   margin-bottom: 10px;
   padding: 10px 20px 25px 20px;
@@ -301,11 +305,12 @@ a.post-link {
 
 .post-title {
   font-family: $header-font-family;
-  font-size: $base-font-size + 16px;
+  font-size: $base-font-size + 14px;
   font-weight: 400;
   margin: 10px 0 20px 0;
+  color: $strong-text-color;
   @include media-query($on-laptop) {
-    font-size: $small-font-size + 16px;
+    font-size: $small-font-size + 14px;
   }
 }
 
@@ -318,6 +323,7 @@ a.post-link {
   h6 {
     font-family: $header-font-family;
     margin: 20px 0 15px 0;
+    color: $strong-text-color;
   }
   h2 {
     font-size: $base-font-size + 8px;
@@ -364,6 +370,18 @@ a.post-link {
 
 blockquote:not(:first-child) {
   background-color: darken($background-color, 1%);
+  font-size: $small-font-size;
+  padding: 5px 5px;
+  border-left: 2px solid $brand-color;
+}
+
+blockquote + blockquote{
+  margin-top: - $spacing-unit / 4;
+}
+
+code {
+  // overwrite bootstrap color
+  color: $text-color;
 }
 
 .media-func {

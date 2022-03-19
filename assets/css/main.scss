@@ -46,13 +46,14 @@ $blockquote-font-family:
 
 $base-font-size:   16px;
 $small-font-size:  $base-font-size * 0.875;
-$base-line-height: 1.8;
+$base-line-height: 1.6;
 
 $spacing-unit:     20px;
 
-$text-color:       #333;
+$text-color:       #060601;
+$strong-text-color: lighten($text-color, 10%);
 $background-color: #fdfdfd;
-$brand-color:      #2a7ae2;
+$brand-color:      #3fa7cb;
 
 $grey-color:       #828282;
 $grey-color-light: lighten($grey-color, 40%);
