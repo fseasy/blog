@@ -20,7 +20,7 @@ exclude: [_site, md_templates_, deployment_]
 paginate: 15
 
 #social info
-github_username:  fseasy
+github_username: fseasy
 
 defaults:
   -

@@ -1,9 +1,9 @@
 {% capture title_val %}
   {% if page.title %}
-    {{ page.title }} - {{ site.title }}
+    {{ page.title }} | {{ site.title }}
   {% else %}
     {% if paginator.page and paginator.page > 1 %}
-      第 {{ paginator.page }} 页 - {{ site.title }}
+      第 {{ paginator.page }} 页 | {{ site.title }}
     {% else %}
       {{ site.title }}
     {% endif %}
@@ -27,11 +27,20 @@
 {% endcapture %}
 
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width initial-scale=1" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <title>{{ title_val | strip }}</title>
-<meta name="description" content="{{ description_val | strip }}">
+<meta property="og:title" content="{{ title_val | strip }}">
+<meta name="description" property="og:description" content="{{ description_val | strip }}">
+{% if page.tags  %}
+  <meta name="keywords" content="{{ page.tags | join: ','}}">
+{% endif %}
+{% if paginator.page and paginator.page > 1 %}
+  <!-- index page and > 1, disable search-engine index -->
+  <meta name="robots" content="noindex">
+{% endif %}
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
-<link rel="shortcut icon" href="{{ '/favicon.ico' | prepend: site.baseurl }}">
+<link rel="shortcut icon" href="{{ '/favicon.ico' | prepend: site.baseurl | prepend: site.url }}">
+<!-- stylesheet -->
 {% include third_resource/bootstrap_css.html %}
-<link rel="stylesheet" href="{{ "/assets/css/main.css" | prepend: site.baseurl }}">
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | prepend: site.baseurl | prepend: site.url }}">

@@ -24,9 +24,11 @@
                     {% endif %}
                     <span class="glyphicon glyphicon-tags post-graph"></span>
                     {% if page.tags %}
-                        {% for t in page.tags %}
-                            <span> {{t}} </span>
-                        {% endfor %}
+                        <span> {{page.tags | join: ', '}} </span>
+                    {% endif %}
+                    {% if content %}
+                        <span class="glyphicon glyphicon-dashboard post-graph"></span>
+                        {{ content | strip_html | strip_newlines | size }} 字
                     {% endif %}
                 </p>
                 <!-- TOC -->
