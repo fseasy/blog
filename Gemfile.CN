@@ -1,4 +1,5 @@
-source "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"
+# source "https://mirrors.tuna.tsinghua.edu.cn/rubygems/"
+source "https://gems.ruby-china.com"
 
 gem "github-pages", group: :jekyll_plugins
-
+gem "jekyll-target-blank"
