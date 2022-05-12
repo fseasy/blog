@@ -1,0 +1,7 @@
+<!--change link target='_blank' --> -->
+{% include third_resource/jquery.html %}
+<script>
+$(document.links).filter(function() {
+    return this.hostname != window.location.hostname;
+}).attr('target', '_blank');
+</script>
