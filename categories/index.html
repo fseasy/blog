@@ -4,7 +4,6 @@ index_name: 索引目录
 title: 索引目录
 ---
 
-
 <div class="row">
     <div class="col-md-3 clear-padding-horizontal" id="navibar">
     </div>
@@ -33,9 +32,7 @@ title: 索引目录
     }
     for (var post_idx in post_data) {
         var post = post_data[post_idx],
-            categories = post.categories,
-            tags = post.tags,
-            onewords = post.onewords;
+            categories = post.categories;
         add_idx(category_idx, categories, post);
     }
     // DOM handler
@@ -81,22 +78,19 @@ title: 索引目录
     var RESPONSE_ACTIVE_EVENT_ELEMENTS = [];
     var CATEGORY_ELEMENTS = [];
     var CATEGORY_NAME_TO_ELEMENT = {};
-    var buildNaviList = function (naviTypeName, category2items, naviId, name2ElementIdx) {
+    var buildNaviList = function (category2items, naviId, name2ElementIdx) {
         var panel = document.createElement('DIV'),
             navi = document.createElement('UL'),
             header = document.createElement('DIV');
         panel.setAttribute('class', 'panel panel-default clear-border clear-margin-horizontal');
         panel.setAttribute('id', naviId);
 
-        header.setAttribute('class', 'panel-heading ');
-        header.innerHTML = naviTypeName;
-
         navi.setAttribute('class', 'list-group');
 
-        var categoryItemPairs = Object.keys(category2items).map(function(key) {
+        var categoryItemPairs = Object.keys(category2items).map(function (key) {
             return [key, category2items[key]];
         });
-        categoryItemPairs.sort(function(first, second) {
+        categoryItemPairs.sort(function (first, second) {
             return second[1].length - first[1].length;
         });
 
@@ -107,7 +101,7 @@ title: 索引目录
                 link_dom = document.createElement('A'),
                 badge = document.createElement('SPAN');
             link_dom.setAttribute('class', 'list-group-item');
-            link_dom.setAttribute('href', ['###', naviTypeName, category].join('&'));
+            link_dom.setAttribute('href', ['###', category].join('&'));
             link_dom.innerHTML = category;
 
             badge.setAttribute('class', 'badge');
@@ -120,19 +114,20 @@ title: 索引目录
             name2ElementIdx[category] = link_dom;
         }
 
-        panel.appendChild(header);
         panel.appendChild(navi);
 
         return panel;
     }
 
-    var categoryPanel = buildNaviList(NAVI_TYPE_NAME['categoryTypeName'], category_idx, 'category_panel', CATEGORY_NAME_TO_ELEMENT);
+    var categoryPanel = buildNaviList(category_idx, 'category_panel', CATEGORY_NAME_TO_ELEMENT);
     navi.appendChild(categoryPanel);
 
     CATEGORY_ELEMENTS = categoryPanel.getElementsByTagName('A');
     /* add the right elements to the RESPONSE_ACTIVE_EVENT_ELEMENTS */
     (function (RESPONSE_ACTIVE_EVENT_ELEMENTS) {
-        for (var i = 0; i < CATEGORY_ELEMENTS.length; ++i) RESPONSE_ACTIVE_EVENT_ELEMENTS.push(CATEGORY_ELEMENTS[i]);
+        for (var i = 0; i < CATEGORY_ELEMENTS.length; ++i) {
+            RESPONSE_ACTIVE_EVENT_ELEMENTS.push(CATEGORY_ELEMENTS[i]);
+        }
     })(RESPONSE_ACTIVE_EVENT_ELEMENTS)
 
     // Event handler
@@ -146,18 +141,12 @@ title: 索引目录
         }
         return text.join(" ").trim();
     }
-    var helperGetNode = function (nodeTextValue, cadidateDoms) {
-        // by  brute force
-        for (var i = 0; i < cadidateDoms.length; ++i) {
-            if (helperGetTextValue(cadidateDoms[i]) == nodeTextValue) return cadidateDoms[i];
-        }
-        return null;
-    }
     var setCategoryList = function (target) {
         // input > target : DOM Element of category navi
         var target_val = helperGetTextValue(target);
-        if (category_idx[target_val] == undefined) console.error("Error to find corresponding category date");
-        else {
+        if (category_idx[target_val] == undefined) {
+            console.error("Error to find corresponding category date");
+        } else {
             // first , remove all the child of listContent
             while (list.childNodes.length) {
                 list.removeChild(list.lastChild);
@@ -183,63 +172,73 @@ title: 索引目录
     var changeActiveState = function (selectedElement, candidateDoms) {
         // first , check selected Element is the valid DOM | brute force
         var valid = false;
-        for (var i = 0; i < candidateDoms.length; ++i) if (selectedElement == candidateDoms[i]) { valid = true; break; }
-        if (!valid) return false;
+        for (var i = 0; i < candidateDoms.length; ++i) {
+            if (selectedElement == candidateDoms[i]) { 
+                valid = true; 
+                break; 
+            }
+        }
+        if (!valid) {
+            return false;
+        } 
 
-        // canvel origin selected
-        for (var i = 0; i < candidateDoms.length; ++i) removeActiveFace(candidateDoms[i]);
+        // cancel origin selected (cancel all)
+        for (var i = 0; i < candidateDoms.length; ++i) {
+            removeActiveFace(candidateDoms[i]);
+        }
 
         setActiveFace(selectedElement);
     }
 
-    var changeListContent = function (selectedType, selectedEle) {
-        if (selectedType == NAVI_TYPE_NAME['categoryTypeName']) {
-            setCategoryList(selectedEle);
-        }
+    var changeListContent = function (selectedEle) {
+        setCategoryList(selectedEle);
         changeActiveState(selectedEle, RESPONSE_ACTIVE_EVENT_ELEMENTS);
     }
 
     // bind Event
     categoryPanel.onclick = function (e) {
         var target = e.target;
-        if (target.nodeName != 'A') return false;
+        if (target.nodeName != 'A') {
+            return false;
+        }
         setCategoryList(target);
         changeActiveState(target, RESPONSE_ACTIVE_EVENT_ELEMENTS);
     };
+
     // ON LOAD
     (function () {
 
-        // if we return from other page , the location href will store the previous info . we should restore it !
-        var queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1], /* ['###queryStr' , 'queryStr'] */
+        // if we return from other page , the location href will store the previous info . 
+        // we should restore it !
+        var 
+            /* location.href.match = ['###queryStr' , 'queryStr'] => queryStr*/
+            queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1],
             queryStrParts = queryStr.split('&').filter(function (item) { return item != "" }),
-            selectedEle,
-            selectedType;
+            selectCategory;
+        
+        var getDefaultCategory = function() {
+            var categoryLinks = categoryPanel.getElementsByTagName('A');
+            if (categoryLinks.length != 0) {
+                return categoryLinks[0];
+            } else {
+                return null;
+            }
+        };
         if (queryStrParts.length == 0) {
-            var category_links = categoryPanel.getElementsByTagName('A');
-            if (category_links.length != 0) selectedEle = category_links[0];
-            else selectedEle = null;
-            selectedType = NAVI_TYPE_NAME['categoryTypeName'];
+            selectCategory = getDefaultCategory();
         }
-        else if (queryStrParts.length >= 1) {
-            var queryType = queryStrParts[0];
-            if (queryType == NAVI_TYPE_NAME['categoryTypeName']) {
-                var categoryLinks = categoryPanel.getElementsByTagName('A');
-                if (queryStrParts.length == 1) {
-                    if (categoryLinks.length > 0) selectedEle = categoryLinks[0];
-                    else selectedEle = null;
-                }
-                else {
-                    var categoryText = queryStrParts[1];
-                    if (CATEGORY_NAME_TO_ELEMENT[categoryText] == undefined) selectedEle = null;
-                    else selectedEle = CATEGORY_NAME_TO_ELEMENT[categoryText];
-                }
-                selectedType = queryType;
+        else {
+            var categoryText = queryStrParts[0];
+            try {
+                categoryText = decodeURIComponent(categoryText);
+            } catch(e) {
+                console.log("Failedo to decode %s", e)
             }
-            else if (queryType == NAVI_TYPE_NAME['tagTypeName']) {
-                selectedType = NAVI_TYPE_NAME['tagTypeName'];
+            selectCategory = CATEGORY_NAME_TO_ELEMENT[categoryText];
+            if (selectCategory == undefined) {
+                selectCategory = getDefaultCategory();
             }
         }
-        changeListContent(selectedType, selectedEle);
+        changeListContent(selectCategory);
     })();
-
 </script>
