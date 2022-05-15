@@ -88,15 +88,15 @@
         var SIDE_NAV_CLASS = ".side-nav",
             CONTENT_TOC_CLASS = ".content_toc_wrapper";
         var ORIGIN_CONTENT_WIDE_CLASS = "col-md-10",
-            NEW_CONTENT_WIDE_CLASS = "col-md-7",
+            NEW_CONTENT_WIDE_CLASS = "col-md-9",
             ORIGIN_SIDE_WIDE_CLASS = "col-md-1",
-            NEW_SIDE_WIDE_CLASS = "col-md-3";
+            NEW_SIDE_WIDE_CLASS = "col-md-2";
         var content_panel = $(".contentpanel"),
             right_side = $(".right-side");
 
         $(SWITCH_CLASS).click(function () {
             if ($(SIDE_NAV_CLASS).is(":hidden")) {
-                // close the content & show the nav
+                // close the content-toc & show the nav
                 // smaller the content-panel and extend the side
                 $(CONTENT_TOC_CLASS).hide();
                 $(SIDE_NAV_CLASS).show();
