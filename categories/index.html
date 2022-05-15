@@ -12,265 +12,449 @@ title: 索引目录
     </div>
 </div>
 
-<script src="{{ '/assets/js/load_all_postdata.js' | prepend: site.baseurl }}" type="text/javascript"></script>
-<script src="{{ '/assets/js/date_extend.js' | prepend: site.baseurl }}" type="text/javascript"></script>
-<script type="text/javascript">
-    var category_idx = {},
-        NAVI_TYPE_NAME = { 'categoryTypeName': 'Categories' };
-    // INIT Data  
-    var add_idx = function (set, item, post) {
-        if (!Array.isArray(item)) item = [item,];
-        for (var idx in item) {
-            var si = item[idx];
-            if (set[si] == undefined) {
-                set[si] = [post,];
+<script src="{{ '/assets/js/postdata.js' | prepend: site.baseurl }}"></script>
+
+<script>
+    // Draw categories -> pages, bind click and on-load actions.
+    // class writing style, following: https://www.cnblogs.com/zyl910/p/js_class_bestpractice.html
+    var categoryNs = window.categoryNs || {};
+
+    categoryNs.naviContainerId = "navibar";
+    categoryNs.contentContainerId = "listcontent";
+    categoryNs.contentPageSize = {{ site.paginate }};
+
+    /** @class
+     * categories2post 数据
+     */
+    categoryNs.CatePostData = function () { };
+    (function () {
+        /**
+         * category[String] -> posts[List]
+         * @static @private
+         */
+        var cate2posts_ = {};
+
+        (function () {
+            var _addInverseIndex = function (dict, keys, value) {
+                if (!Array.isArray(keys)) { keys = [keys,]; }
+                for (var idx in keys) {
+                    var key = keys[idx];
+                    if (dict[key] == undefined) { dict[key] = [value,]; }
+                    else { dict[key].push(value); }
+                }
             }
-            else {
-                set[si].push(post);
+            var posts = postdataNs.posts;
+            for (var post_idx in posts) {
+                var post = posts[post_idx],
+                    categories = post.categories;
+                _addInverseIndex(cate2posts_, categories, post);
             }
+        })();
+
+        categoryNs.CatePostData.prototype.get = function () {
+            return cate2posts_;
         }
-    }
-    for (var post_idx in post_data) {
-        var post = post_data[post_idx],
-            categories = post.categories;
-        add_idx(category_idx, categories, post);
-    }
-    // DOM handler
-    var navi = document.getElementById('navibar'),
-        list = document.getElementById('listcontent');
+    })();
 
-    var buildPostItem = function (post) {
-        var li_dom = document.createElement('LI'),
-            date_dom = document.createElement('SPAN'),
-            cont_dom = document.createElement('H3'),
-            excerpt_dom = document.createElement('P'),
-            link_dom = document.createElement('A');
-        date_dom.setAttribute('class', 'post-meta');
-        date_dom.innerHTML = post.date;
+    /** @class 
+     * URI controller
+     */
+    categoryNs.URICtrl = function (args) { };
+    (function () {
+        var anchorStr_ = "###";
 
-        link_dom.setAttribute('class', 'post-link');
-        link_dom.setAttribute('href', post.url);
-        link_dom.innerHTML = post.title;
+        //-- static method --
+        /** 生成 URIComponent
+         *  page 从1开始计数
+         */
+        categoryNs.URICtrl.genURIComponent = function (category, page = 1) {
+            var cateQuery = "category=" + category,
+                pageQuery = "page=" + page;
+            return anchorStr_ + [cateQuery, pageQuery].join("&");
+        };
 
-        excerpt_dom.setAttribute('class', 'post-excerpt');
-        excerpt_dom.innerHTML = post.excerpt || post.onewords;
-
-        cont_dom.appendChild(link_dom);
-        li_dom.appendChild(date_dom);
-        li_dom.appendChild(cont_dom);
-        li_dom.appendChild(excerpt_dom);
-
-        return li_dom;
-    }
-
-    /* INIT DOM Elements , including post_dom ,onewords_dom */
-    /* We build all dom for every post , bind it to post_data */
-
-    for (var idx in post_data) {
-        post_data[idx]["dom"] = buildPostItem(post_data[idx]);
-    }
-
-    /* INIT navi bar*/
-
-    var NAVI_INNER_STYLE = {
-        'list-active': ["border-right:1px solid #3fa7cb", 'margin-right:-1px']
-    };
-    var RESPONSE_ACTIVE_EVENT_ELEMENTS = [];
-    var CATEGORY_ELEMENTS = [];
-    var CATEGORY_NAME_TO_ELEMENT = {};
-    var buildNaviList = function (category2items, naviId, name2ElementIdx) {
-        var panel = document.createElement('DIV'),
-            navi = document.createElement('UL'),
-            header = document.createElement('DIV');
-        panel.setAttribute('class', 'panel panel-default clear-border clear-margin-horizontal');
-        panel.setAttribute('id', naviId);
-
-        navi.setAttribute('class', 'list-group');
-
-        var categoryItemPairs = Object.keys(category2items).map(function (key) {
-            return [key, category2items[key]];
-        });
-        categoryItemPairs.sort(function (first, second) {
-            return second[1].length - first[1].length;
-        });
-
-        for (var idx in categoryItemPairs) {
-            var k2v = categoryItemPairs[idx],
-                category = k2v[0],
-                items = k2v[1],
-                link_dom = document.createElement('A'),
-                badge = document.createElement('SPAN');
-            link_dom.setAttribute('class', 'list-group-item');
-            link_dom.setAttribute('href', ['###', category].join('&'));
-            link_dom.innerHTML = category;
-
-            badge.setAttribute('class', 'badge');
-            badge.innerHTML = items.length;
-
-            link_dom.appendChild(badge);
-
-            navi.appendChild(link_dom);
-            /* build the name to node index*/
-            name2ElementIdx[category] = link_dom;
-        }
-
-        panel.appendChild(navi);
-
-        return panel;
-    }
-
-    var categoryPanel = buildNaviList(category_idx, 'category_panel', CATEGORY_NAME_TO_ELEMENT);
-    navi.appendChild(categoryPanel);
-
-    CATEGORY_ELEMENTS = categoryPanel.getElementsByTagName('A');
-    /* add the right elements to the RESPONSE_ACTIVE_EVENT_ELEMENTS */
-    (function (RESPONSE_ACTIVE_EVENT_ELEMENTS) {
-        for (var i = 0; i < CATEGORY_ELEMENTS.length; ++i) {
-            RESPONSE_ACTIVE_EVENT_ELEMENTS.push(CATEGORY_ELEMENTS[i]);
-        }
-    })(RESPONSE_ACTIVE_EVENT_ELEMENTS)
-
-    // Event handler
-    var helperGetTextValue = function (node) {
-        var text = [];
-        for (var i = 0; i < node.childNodes.length; ++i) {
-            var childNode = node.childNodes[i];
-            if (childNode.nodeName == '#text' || childNode.nodeType === 3) {
-                text.push(childNode.nodeValue);
-            }
-        }
-        return text.join(" ").trim();
-    }
-    var setCategoryList = function (target) {
-        // input > target : DOM Element of category navi
-        var target_val = helperGetTextValue(target);
-        if (category_idx[target_val] == undefined) {
-            console.error("Error to find corresponding category date");
-        } else {
-            // first , remove all the child of listContent
-            while (list.childNodes.length) {
-                list.removeChild(list.lastChild);
+        categoryNs.URICtrl.parseURI = function (href) {
+            href = href || window.location.href;
+            var ret = {
+                "category": "_PLACEHOLDER_",
+                "page": "1"
             };
-            var ulDOM = document.createElement('ul')
-            ulDOM.setAttribute('class', 'post-list');
-
-            list.appendChild(ulDOM);
-            for (var i = 0; i < category_idx[target_val].length; ++i) {
-                var post = category_idx[target_val][i];
-                ulDOM.appendChild(post.dom);
+            var matchQuery = href.match(/.*###(.*)/);
+            if (!matchQuery) {
+                return ret;
             }
-        }
+            var queryParts = matchQuery[1].split('&').filter(function (s) { return s != "" });
+            queryParts.forEach(function (s) {
+                try {
+                    // trim space or '/'
+                    s = s.replace(/^[/\s\uFEFF\xA0]+|[/\s\uFEFF\xA0]+$/g, '');
+                    s = decodeURIComponent(s);
+                } catch (e) {
+                    console.log("decodeURIComponent failed; err=%s, s=%s", e, s);
+                    return;
+                }
+                var kv = s.split('=');
+                if (kv.length != 2) {
+                    return;
+                }
+                ret[kv[0]] = kv[1];
+            });
+            return ret;
+        };
 
-    }
-
-    var setActiveFace = function (ele) {
-        ele.setAttribute('style', NAVI_INNER_STYLE['list-active'].join(';'));
-    }
-    var removeActiveFace = function (ele) {
-        ele.removeAttribute('style');
-    }
-    var changeActiveState = function (selectedElement, candidateDoms) {
-        // first , check selected Element is the valid DOM | brute force
-        var valid = false;
-        for (var i = 0; i < candidateDoms.length; ++i) {
-            if (selectedElement == candidateDoms[i]) { 
-                valid = true; 
-                break; 
+        categoryNs.URICtrl.genURI = function (category, page = 1) {
+            var component = this.genURIComponent(category, page);
+            var href = window.location.href;
+            var pos = href.indexOf(anchorStr_);
+            if (pos != -1) {
+                href = href.substring(0, pos);
             }
+            return href + component;
         }
-        if (!valid) {
-            return false;
-        } 
+    })();
 
-        // cancel origin selected (cancel all)
-        for (var i = 0; i < candidateDoms.length; ++i) {
-            removeActiveFace(candidateDoms[i]);
-        }
+    /** @class
+     * DOM 绘制类
+     *  - 构造函数会初始化 category navi 
+     *  - 提供更新navi选择、更新content的绘制接口
+     */
+    categoryNs.DOMDraw = function (args) {
+        args = args || {};
+        this.cate2posts_ = args["cate2posts"] || {};
+        this.naviId_ = args["navi_id"] || "category_panel";
+        this.naviContainerDOM_ = document.getElementById(categoryNs.naviContainerId);
+        this.contentContainerDOM_ = document.getElementById(categoryNs.contentContainerId);
 
-        setActiveFace(selectedElement);
-    }
+        var ret = _buildNaviListDOM(this.cate2posts_, this.naviId_);
+        this.naviListDOM_ = ret[0];
+        this.cateName2DOM_ = ret[1];
+        this.cateInDrawOrder = ret[2]; // category list in draw order.
+        this.naviContainerDOM_.appendChild(this.naviListDOM_);
 
-    var changeListContent = function (selectedEle) {
-        setCategoryList(selectedEle);
-        changeActiveState(selectedEle, RESPONSE_ACTIVE_EVENT_ELEMENTS);
-    }
+        function _buildNaviListDOM(category2posts, naviId) {
+            var panel = document.createElement('DIV'),
+                navi = document.createElement('UL'),
+                cateName2DOM = {},
+                cateInDrawOrder = [];
+            panel.setAttribute('id', naviId);
+            panel.setAttribute('class', 'panel panel-default clear-border clear-margin-horizontal');
 
-    // bind Event
-    categoryPanel.onclick = function (e) {
-        var target = e.target;
-        if (target.nodeName != 'A') {
-            return false;
-        }
-        setCategoryList(target);
-        changeActiveState(target, RESPONSE_ACTIVE_EVENT_ELEMENTS);
+            navi.setAttribute('class', 'list-group');
+
+            var categoryPostsPairs = Object.keys(category2posts).map(function (key) {
+                return [key, category2posts[key]];
+            });
+            categoryPostsPairs.sort(function (first, second) {
+                return second[1].length - first[1].length;
+            });
+
+            for (var idx in categoryPostsPairs) {
+                var k2v = categoryPostsPairs[idx],
+                    category = k2v[0],
+                    posts = k2v[1],
+                    hrefDOM = document.createElement('A'),
+                    badge = document.createElement('SPAN');
+
+                cateInDrawOrder.push(category);
+                hrefDOM.setAttribute('class', 'list-group-item');
+                hrefDOM.setAttribute('href', categoryNs.URICtrl.genURIComponent(category));
+                hrefDOM.innerHTML = category;
+
+                badge.setAttribute('class', 'badge');
+                badge.innerHTML = posts.length;
+
+                hrefDOM.appendChild(badge);
+                cateName2DOM[category] = hrefDOM;
+                navi.appendChild(hrefDOM);
+            }
+
+            panel.appendChild(navi);
+            return [panel, cateName2DOM, cateInDrawOrder];
+        };
+
     };
+    (function () {
+        categoryNs.DOMDraw.prototype.activeNaviSelectedCategory = function (selectCategory) {
+            var setActiveFace = function (ele) {
+                var styles = ["border-right:1px solid #3fa7cb", 'margin-right:-1px'];
+                ele.setAttribute('style', styles.join(';'));
+            }
+            var removeActiveFace = function (ele) {
+                ele.removeAttribute('style');
+            }
 
-    // ON LOAD
+            var cate2DOM = this.cateName2DOM_;
+            var selectDOM = cate2DOM[selectCategory];
+            if (selectDOM == undefined) {
+                return;
+            }
+            // cancel origin selected (cancel all)
+            Object.keys(cate2DOM).forEach(function (k) {
+                removeActiveFace(cate2DOM[k]);
+            });
+            setActiveFace(selectDOM);
+        }
+
+        categoryNs.DOMDraw.prototype.updateContent = function (category, page) {
+            var _buildPostDOMs = function (showPosts) {
+                var _buildPostDOM = function (post) {
+                    var liDOM = document.createElement('LI'),
+                        dateDOM = document.createElement('SPAN'),
+                        contentDOM = document.createElement('H3'),
+                        excerptDOM = document.createElement('P'),
+                        hrefDOM = document.createElement('A');
+
+                    // dateDOM.setAttribute('class', 'post-meta');
+                    // dateDOM.innerHTML = post.date;
+
+                    hrefDOM.setAttribute('class', 'post-link');
+                    hrefDOM.setAttribute('href', post.url);
+                    hrefDOM.innerHTML = post.title;
+
+                    excerptDOM.setAttribute('class', 'post-excerpt');
+                    excerptDOM.innerHTML = [post.date, post.excerpt].join(" | ");
+
+                    contentDOM.appendChild(hrefDOM);
+                    // liDOM.appendChild(dateDOM);
+                    liDOM.appendChild(contentDOM);
+                    liDOM.appendChild(excerptDOM);
+
+                    return liDOM;
+                };
+
+                var ulDOM = document.createElement('ul')
+                ulDOM.setAttribute('class', 'post-list');
+                showPosts.forEach(function (post) {
+                    var pDOM = _buildPostDOM(post);
+                    ulDOM.appendChild(pDOM);
+                });
+                return ulDOM;
+            }
+
+            var _buildPaginationDOM = function (category, page, pageNum) {
+                var _buildPaginationContiner = function () {
+                    var row = document.createElement("DIV");
+                    row.setAttribute("class", "row");
+                    var col = document.createElement("DIV");
+                    col.setAttribute("class", "col-md-12 col-xs-12 col-sm-12");
+                    var div = document.createElement("DIV");
+                    div.setAttribute("class", "pagination shadow");
+
+                    row.appendChild(col);
+                    col.appendChild(div);
+                    return [row, div];
+                };
+
+                var _buildIndicatorDiv = function (className, texts, hrefs) {
+                    var div = document.createElement("DIV");
+                    div.setAttribute("class", className);
+                    for (var i = 0; i < texts.length; ++i) {
+                        var text = texts[i];
+                        var href = hrefs[i];
+                        var node;
+                        if (!href) {
+                            node = document.createTextNode(text);
+                        } else {
+                            node = document.createElement("A");
+                            node.setAttribute("href", href);
+                            node.innerHTML = text;
+                        }
+                        div.appendChild(node);
+                        // append a space to make a separator.
+                        div.appendChild(document.createTextNode(" "));
+                    }
+                    return div;
+                };
+                var ret = _buildPaginationContiner();
+                var containerWrapper = ret[0],
+                    container = ret[1];
+
+                var preHref;
+                if (page > 1) {
+                    preHref = categoryNs.URICtrl.genURIComponent(category, page - 1);
+                }
+                var preIndicator = _buildIndicatorDiv("pre", ["上一页"], [preHref]);
+                container.appendChild(preIndicator);
+
+                var numTexts = [],
+                    numHrefs = [];
+                for (var i = 1; i <= pageNum; ++i) {
+                    var href;
+                    if (i != page) {
+                        href = categoryNs.URICtrl.genURIComponent(category, i);
+                    } else {
+                        href = null;
+                    }
+                    numTexts.push(i);
+                    numHrefs.push(href);
+                }
+                var numIndicator = _buildIndicatorDiv("num", numTexts, numHrefs);
+                container.appendChild(numIndicator);
+
+                var nextHref;
+                if (page < pageNum) {
+                    nextHref = categoryNs.URICtrl.genURIComponent(category, page + 1);
+                }
+                var nextIndicator = _buildIndicatorDiv("nxt", ["下一页"], [nextHref]);
+                container.appendChild(nextIndicator);
+                return containerWrapper;
+            };
+
+            var _removeAllChildren = function (container) {
+                while (container.childNodes.length) { container.removeChild(container.lastChild); };
+            };
+
+            var posts = this.cate2posts_[category];
+            if (posts == undefined) {
+                console.log("category [%s] doesn't have posts", category);
+                return;
+            }
+            var pageSz = categoryNs.contentPageSize,
+                pageNum = Math.ceil(posts.length / pageSz);
+            if (typeof (page) == "string") { page = parseInt(page); }
+            if (isNaN(page) || page < 1 || page > pageNum) {
+                console.log("invalid page [%s], should in range [%s, %s]", page, 1, pageNum);
+                return;
+            }
+            // first , remove all the child of listContent; then append
+            // struncture: TOP -> | posts | pagination-container -> pagination-dom |
+            var container = this.contentContainerDOM_;
+            _removeAllChildren(container);
+            var showPosts = posts.slice((page - 1) * pageSz, page * pageSz - 1);
+            container.appendChild(_buildPostDOMs(showPosts));
+            container.appendChild(_buildPaginationDOM(category, page, pageNum));
+        };
+
+        /** 将navi更新和content更新放到一起, 再加更新window.location，方便外部直接调用.
+         */
+        categoryNs.DOMDraw.prototype.draw = function (category, page = 1) {
+            _scrollToTop();
+            this.activeNaviSelectedCategory(category);
+            this.updateContent(category, page);
+            window.location.href = categoryNs.URICtrl.genURI(category, page);
+        };
+
+        function _scrollToTop() {
+            // copy from 
+            // https://stackoverflow.com/questions/1144805/\
+            //      scroll-to-the-top-of-the-page-using-javascript
+            var st = window.setInterval(function () {
+                var pos = window.pageYOffset;
+                if (pos > 0) {
+                    var targetPos;
+                    if (pos > 160) { targetPos = pos / 1.2; } 
+                    else { targetPos = pos - 20; }
+                    window.scrollTo(0, targetPos); // how far to scroll on each step
+                } else {
+                    window.clearInterval(st);
+                }
+            }, 16); // how fast to scroll (this equals roughly 60 fps)
+        }
+
+    })();
+
+    /** @class
+     *  事件绑定器。
+     *  给定 DOMDraw 对象，为 navi, pagination 绑定事件。
+     */
+    categoryNs.EventBinder = function (drawer) {
+        this.drawer = drawer;
+    };
     (function () {
 
-        // if we return from other page , the location href will store the previous info . 
-        // we should restore it !
-        var 
-            /* location.href.match = ['###queryStr' , 'queryStr'] => queryStr*/
-            queryStr = location.href.match(/###(.*)/) == null ? "" : location.href.match(/###(.*)/)[1],
-            queryStrParts = queryStr.split('&').filter(function (item) { return item != "" }),
-            selectCategory;
-        
-        var getDefaultCategory = function() {
-            var categoryLinks = categoryPanel.getElementsByTagName('A');
-            if (categoryLinks.length != 0) {
-                return categoryLinks[0];
-            } else {
-                return null;
+        var _getTextValue = function (node) {
+            var text = [];
+            for (var i = 0; i < node.childNodes.length; ++i) {
+                var childNode = node.childNodes[i];
+                if (childNode.nodeName == '#text' || childNode.nodeType === 3) {
+                    text.push(childNode.nodeValue);
+                }
+            }
+            return text.join(" ").trim();
+        }
+
+        categoryNs.EventBinder.prototype.bindNaviClick = function () {
+            var d = this.drawer;
+            d.naviContainerDOM_.onclick = function (e) {
+                var target = e.target;
+                if (target.nodeName != 'A') {
+                    return true;
+                }
+                var category = _getTextValue(target);
+                d.draw(category);
+                return false;
             }
         };
-        if (queryStrParts.length == 0) {
-            selectCategory = getDefaultCategory();
-        }
-        else {
-            var categoryText = queryStrParts[0];
-            try {
-                categoryText = decodeURIComponent(categoryText);
-            } catch(e) {
-                console.log("Failedo to decode %s", e)
+
+        categoryNs.EventBinder.prototype.bindPaginationClick = function () {
+            var d = this.drawer;
+            d.contentContainerDOM_.onclick = function (e) {
+                var target = e.target;
+                if (target.nodeName != 'A') { return true; }
+                // distinguish from post link
+                var parent = target.parentNode;
+                if (!parent) { return true; }
+                var className = parent.getAttribute("class");
+                if (typeof (className) != 'string'
+                    || ["pre", "num", "nxt"].indexOf(className) == -1) {
+                    // propogate upwards, or can't click the post link...
+                    return true;
+                }
+                var href = target.getAttribute("href");
+                var ret = categoryNs.URICtrl.parseURI(href),
+                    category = ret["category"],
+                    page = ret["page"];
+                console.log("cate = %s, page = %s", category, page);
+                d.draw(category, page);
+                return false;
             }
-            selectCategory = CATEGORY_NAME_TO_ELEMENT[categoryText];
-            if (selectCategory == undefined) {
-                selectCategory = getDefaultCategory();
+        };
+
+        /** 在脚本加载成功后，立即执行draw一次
+         * 
+         */
+        categoryNs.EventBinder.prototype.actInstant = function () {
+            // try to parse from window.location
+            var ret = categoryNs.URICtrl.parseURI(window.location.href);
+            // verify and reset if not Query not OK.
+            var category = ret["category"];
+            if (this.drawer.cate2posts_[category] == undefined) {
+                // use the first category as default category.
+                category = this.drawer.cateInDrawOrder[0];
             }
+            if (!category) {
+                return;
+            }
+            var page = ret["page"];
+            if (!page) {
+                page = 1;
+            } else if (typeof (page) == "string") {
+                page = parseInt(page);
+            }
+            var postsLen = this.drawer.cate2posts_[category].length;
+            if (isNaN(page)
+                || page < 1
+                || (page - 1) * categoryNs.contentPageSize > postsLen) {
+                page = 1;
+            }
+            this.drawer.draw(category, page);
         }
-        changeListContent(selectCategory);
+
+        /** 集合所有接口，一次调用完成。
+         */
+        categoryNs.EventBinder.prototype.bindAndAct = function () {
+            this.bindNaviClick();
+            this.bindPaginationClick();
+            this.actInstant();
+        };
     })();
 </script>
+
 <script>
-// Draw categories -> pages, bind click and on-load actions.
-// class writing style, following: https://www.cnblogs.com/zyl910/p/js_class_bestpractice.html
-
-var categoryNS = window.categoryNS || {};
-
-/** @class
- * 类别和post的数据类
- */
-categoryNS.CatePostData = function(){
-
-    var add_idx = function (set, item, post) {
-        if (!Array.isArray(item)) item = [item,];
-        for (var idx in item) {
-            var si = item[idx];
-            if (set[si] == undefined) {
-                set[si] = [post,];
-            }
-            else {
-                set[si].push(post);
-            }
-        }
-    }
-    for (var post_idx in post_data) {
-        var post = post_data[post_idx],
-            categories = post.categories;
-        add_idx(category_idx, categories, post);
-    }
-
-};
-
+    // call 
+    // (function () {
+    var cate2posts = new categoryNs.CatePostData();
+    var drawer = new categoryNs.DOMDraw({ "cate2posts": cate2posts.get() });
+    (new categoryNs.EventBinder(drawer)).bindAndAct();
+// })();
 </script>

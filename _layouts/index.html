@@ -16,7 +16,10 @@
                 {{ content }} 
             </div>   
         </div>
-        {% include pagination.html  %}
+        {% if page.index_name == "主页" %}
+            <!--load pagenation only when main-index -->>
+            {% include pagination.html  %}
+        {% endif %}
         {% include page_footer.html %}
     </div>
 

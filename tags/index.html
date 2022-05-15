@@ -7,12 +7,13 @@ title: 标签
 <div id="tags_table">
 </div>
 
-<script src="{{ '/assets/js/load_all_postdata.js' | prepend: site.baseurl }}" type="text/javascript"></script>
+<script src="{{ '/assets/js/postdata.js' | prepend: site.baseurl }}" type="text/javascript"></script>
 <script>
     var tag2posts = (function () {
         var tag2posts = {};
-        for (var post_idx in post_data) {
-            var post = post_data[post_idx],
+        var posts = postdataNs.posts;
+        for (var post_idx in posts) {
+            var post = posts[post_idx],
                 tags = post.tags;
             for (var idx in tags) {
                 var tag = tags[idx];
