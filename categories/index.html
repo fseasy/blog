@@ -242,3 +242,35 @@ title: 索引目录
         changeListContent(selectCategory);
     })();
 </script>
+<script>
+// Draw categories -> pages, bind click and on-load actions.
+// class writing style, following: https://www.cnblogs.com/zyl910/p/js_class_bestpractice.html
+
+var categoryNS = window.categoryNS || {};
+
+/** @class
+ * 类别和post的数据类
+ */
+categoryNS.CatePostData = function(){
+
+    var add_idx = function (set, item, post) {
+        if (!Array.isArray(item)) item = [item,];
+        for (var idx in item) {
+            var si = item[idx];
+            if (set[si] == undefined) {
+                set[si] = [post,];
+            }
+            else {
+                set[si].push(post);
+            }
+        }
+    }
+    for (var post_idx in post_data) {
+        var post = post_data[post_idx],
+            categories = post.categories;
+        add_idx(category_idx, categories, post);
+    }
+
+};
+
+</script>
