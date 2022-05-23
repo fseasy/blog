@@ -7,3 +7,4 @@ pages.sublime-workspace
 .jekyll-cache
 Gemfile
 Gemfile.lock
+.DS_Store
