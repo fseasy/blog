@@ -1,111 +1,85 @@
 ---
 layout: post
+categories: 工具
+tags: mathjax
 ---
 
 <h1 class="text-center">MathJax Demo测试</h1>
 
 <blockquote>
-本页面来自MathJax在Github上的<a href="https://github.com/mathjax/MathJax/blob/master/test/sample-dynamic-2.html">demo</a>.
+本页面来自MathJax在Github上的<a href="https://github.com/mathjax/MathJax-demos-web/blob/master/input-tex2chtml.html.md">demo</a>.
 </blockquote>
 
-<p>输入包含MathJax代码的HTML
+<p>输入Tex</p>
 
-<textarea id="MathInput" class="form-control" rows="6">
-$ $
-</textarea>
+<div class="row form-group">
+  <div class="col-md-12">
+    <textarea id="MathInput" class="form-control" rows="6">
+    </textarea>
+  </div>
+</div>
 
-<p>效果预览
 
-<div id="MathPreview" style="min-height:500px ; width : 100% ; margin : auto ; border:1px solid #ccc ;border-radius: 4px ; padding: 6px 18px;"></div>
-<div id="MathBuffer" style="min-height:500px ; width : 100% ;  margin : auto ; border:1px solid #ccc ;border-radius: 4px ;padding: 6px 18px;
-visibility:hidden; position:absolute; top:0; left: 0"></div>
+<div class="row form-group">
+  <div class="col-md-4 col-md-offset-8 text-right" >
+    <input type="checkbox" id="DisplayStyle" checked> <label for="display">渲染带样式</label>
+    <button type="button" id="MathRender" class="btn btn-primary">渲染公式</button>
+  </div>
+</div>
 
-<script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<p>效果预览</p>
+
+<div id="MathShow" style="min-height:100px ; width : 100% ; margin : auto ; border:1px solid #ccc ;border-radius: 4px ; padding: 6px 18px;"></div>
+
 <script>
-$(document).ready(function(){
-  Preview = {
-  delay: 150,        // delay after keystroke before updating
-
-  preview: null,     // filled in by Init below
-  buffer: null,      // filled in by Init below
-
-  timeout: null,     // store setTimout id
-  mjRunning: false,  // true when MathJax is processing
-  oldText: null,     // used to check if an update is needed
-
-  //
-  //  Get the preview and buffer DIV's
-  //
-  Init: function () {
-    this.preview = document.getElementById("MathPreview");
-    this.buffer = document.getElementById("MathBuffer");
-  },
-
-  //
-  //  Switch the buffer and preview, and display the right one.
-  //  (We use visibility:hidden rather than display:none since
-  //  the results of running MathJax are more accurate that way.)
-  //
-  SwapBuffers: function () {
-    var buffer = this.preview, preview = this.buffer;
-    this.buffer = buffer; this.preview = preview;
-    buffer.style.visibility = "hidden"; buffer.style.position = "absolute";
-    preview.style.position = ""; preview.style.visibility = "";
-  },
-
-  //
-  //  This gets called when a key is pressed in the textarea.
-  //  We check if there is already a pending update and clear it if so.
-  //  Then set up an update to occur after a small delay (so if more keys
-  //    are pressed, the update won't occur until after there has been 
-  //    a pause in the typing).
-  //  The callback function is set up below, after the Preview object is set up.
-  //
-  Update: function () {
-    if (this.timeout) {clearTimeout(this.timeout)}
-    this.timeout = setTimeout(this.callback,this.delay);
-  },
-
-  //
-  //  Creates the preview and runs MathJax on it.
-  //  If MathJax is already trying to render the code, return
-  //  If the text hasn't changed, return
-  //  Otherwise, indicate that MathJax is running, and start the
-  //    typesetting.  After it is done, call PreviewDone.
-  //  
-  CreatePreview: function () {
-    Preview.timeout = null;
-    if (this.mjRunning) return;
-    var text = document.getElementById("MathInput").value;
-    if (text === this.oldtext) return;
-    this.buffer.innerHTML = this.oldtext = text;
-    this.mjRunning = true;
-    MathJax.Hub.Queue(
-      ["Typeset",MathJax.Hub,this.buffer],
-      ["PreviewDone",this]
-    );
-  },
-
-  //
-  //  Indicate that MathJax is no longer running,
-  //  and swap the buffers to show the results.
-  //
-  PreviewDone: function () {
-    this.mjRunning = false;
-    this.SwapBuffers();
+  function convert() {
+    //
+    //  Get the TeX input
+    //
+    var input = document.getElementById("MathInput").value.trim();
+    //
+    //  Disable the display and render buttons until MathJax is done
+    //
+    var display = document.getElementById("DisplayStyle");
+    var button = document.getElementById("MathRender");
+    button.disabled = display.disabled = true;
+    //
+    //  Clear the old output
+    //
+    output = document.getElementById('MathShow');
+    output.innerHTML = '';
+    //
+    //  Reset the tex labels (and automatic equation numbers, though there aren't any here).
+    //  Get the conversion options (metrics and display settings)
+    //  Convert the input to CommonHTML output and use a promise to wait for it to be ready
+    //    (in case an extension needs to be loaded dynamically).
+    //
+    MathJax.texReset();
+    var options = MathJax.getMetricsFor(output);
+    options.display = display.checked;
+    MathJax.tex2chtmlPromise(input, options).then(function (node) {
+      //
+      //  The promise returns the typeset node, which we add to the output
+      //  Then update the document to include the adjusted CSS for the
+      //    content of the new equation.
+      //
+      output.appendChild(node);
+      MathJax.startup.document.clear();
+      MathJax.startup.document.updateDocument();
+    }).catch(function (err) {
+      //
+      //  If there was an error, put the message into the output instead
+      //
+      output.appendChild(document.createElement('pre')).appendChild(document.createTextNode(err.message));
+    }).then(function () {
+      //
+      //  Error or not, re-enable the display and render buttons
+      //
+      button.disabled = display.disabled = false;
+    });
   }
 
-};
+  var button = document.getElementById("MathRender");
+  button.onclick = function() { convert(); };
 
-//
-//  Cache a callback to the CreatePreview action
-//
-Preview.callback = MathJax.Callback(["CreatePreview",Preview]);
-Preview.callback.autoReset = true;  // make sure it can run more than once
-Preview.Init();
-
-$("#MathInput").bind('keyup' , function(){ Preview.Update() ; } ) ;
-
-})
 </script>
-
