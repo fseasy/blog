@@ -1,29 +1,57 @@
 <!-- Mathjax -->
 <script>
-    MathJax = {
-        tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']]
+(function () {
+    {% comment %}
+        if one post define `need_mathjax` in head , then we should load it.
+    {% endcomment %}
+    {% if post.need_mathjax %}
+        var needMathjax = true;
+    {% else %}
+        var needMathjax = false;
+    {% endif %}
+    var hasMath = (function() {
+        var ps = document.getElementsByTagName("P");
+        var textHasMathEnv = function(t) {
+            if (!t) {
+                return false;
+            }
+            return t.match(/(?:\$|\\\(|\\\[|\\begin\{.*?})/);
         }
-    };
-</script>
+        for (var idx in ps) {
+            if (textHasMathEnv(ps[idx].textContent)) {
+                return true;
+            }
+        }
+        return false;
+    })();
 
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.min.js" integrity="sha512-9DkJEmXbL/Tdj8b1SxJ4H2p3RCAXKsu8RqbznEjhFYw0cFIWlII+PnGDU2FX3keyE9Ev6eFaDPyEAyAL2cEX0Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    if (!hasMath && !needMathjax) {
+        console.debug("no need load mathjax");
+        return;
+    }
+    if (!window.MathJax) {
+        window.MathJax = {
+            tex: {
+                inlineMath:  [['$', '$']]
+            }
+        };
+    }
 
-<script>
-// (function () {
-//     var body = document.body.textContent;
-//     if (body.match(/(?:\$|\\\(|\\\[|\\begin\{.*?})/)) {
-//       if (!window.MathJax) {
-//         window.MathJax = {
-//           tex: {
-//             inlineMath: {'[+]': [['$', '$']]}
-//           }
-//         };
-//       }
-//       var script = document.createElement('script');
-//       script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js';
-//       document.head.appendChild(script);
-//     }
-//   })();
+    var makeScript = function (src) {
+        var script = document.createElement("SCRIPT");
+        script.src = src;
+        return script;
+    }
+
+    // add polyfill.io
+    var polyScript = makeScript("https://polyfill.io/v3/polyfill.min.js?features=es6");
+    document.head.appendChild(polyScript);
+    // add mathjax
+    var mScript = makeScript("https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.min.js")
+    mScript.integrity = "sha512-9DkJEmXbL/Tdj8b1SxJ4H2p3RCAXKsu8RqbznEjhFYw0cFIWlII+PnGDU2FX3keyE9Ev6eFaDPyEAyAL2cEX0Q==";
+    mScript.crossOrigin = "anonymous";
+    mScript.referrerpolicy = "no-referrer";
+    document.head.appendChild(mScript);
+
+})();
 </script>

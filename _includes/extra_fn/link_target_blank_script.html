@@ -1,7 +1,6 @@
 <!--change link target='_blank' -->
-{% include third_resource/jquery.html %}
 <script>
-$(document.links).filter(function() {
-    return this.hostname != window.location.hostname;
-}).attr('target', '_blank');
+Array.from(document.links)
+    .filter(link => link.hostname != window.location.hostname)
+    .forEach(link => link.target = '_blank');
 </script>
