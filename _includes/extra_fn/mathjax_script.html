@@ -4,7 +4,7 @@
     {% comment %}
         if one post define `need_mathjax` in head , then we should load it.
     {% endcomment %}
-    {% if post.need_mathjax %}
+    {% if page.need_mathjax %}
         var needMathjax = true;
     {% else %}
         var needMathjax = false;
