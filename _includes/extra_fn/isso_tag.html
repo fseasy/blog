@@ -1,29 +1,24 @@
 <!-- use isso as self-host comments -->
-
-<!-- <script async data-isso="{{ site.url }}/_scomment" data-isso-vote="true"
-        src="{{ site.url }}/_scomment/js/embed.min.js"></script> -->
-
-<!-- Now use another click button -->
 <div class="text-center">
-        <button type="button" id="isso_request">点击评论</button>
+  <button type="button" id="isso_request">点击评论</button>
 </div>
 <section id="isso-thread"></section>
 
 <script>
-        (function () {
-                var _isso_fn = function () {
-                        var d = document, s = d.createElement('script');
-                        s.src = '{{ site.url }}/_scomment/js/embed.min.js';
-                        s.setAttribute('data-isso', '{{ site.url }}/_scomment');
-                        s.setAttribute('data-isso-vote', 'true');
-                        (d.head || d.body).appendChild(s);
-                };
+  (function () {
+    var _isso_fn = function () {
+      var d = document, s = d.createElement('script');
+      s.src = '{{ site.url }}/isso/js/embed.min.js';
+      s.setAttribute('data-isso', '{{ site.url }}/isso');
+      s.setAttribute('data-isso-vote', 'true');
+      (d.head || d.body).appendChild(s);
+    };
 
-                var btn = document.getElementById("isso_request");
-                btn.onclick = function (e) {
-                        _isso_fn();
-                        var parent = e.target.parentNode;
-                        parent.style = "opacity: 0; transition: opacity 0.3s linear;";
-                };
-        })()
+    var btn = document.getElementById("isso_request");
+    btn.onclick = function (e) {
+      _isso_fn();
+      var parent = e.target.parentNode;
+      parent.style = "opacity: 0; transition: opacity 0.3s linear;";
+    };
+  })();
 </script>
