@@ -355,6 +355,27 @@ a.post-link {
   
 }
 
+.footnotes {
+  font-size: $small-font-size;
+  padding: 5px 0 0 0;
+  border-top: 1px solid $grey-color;
+}
+
+.footnotes a {
+  color: $grey-color-dark;
+}
+
+.post-image {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  color: $grey-color;
+}
+
+.post-image img {
+  margin-bottom: 10px;
+}
+
 blockquote:not(:first-child) {
   background-color: darken($background-color, 1%);
   font-size: $small-font-size;
