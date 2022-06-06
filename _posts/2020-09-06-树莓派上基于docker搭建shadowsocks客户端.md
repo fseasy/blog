@@ -54,5 +54,6 @@ tags: 树莓派 shadowsocks
 	vim /etc/rc.local
 
 ## 主要参考链接
+
 1. [树莓派安装docker](https://yeasy.gitbook.io/docker_practice/install/raspberry-pi#shi-yong-jiao-ben-zi-dong-an-zhuang)
 2. [docker安装ss](http://tiven.wang/articles/setup-shadowsocks-proxy-using-docker/)
