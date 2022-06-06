@@ -86,6 +86,10 @@ strong {
   color: $strong-text-color;
 }
 
+.container {
+  overflow-x: hidden;
+}
+
 /**
  * Images
  */
