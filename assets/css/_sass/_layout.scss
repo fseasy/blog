@@ -382,6 +382,12 @@ a.post-link {
   margin-bottom: 10px;
 }
 
+.post-image p+p {
+  text-align: left;
+  padding: 0 3em;
+  font-style: italic;
+}
+
 blockquote:not(:first-child) {
   background-color: darken($background-color, 1%);
   font-size: $small-font-size;
