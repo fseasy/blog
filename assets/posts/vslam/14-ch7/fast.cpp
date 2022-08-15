@@ -67,18 +67,30 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
     // 以 t = 16 为例子, K = 8; N = 25
     const int K = patternSize/2, N = patternSize + K + 1;
     int i, j, k, pixel[25];
+    // img.step 表示图像的一行需要的字节大小。
+    // makeOffsets 实现在自 fast_score.cpp 中；
+    // 签名为 void makeOffsets(int pixel[25], int rowStride, int patternSize)
+    // 功能是提前算好周围元素相对与中心点的偏移量（一维、字节层面）。
     makeOffsets(pixel, (int)img.step, patternSize);
 
     keypoints.clear();
-
+    // 保证输入的 threshold 有效； 255 说明这个函数处理 灰度的 8UC1 类型输入
     threshold = std::min(std::max(threshold, 0), 255);
 
+    // 预先填充好灰度差值对应的标签结果
+    // 像素差值 
+    //    < -threshold, 为1； 
+    //    > threshold, 为2； 
+    //      否则为 0
+    // 分开处理正负阈值，说明是区分低于中心亮度和高于中心亮度的。
     uchar threshold_tab[512];
     for( i = -255; i <= 255; i++ )
         threshold_tab[i+255] = (uchar)(i < -threshold ? 1 : i > threshold ? 2 : 0);
 
     uchar* buf[3] = { 0 };
     int* cpbuf[3] = { 0 };
+    // BufferArea::allocate, 内存池化技术，相当于 new [xxx]
+    // https://docs.opencv.org/4.4.0/d8/d2e/classcv_1_1utils_1_1BufferArea.html#details
     utils::BufferArea area;
     for (unsigned idx = 0; idx < 3; ++idx)
     {
