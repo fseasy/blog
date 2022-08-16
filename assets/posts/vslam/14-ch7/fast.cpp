@@ -87,10 +87,13 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
     for( i = -255; i <= 255; i++ )
         threshold_tab[i+255] = (uchar)(i < -threshold ? 1 : i > threshold ? 2 : 0);
 
-    uchar* buf[3] = { 0 };
-    int* cpbuf[3] = { 0 };
+    // buf: （行）像素缓冲区； 这里申请了3行； 注意到type 是 uchar, 故是只能处理 8UC1 的图像（即灰度图）的！
+    // cpbuf: （行）角点位置缓冲区， 从后面可知为 CornerPos buf 的缩写；下面看到每行的 size 为 cols + 1, 
+    //        比 row-size 多申请了 1 个， 具体原因可看后面
     // BufferArea::allocate, 内存池化技术，相当于 new [xxx]
     // https://docs.opencv.org/4.4.0/d8/d2e/classcv_1_1utils_1_1BufferArea.html#details
+    uchar* buf[3] = { 0 };
+    int* cpbuf[3] = { 0 };
     utils::BufferArea area;
     for (unsigned idx = 0; idx < 3; ++idx)
     {
@@ -104,19 +107,37 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
         memset(buf[idx], 0, img.cols);
     }
 
+    // 逐行迭代！ 起始为 第 4 行！
     for(i = 3; i < img.rows-2; i++)
     {
+        // img.ptr<T> 是 OpenCV 中迭代像素（差不多）最快的方式
+        // 它按行迭代， .ptr<T>(i) 就是得到第 i 行元素的指针； 访问第 i 行的第j列，直接用C++原生的下标操作 [j] 即可
+        // --- PS: 对(数组）指针a， a[j] 就是得到第j个元素的地址 addr = a + j * sizeof(*a)
+        // .ptr(i) 与 .at(i) 都是访问第 i 行头地址，但是 .at 有边界检查，所以会慢一点……
+        // 因此下面的 ptr， 就是图像 (i, 3) 位置的像素地址！ 
+        // 结合 i 从 row = 3 开始，可知迭代都是从 第4行(0-based)、第4列 开始的！
         const uchar* ptr = img.ptr<uchar>(i) + 3;
+        // curr：  xxx，赋值为 buf 的第 0 维数组（长度为 cols = row size）； 
+        //         (i - 3) %3 使得消除 i 从 3 开始的偏移，且保证取值在 {0，1，2} 中 ( 前面只申请了 3 个长度)
         uchar* curr = buf[(i - 3)%3];
+        // cornerpos 同理； 注意， 从 cornerpos 可以推出 cpbuf 就是 CornerPos 的 buf, 即角点位置的缓冲区，所以类型是int
+        //    如原生注释， cornerpos[-1] 要存值，所以 cornerpos 是从 cpbuf[k] 往后偏移1个位置，故 cpbuf 每行申请的空间是
+        //    cols + 1 (row-size + 1)
         int* cornerpos = cpbuf[(i - 3)%3] + 1; // cornerpos[-1] is used to store a value
+        // 迭代前重新清空像素缓冲
         memset(curr, 0, img.cols);
         int ncorners = 0;
 
+        // 只在 倒数第4行 进入（比迭代终止条件少 1 行）
         if( i < img.rows - 3 )
         {
+            // 迭代： j 从第 4 列开始，倒数第 4 列结束；
+            //       每次循环 j++，即递增一列，相应的ptr （指向原图像像素）也相应递增1， 与 j 对应
             j = 3;
             for( ; j < img.cols - 3; j++, ptr++ )
             {
+                // ptr 初始是 当前行第 4 列；这里将此位置的像素值取出赋给v； 
+                //     这里有隐式类型转换（提升）: uchar -> int; 安全的
                 int v = ptr[0];
                 const uchar* tab = &threshold_tab[0] - v + 255;
                 int d = tab[ptr[pixel[0]]] | tab[ptr[pixel[8]]];
