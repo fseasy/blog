@@ -70,7 +70,7 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
     // img.step 表示图像的一行需要的字节大小。
     // makeOffsets 实现在自 fast_score.cpp 中；
     // 签名为 void makeOffsets(int pixel[25], int rowStride, int patternSize)
-    // 功能是提前算好周围元素相对与中心点的偏移量（一维、字节层面）。
+    // 功能是提前算好周围元素相对与中心点的偏移量（底层表示的偏移，即一维、字节层面的偏移）。
     makeOffsets(pixel, (int)img.step, patternSize);
 
     keypoints.clear();
@@ -133,36 +133,56 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
         {
             // 迭代： j 从第 4 列开始，倒数第 4 列结束；
             //       每次循环 j++，即递增一列，相应的ptr （指向原图像像素）也相应递增1， 与 j 对应
+            // 每个像素，就是角点检测的中心像素
             j = 3;
             for( ; j < img.cols - 3; j++, ptr++ )
             {
+                // 中心像素的灰度值
                 // ptr 初始是 当前行第 4 列；这里将此位置的像素值取出赋给v； 
                 //     这里有隐式类型转换（提升）: uchar -> int; 安全的
                 int v = ptr[0];
+                // 预先计算周围像素相对当前中心像素阈值的初始位置（效率优化）
+                // 正常计算，应该是 threshold_tab[周围像素亮度 - v + 255]
+                // = *(&threshold_tab[0] + 周围像素亮度 - v + 255)
+                // 这里把 (&threshold_tab[0] - v + 255) 提出来，后面就只需 `+ 周围像素亮度 `
+                // 就得到对应的阈值结果了！ => 挺巧妙的，但我肯定愿意写一个lamda函数来做…… 不过这肯定快
+                // PS: &threshold_tab[0] 就等价与 threshold_tab 吧？都是数组开始的地址，前者太长了
                 const uchar* tab = &threshold_tab[0] - v + 255;
+                // 快速筛选： 测试 第0 和 第9 个元素（根据offset，即pixel定义，是最下面和最上面的像素）的阈值
                 int d = tab[ptr[pixel[0]]] | tab[ptr[pixel[8]]];
-
+                // < -T 是 01 (1), > T 是 10 (2), 无差异是 00 (0)
+                // 上面是'或'，所以只要有1个有差异，下面就筛选就过了；
                 if( d == 0 )
                     continue;
-
+                // 连续检查 3 组；注意左边是 &=; 
+                // 每对，至少一个点得有差异；整体上，差异还不能刚好相反 
+                // —— 有点复杂，不知道究竟限制的是什么条件, 继续往后看
                 d &= tab[ptr[pixel[2]]] | tab[ptr[pixel[10]]];
                 d &= tab[ptr[pixel[4]]] | tab[ptr[pixel[12]]];
                 d &= tab[ptr[pixel[6]]] | tab[ptr[pixel[14]]];
 
                 if( d == 0 )
                     continue;
-
+                // 继续检查 4 组；同样的限制
                 d &= tab[ptr[pixel[1]]] | tab[ptr[pixel[9]]];
                 d &= tab[ptr[pixel[3]]] | tab[ptr[pixel[11]]];
                 d &= tab[ptr[pixel[5]]] | tab[ptr[pixel[13]]];
                 d &= tab[ptr[pixel[7]]] | tab[ptr[pixel[15]]];
-
+                // 到这里，可以简单计算，因为共有 8 对点连续参与了  &= 运算，每个点对内是 | 关系，
+                // 所以，如果有同样阈值的点，小于8个，则肯定 d 是 0；因为必然至少有1个 &= 运算后是1
+                // 接着往后看
+                // 进入此 if 条件：d & 01 != 0;  则至少 8 个点的阈值是 1 （即 < -T)
                 if( d & 1 )
                 {
+                    // 这里就是要具体测试 周围点 - 中心点 < -T 的个数，即计算
+                    //  count(x - v < -threshold)
+                    // 与前面做 threshold_tab 加速一样，这里预先把 v 移过来，变为计算 count(x < v - threshold)
+                    // 右边就是下面的 vt, 后面只需比较 x 与 vt 的值即可。
                     int vt = v - threshold, count = 0;
-
+                    // 注意 k 的上限是 N, 在 t = 16 情况下， N = 25
                     for( k = 0; k < N; k++ )
                     {
+                        // 这里就是取 周围像素的灰度值；
                         int x = ptr[pixel[k]];
                         if(x < vt)
                         {
@@ -174,6 +194,13 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
                                 break;
                             }
                         }
+                        // 注意啊，注意！
+                        // 这里一旦有1个点不满足 < -T，count 直接就重置为0了！！
+                        // 这里可以说明2个问题：
+                        // 1. 如论文所言， FAST是要求**连续的 >K个**像素的亮度差 < -T
+                        // 2. N 比 K 大的由来： 因为t = 16，至少要连续9个点满足情况；
+                        //    把将最后一个像素作为检查起点时(idx = 15)，还需要往后看 8 个, idx = 23；
+                        //    则列表最长要 size = 24 …… 但，为何 N 是 25 呢？
                         else
                             count = 0;
                     }
