@@ -47,6 +47,7 @@ The references are:
 
 namespace cv {
 
+// 预先计算周围点相对与中心点的偏移量（最底层的偏移量，即矩阵打平为一维、字节维度）
 void makeOffsets(int pixel[25], int rowStride, int patternSize)
 {
     // 半径为 3 的圆覆盖的像素范围 —— 相对中心点的 offset
@@ -88,6 +89,10 @@ void makeOffsets(int pixel[25], int rowStride, int patternSize)
         pixel[k] = pixel[k - patternSize];
 }
 
+// 16-9 模式下，计算用于 nonmax-suppression 的角点分数！
+// 究竟算的啥值没太看懂，反正最终结果应该是一个 >= threshold - 1 的数， 且 <= 255
+// 这块的具体逻辑，或许可以看这里：
+// https://stackoverflow.com/questions/67306891/algorithm-behind-score-calculation-in-fast-corner-detector
 template<>
 int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
 {
@@ -144,88 +149,6 @@ int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
 
         // 最终， threshold 取 -b0 -1; -b0 是 >= 原 threshold 的正数
         threshold = -b0 - 1;
-    }
-    return threshold;
-}
-
-template<>
-int cornerScore<12>(const uchar* ptr, const int pixel[], int threshold)
-{
-    const int K = 6, N = K*3 + 1;
-    int k, v = ptr[0];
-    short d[N + 4];
-    for( k = 0; k < N; k++ )
-        d[k] = (short)(v - ptr[pixel[k]]);
-    {
-        int a0 = threshold;
-        for( k = 0; k < 12; k += 2 )
-        {
-            int a = std::min((int)d[k+1], (int)d[k+2]);
-            if( a <= a0 )
-                continue;
-            a = std::min(a, (int)d[k+3]);
-            a = std::min(a, (int)d[k+4]);
-            a = std::min(a, (int)d[k+5]);
-            a = std::min(a, (int)d[k+6]);
-            a0 = std::max(a0, std::min(a, (int)d[k]));
-            a0 = std::max(a0, std::min(a, (int)d[k+7]));
-        }
-
-        int b0 = -a0;
-        for( k = 0; k < 12; k += 2 )
-        {
-            int b = std::max((int)d[k+1], (int)d[k+2]);
-            b = std::max(b, (int)d[k+3]);
-            b = std::max(b, (int)d[k+4]);
-            if( b >= b0 )
-                continue;
-            b = std::max(b, (int)d[k+5]);
-            b = std::max(b, (int)d[k+6]);
-
-            b0 = std::min(b0, std::max(b, (int)d[k]));
-            b0 = std::min(b0, std::max(b, (int)d[k+7]));
-        }
-
-        threshold = -b0-1;
-    }
-    return threshold;
-}
-
-template<>
-int cornerScore<8>(const uchar* ptr, const int pixel[], int threshold)
-{
-    const int K = 4, N = K * 3 + 1;
-    int k, v = ptr[0];
-    short d[N];
-    for (k = 0; k < N; k++)
-        d[k] = (short)(v - ptr[pixel[k]]);
-    {
-        int a0 = threshold;
-        for( k = 0; k < 8; k += 2 )
-        {
-            int a = std::min((int)d[k+1], (int)d[k+2]);
-            if( a <= a0 )
-                continue;
-            a = std::min(a, (int)d[k+3]);
-            a = std::min(a, (int)d[k+4]);
-            a0 = std::max(a0, std::min(a, (int)d[k]));
-            a0 = std::max(a0, std::min(a, (int)d[k+5]));
-        }
-
-        int b0 = -a0;
-        for( k = 0; k < 8; k += 2 )
-        {
-            int b = std::max((int)d[k+1], (int)d[k+2]);
-            b = std::max(b, (int)d[k+3]);
-            if( b >= b0 )
-                continue;
-            b = std::max(b, (int)d[k+4]);
-
-            b0 = std::min(b0, std::max(b, (int)d[k]));
-            b0 = std::min(b0, std::max(b, (int)d[k+5]));
-        }
-
-        threshold = -b0-1;
     }
     return threshold;
 }

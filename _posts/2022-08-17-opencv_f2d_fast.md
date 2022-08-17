@@ -1,3 +1,34 @@
+---
+layout: post
+title: OpenCV FAST 角点检测算法 CPU 版本实现注解
+date: 2022-05-19
+categories: 杂谈
+tags: 人物 努力生活 路在何方
+---
+> 看高博的“视觉里程计”章节，以为 FAST 算法很简单， 但最近在 OpenCV 的 tutorial 里，发现 FAST 角点
+检测算法没那么 Naive，还有 Machine Learning 在里面呢！ 
+
+
+从 [FAST Algorithm for Corner Detection][fast_opencv_tutorial] 中看到，该算法远比高博书里讲得复杂。其甚至包含一个 ID3 的决策数来确定怎么选点来让整个检测更快速， 而且注意到其论文名字就是 *Machine learning for high-speed corner detection*. 那问题来了，既然有 ML，那肯定得有模型吧，
+OpenCV 里是咋做的呢？ 是预先训练好的，开发者直接用？ 还是有一个 train 接口，支持在目标数据上重训呢？
+另外，我之前一直以为 FAST-12，就是只要有至少 12 个点和中心点有亮度差异就行了，但是看这个 tutoral/论文，
+看起来要求：
+
+1. 12点必须连续
+2. 这些点的亮度差异类型得一样（要么都是darker, 要么都是 brighter).
+
+而且，之前以为 FAST 算法的参数如高博所言，是 FAST-N, 但是看起来参数是亮度的阈值啊？ 谁说得对？
+网上查，中英文都搜了，是真的找不到有效信息。这 OpenCV 的资源，好像不是那么丰富啊。只有看源代码了！
+
+辗转确定了 FAST 算法的实现位置，在 [opencv/opencv:modules/features2d/src/fast.cpp][fast_code].
+代码拉下来，费了几天劲注解了一下代码，这里贴上来。
+需要注意的是，因为 OpenCV 要追求速度，所以在不同硬件、软件环境下有不同的实现，如 OpenGL, OpenVX, HAL 等实现，即使最基本的 CPU 实现，还有 SIMD 等宏分支。这里我能力、时间有限，只看了最基本的 CPU 实现。
+
+## 代码注解
+
+### 1. fast.cpp
+
+```C++
 // 一大段版权注释，这里不做删减。前后还是有一定信息量的
 //
 /* This is FAST corner detector, contributed to OpenCV by the author, Edward Rosten.
@@ -425,3 +456,127 @@ String FastFeatureDetector::getDefaultName() const {
 }
 
 } // end of namespace cv
+```
+
+### 2. fast_score.cpp
+
+```C++
+
+#include "fast_score.hpp"
+#include "opencv2/core/hal/intrin.hpp"
+#define VERIFY_CORNERS 0
+
+namespace cv {
+
+// 预先计算周围点相对与中心点的偏移量（最底层的偏移量，即矩阵打平为一维、字节维度）
+void makeOffsets(int pixel[25], int rowStride, int patternSize)
+{
+    // 半径为 3 的圆覆盖的像素范围 —— 相对中心点的 offset
+    // 从后面来看，offset 的坐标格式是 (x, y). 因为图偏Y轴正半轴向下，因此
+    // 编号顺序为：最下面的点开始，沿逆时针编号
+    static const int offsets16[][2] =
+    {
+        {0,  3}, { 1,  3}, { 2,  2}, { 3,  1}, { 3, 0}, { 3, -1}, { 2, -2}, { 1, -3},
+        {0, -3}, {-1, -3}, {-2, -2}, {-3, -1}, {-3, 0}, {-3,  1}, {-2,  2}, {-1,  3}
+    };
+
+    // 半径为 2 的圆；最下点、逆时针编号
+    static const int offsets12[][2] =
+    {
+        {0,  2}, { 1,  2}, { 2,  1}, { 2, 0}, { 2, -1}, { 1, -2},
+        {0, -2}, {-1, -2}, {-2, -1}, {-2, 0}, {-2,  1}, {-1,  2}
+    };
+
+    // 半径为 1 的圆； 最下点、逆时针编号
+    static const int offsets8[][2] =
+    {
+        {0,  1}, { 1,  1}, { 1, 0}, { 1, -1},
+        {0, -1}, {-1, -1}, {-1, 0}, {-1,  1}
+    };
+
+    // 只支持这3种，否则 offsets = nullptr, 下面的 CV_Assert 通不过
+    const int (*offsets)[2] = patternSize == 16 ? offsets16 :
+                              patternSize == 12 ? offsets12 :
+                              patternSize == 8  ? offsets8  : 0;
+
+    CV_Assert(pixel && offsets);
+
+    // 预先计算好每个位置相对中心点的一维偏移 （y 轴offset * row-size + x轴 offset）
+    int k = 0;
+    for( ; k < patternSize; k++ )
+        pixel[k] = offsets[k][0] + offsets[k][1] * rowStride;
+    // 这里是超过 patternSize 的部分，重复之前的偏移
+    for( ; k < 25; k++ )
+        pixel[k] = pixel[k - patternSize];
+}
+
+// 16-9 模式下，计算用于 nonmax-suppression 的角点分数！
+// 究竟算的啥值没太看懂，反正最终结果应该是一个 >= threshold - 1 的数， 且 <= 255
+// 这块的具体逻辑，或许可以看这里：
+// https://stackoverflow.com/questions/67306891/algorithm-behind-score-calculation-in-fast-corner-detector
+template<>
+int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
+{
+    // 注意这里的 + 1
+    const int K = 8, N = K*3 + 1;
+    int k, v = ptr[0];
+    // 计算的是中心点灰度与各个周围点的灰度值的差
+    short d[N];
+    for( k = 0; k < N; k++ )
+        d[k] = (short)(v - ptr[pixel[k]]);
+    {
+
+        int a0 = threshold;
+        // 下面要更新 a0; 
+        // 更新逻辑是： a0 为 {每隔1个位置起，连续10个元素的的最小值} 构成的集合（共16个最小值） 中的最大值
+        // a0 初始为 threshold, 而 threshold > 0 且 里面小于 a0 直接continue，故 最终的 a0 必然大于等于 threshold
+        // 是一个正值！
+        // 注意 K+=2； 且 看 10 个元素 （所以前面 N 要 K*3 + 1）
+        for( k = 0; k < 16; k += 2 )
+        {
+            int a = std::min((int)d[k+1], (int)d[k+2]);
+            a = std::min(a, (int)d[k+3]);
+            if( a <= a0 )
+                continue;
+            a = std::min(a, (int)d[k+4]);
+            a = std::min(a, (int)d[k+5]);
+            a = std::min(a, (int)d[k+6]);
+            a = std::min(a, (int)d[k+7]);
+            a = std::min(a, (int)d[k+8]);
+            a0 = std::max(a0, std::min(a, (int)d[k]));
+            a0 = std::max(a0, std::min(a, (int)d[k+9]));
+        }
+
+        int b0 = -a0;
+        // 下面更新 b0; 
+        // 更新逻辑： 取 {每隔1个位置起，连续10个元素中最大值} 构成的集合中的 最小值；
+        // b0 从 -a0 初始化，因为 a0 是>=threshold的，故 b0 初始是<=-threshold的一个负数
+        // 最终也是一个 <= -threshold 的负数
+        for( k = 0; k < 16; k += 2 )
+        {
+            int b = std::max((int)d[k+1], (int)d[k+2]);
+            b = std::max(b, (int)d[k+3]);
+            b = std::max(b, (int)d[k+4]);
+            b = std::max(b, (int)d[k+5]);
+            if( b >= b0 )
+                continue;
+            b = std::max(b, (int)d[k+6]);
+            b = std::max(b, (int)d[k+7]);
+            b = std::max(b, (int)d[k+8]);
+
+            b0 = std::min(b0, std::max(b, (int)d[k]));
+            b0 = std::min(b0, std::max(b, (int)d[k+9]));
+        }
+
+        // 最终， threshold 取 -b0 -1; -b0 是 >= 原 threshold 的正数
+        threshold = -b0 - 1;
+    }
+    return threshold;
+}
+
+} // namespace cv
+```
+
+
+[fast_opencv_tutorial]: https://docs.opencv.org/3.4/df/d0c/tutorial_py_fast.html "FAST Algorithm for Corner Detection"
+[fast_code]: https://github.com/opencv/opencv/blob/master/modules/features2d/src/fast.cpp
