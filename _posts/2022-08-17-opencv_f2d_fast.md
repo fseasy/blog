@@ -8,6 +8,12 @@ tags: 人物 努力生活 路在何方
 > 看高博的“视觉里程计”章节，以为 FAST 算法很简单， 但最近在 OpenCV 的 tutorial 里，发现 FAST 角点
 检测算法没那么 Naive，还有 Machine Learning 在里面呢！ 
 
+<!-- code is too long, enlarge the page -->
+<style>
+    .container {
+        width: 1200px;
+    }
+</style>
 
 从 [FAST Algorithm for Corner Detection][fast_opencv_tutorial] 中看到，该算法远比高博书里讲得复杂。其甚至包含一个 ID3 的决策数来确定怎么选点来让整个检测更快速， 而且注意到其论文名字就是 *Machine learning for high-speed corner detection*. 那问题来了，既然有 ML，那肯定得有模型吧，
 OpenCV 里是咋做的呢？ 是预先训练好的，开发者直接用？ 还是有一个 train 接口，支持在目标数据上重训呢？
@@ -28,7 +34,7 @@ OpenCV 里是咋做的呢？ 是预先训练好的，开发者直接用？ 还�
 
 ### 1. fast.cpp
 
-```C++
+{% highlight cpp linedivs %}
 // 一大段版权注释，这里不做删减。前后还是有一定信息量的
 //
 /* This is FAST corner detector, contributed to OpenCV by the author, Edward Rosten.
@@ -456,12 +462,11 @@ String FastFeatureDetector::getDefaultName() const {
 }
 
 } // end of namespace cv
-```
+{% endhighlight %}
 
 ### 2. fast_score.cpp
 
-```C++
-
+```c++
 #include "fast_score.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #define VERIFY_CORNERS 0

@@ -15,3 +15,5 @@ For Web Service.
 ## 其他
 
 1. 小技巧：Markdown的blockquote, 如果想换行，可以在最原始文本一行的末尾加**2个额外空格**，就可以！([ref](https://stackoverflow.com/questions/26991997/multiple-line-quote-in-markdown))
+
+2. 代码渲染，参考： [Jekyll: Syntax Highlighting And Line Numbers](https://www.bytedude.com/jekyll-syntax-highlighting-and-line-numbers/)
