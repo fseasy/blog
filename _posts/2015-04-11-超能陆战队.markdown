@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: post
 title: 超能陆战队
 date: 2015-04-11
 categories:  电影
