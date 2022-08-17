@@ -88,94 +88,24 @@ void makeOffsets(int pixel[25], int rowStride, int patternSize)
         pixel[k] = pixel[k - patternSize];
 }
 
-#if VERIFY_CORNERS
-static void testCorner(const uchar* ptr, const int pixel[], int K, int N, int threshold) {
-    // check that with the computed "threshold" the pixel is still a corner
-    // and that with the increased-by-1 "threshold" the pixel is not a corner anymore
-    for( int delta = 0; delta <= 1; delta++ )
-    {
-        int v0 = std::min(ptr[0] + threshold + delta, 255);
-        int v1 = std::max(ptr[0] - threshold - delta, 0);
-        int c0 = 0, c1 = 0;
-
-        for( int k = 0; k < N; k++ )
-        {
-            int x = ptr[pixel[k]];
-            if(x > v0)
-            {
-                if( ++c0 > K )
-                    break;
-                c1 = 0;
-            }
-            else if( x < v1 )
-            {
-                if( ++c1 > K )
-                    break;
-                c0 = 0;
-            }
-            else
-            {
-                c0 = c1 = 0;
-            }
-        }
-        CV_Assert( (delta == 0 && std::max(c0, c1) > K) ||
-                   (delta == 1 && std::max(c0, c1) <= K) );
-    }
-}
-#endif
-
 template<>
 int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
 {
+    // 注意这里的 + 1
     const int K = 8, N = K*3 + 1;
     int k, v = ptr[0];
+    // 计算的是中心点灰度与各个周围点的灰度值的差
     short d[N];
     for( k = 0; k < N; k++ )
         d[k] = (short)(v - ptr[pixel[k]]);
-
-#if CV_SIMD128
-    if (true)
-    {
-        v_int16x8 q0 = v_setall_s16(-1000), q1 = v_setall_s16(1000);
-        for (k = 0; k < 16; k += 8)
-        {
-            v_int16x8 v0 = v_load(d + k + 1);
-            v_int16x8 v1 = v_load(d + k + 2);
-            v_int16x8 a = v_min(v0, v1);
-            v_int16x8 b = v_max(v0, v1);
-            v0 = v_load(d + k + 3);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 4);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 5);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 6);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 7);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 8);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k);
-            q0 = v_max(q0, v_min(a, v0));
-            q1 = v_min(q1, v_max(b, v0));
-            v0 = v_load(d + k + 9);
-            q0 = v_max(q0, v_min(a, v0));
-            q1 = v_min(q1, v_max(b, v0));
-        }
-        q0 = v_max(q0, v_setzero_s16() - q1);
-        threshold = v_reduce_max(q0) - 1;
-    }
-    else
-#endif
     {
 
         int a0 = threshold;
+        // 下面要更新 a0; 
+        // 更新逻辑是： a0 为 {每隔1个位置起，连续10个元素的的最小值} 构成的集合（共16个最小值） 中的最大值
+        // a0 初始为 threshold, 而 threshold > 0 且 里面小于 a0 直接continue，故 最终的 a0 必然大于等于 threshold
+        // 是一个正值！
+        // 注意 K+=2； 且 看 10 个元素 （所以前面 N 要 K*3 + 1）
         for( k = 0; k < 16; k += 2 )
         {
             int a = std::min((int)d[k+1], (int)d[k+2]);
@@ -192,6 +122,10 @@ int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
         }
 
         int b0 = -a0;
+        // 下面更新 b0; 
+        // 更新逻辑： 取 {每隔1个位置起，连续10个元素中最大值} 构成的集合中的 最小值；
+        // b0 从 -a0 初始化，因为 a0 是>=threshold的，故 b0 初始是<=-threshold的一个负数
+        // 最终也是一个 <= -threshold 的负数
         for( k = 0; k < 16; k += 2 )
         {
             int b = std::max((int)d[k+1], (int)d[k+2]);
@@ -208,12 +142,9 @@ int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
             b0 = std::min(b0, std::max(b, (int)d[k+9]));
         }
 
+        // 最终， threshold 取 -b0 -1; -b0 是 >= 原 threshold 的正数
         threshold = -b0 - 1;
     }
-
-#if VERIFY_CORNERS
-    testCorner(ptr, pixel, K, N, threshold);
-#endif
     return threshold;
 }
 
@@ -225,45 +156,6 @@ int cornerScore<12>(const uchar* ptr, const int pixel[], int threshold)
     short d[N + 4];
     for( k = 0; k < N; k++ )
         d[k] = (short)(v - ptr[pixel[k]]);
-#if CV_SIMD128
-    for( k = 0; k < 4; k++ )
-        d[N+k] = d[k];
-#endif
-
-#if CV_SIMD128
-    if (true)
-    {
-        v_int16x8 q0 = v_setall_s16(-1000), q1 = v_setall_s16(1000);
-        for (k = 0; k < 16; k += 8)
-        {
-            v_int16x8 v0 = v_load(d + k + 1);
-            v_int16x8 v1 = v_load(d + k + 2);
-            v_int16x8 a = v_min(v0, v1);
-            v_int16x8 b = v_max(v0, v1);
-            v0 = v_load(d + k + 3);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 4);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 5);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k + 6);
-            a = v_min(a, v0);
-            b = v_max(b, v0);
-            v0 = v_load(d + k);
-            q0 = v_max(q0, v_min(a, v0));
-            q1 = v_min(q1, v_max(b, v0));
-            v0 = v_load(d + k + 7);
-            q0 = v_max(q0, v_min(a, v0));
-            q1 = v_min(q1, v_max(b, v0));
-        }
-        q0 = v_max(q0, v_setzero_s16() - q1);
-        threshold = v_reduce_max(q0) - 1;
-    }
-    else
-#endif
     {
         int a0 = threshold;
         for( k = 0; k < 12; k += 2 )
@@ -296,9 +188,6 @@ int cornerScore<12>(const uchar* ptr, const int pixel[], int threshold)
 
         threshold = -b0-1;
     }
-#if VERIFY_CORNERS
-    testCorner(ptr, pixel, K, N, threshold);
-#endif
     return threshold;
 }
 
@@ -310,32 +199,6 @@ int cornerScore<8>(const uchar* ptr, const int pixel[], int threshold)
     short d[N];
     for (k = 0; k < N; k++)
         d[k] = (short)(v - ptr[pixel[k]]);
-
-#if CV_SIMD128 \
-    && (!defined(CV_SIMD128_CPP) || (!defined(__GNUC__) || __GNUC__ != 5))  // "movdqa" bug on "v_load(d + 1)" line (Ubuntu 16.04 + GCC 5.4)
-    if (true)
-    {
-        v_int16x8 v0 = v_load(d + 1);
-        v_int16x8 v1 = v_load(d + 2);
-        v_int16x8 a = v_min(v0, v1);
-        v_int16x8 b = v_max(v0, v1);
-        v0 = v_load(d + 3);
-        a = v_min(a, v0);
-        b = v_max(b, v0);
-        v0 = v_load(d + 4);
-        a = v_min(a, v0);
-        b = v_max(b, v0);
-        v0 = v_load(d);
-        v_int16x8 q0 = v_min(a, v0);
-        v_int16x8 q1 = v_max(b, v0);
-        v0 = v_load(d + 5);
-        q0 = v_max(q0, v_min(a, v0));
-        q1 = v_min(q1, v_max(b, v0));
-        q0 = v_max(q0, v_setzero_s16() - q1);
-        threshold = v_reduce_max(q0) - 1;
-    }
-    else
-#endif
     {
         int a0 = threshold;
         for( k = 0; k < 8; k += 2 )
@@ -364,10 +227,6 @@ int cornerScore<8>(const uchar* ptr, const int pixel[], int threshold)
 
         threshold = -b0-1;
     }
-
-#if VERIFY_CORNERS
-    testCorner(ptr, pixel, K, N, threshold);
-#endif
     return threshold;
 }
 

@@ -65,6 +65,11 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
     // 从包装类，先拿到实际的 Mat （类似与把一个 void* 变量 static_cast 到具体类型这种； 说明这个函数只处理 Mat 类输入） 
     Mat img = _img.getMat();
     // 以 t = 16 为例子, K = 8; N = 25
+    // 从后文看到，K 就是最少符合要求的点数量的下限（不含）。
+    // 如这里是 16-9 模式，即至少要有 9 个点满足灰度阈值限制，则这里 K = 8
+    // N 则是为了从当前位置往后连续匹配方便，建立的缓冲区大小。如 16-9 模式下，对第16个点，还要往后看8个点，
+    // 则为了避免取模操作，直接将数组填充为 16 + 8 + 1 = 25（填充时按取模的方式填充，达到循环的效果）
+    // 但是为何要多加一个 `1`, 我也没想明白 
     const int K = patternSize/2, N = patternSize + K + 1;
     int i, j, k, pixel[25];
     // img.step 表示图像的一行需要的字节大小。
@@ -87,9 +92,11 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
     for( i = -255; i <= 255; i++ )
         threshold_tab[i+255] = (uchar)(i < -threshold ? 1 : i > threshold ? 2 : 0);
 
-    // buf: （行）像素缓冲区； 这里申请了3行； 注意到type 是 uchar, 故是只能处理 8UC1 的图像（即灰度图）的！
-    // cpbuf: （行）角点位置缓冲区， 从后面可知为 CornerPos buf 的缩写；下面看到每行的 size 为 cols + 1, 
-    //        比 row-size 多申请了 1 个， 具体原因可看后面
+    // buf: （行）缓冲区； 由后可知，是放nomax-suppression时要用的分数(uchar即可，因为分数在灰度区间内)
+    //      这里申请了3行； 注意到type 是 uchar, 故是只能处理 8UC1 的图像（即灰度图）的！
+    // cpbuf: （行）缓冲区， 从后面可知为 CornerPos buf 的缩写；存的是当前行里角点的 col 值；
+    //        下面看到每行申请的 size 为 cols + 1, 
+    //        比 cols(row-size) 多申请了 1 个， 后面可以看到，它是是来存有效角点个数的（即数组实际size）
     // BufferArea::allocate, 内存池化技术，相当于 new [xxx]
     // https://docs.opencv.org/4.4.0/d8/d2e/classcv_1_1utils_1_1BufferArea.html#details
     uchar* buf[3] = { 0 };
@@ -117,10 +124,12 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
         // 因此下面的 ptr， 就是图像 (i, 3) 位置的像素地址！ 
         // 结合 i 从 row = 3 开始，可知迭代都是从 第4行(0-based)、第4列 开始的！
         const uchar* ptr = img.ptr<uchar>(i) + 3;
-        // curr：  xxx，赋值为 buf 的第 0 维数组（长度为 cols = row size）； 
+        // curr：由后可知，存储是当前行个角点的分数（用于nomax-suppression)，
+        //         赋值为 buf 的第 x 个数组（长度为 cols = row size）； 
         //         (i - 3) %3 使得消除 i 从 3 开始的偏移，且保证取值在 {0，1，2} 中 ( 前面只申请了 3 个长度)
         uchar* curr = buf[(i - 3)%3];
-        // cornerpos 同理； 注意， 从 cornerpos 可以推出 cpbuf 就是 CornerPos 的 buf, 即角点位置的缓冲区，所以类型是int
+        // cornerpos 由后可知，存当前行下，各角点的col坐标的； 
+        //    注意， 从 cornerpos 可以推出 cpbuf 就是 CornerPos 的 buf, 即角点位置的缓冲区，所以类型是int
         //    如原生注释， cornerpos[-1] 要存值，所以 cornerpos 是从 cpbuf[k] 往后偏移1个位置，故 cpbuf 每行申请的空间是
         //    cols + 1 (row-size + 1)
         int* cornerpos = cpbuf[(i - 3)%3] + 1; // cornerpos[-1] is used to store a value
@@ -168,12 +177,20 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
                 d &= tab[ptr[pixel[3]]] | tab[ptr[pixel[11]]];
                 d &= tab[ptr[pixel[5]]] | tab[ptr[pixel[13]]];
                 d &= tab[ptr[pixel[7]]] | tab[ptr[pixel[15]]];
-                // 到这里，可以简单计算，因为共有 8 对点连续参与了  &= 运算，每个点对内是 | 关系，
-                // 所以，如果有同样阈值的点，小于8个，则肯定 d 是 0；因为必然至少有1个 &= 运算后是1
-                // 接着往后看
-                // 进入此 if 条件：d & 01 != 0;  则至少 8 个点的阈值是 1 （即 < -T)
+                // 到这里，因为共有 8 对点连续参与了  &= 运算，
+                // 所以，如果有同样阈值的点小于8个，则 d 必然是 0；因为要想最后不是0，则每一对 &= 都得有1个bit位相同，即
+                // 最少 8 个点的bit位相同。
+                // 所以，要使 b 不为0，只有 3 种可能：
+                // 1. >= 9 个是更暗的点 (< -T) => b = 01 (1)
+                // 2. >= 9 个是更亮的点 (> T) => b = 10 (2)
+                // 3. 8个更亮的点， 8 个更暗的点 => b = 11 (3)
+                //
+                // 下面需要再进一步区分 b 的情况，并且做更严格的判定： 
+                //     **不仅要求个数，还得要求他们是连续的！！!**
+                // 进入此 if 条件：d & 01 != 0;  则至少 8 个点的阈值是 1 （即 < -T), d 可能是01, 11
                 if( d & 1 )
                 {
+                    // < -T 的情况（更暗）
                     // 这里就是要具体测试 周围点 - 中心点 < -T 的个数，即计算
                     //  count(x - v < -threshold)
                     // 与前面做 threshold_tab 加速一样，这里预先把 v 移过来，变为计算 count(x < v - threshold)
@@ -188,7 +205,16 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
                         {
                             if( ++count > K )
                             {
+                            // 进入条件，找到了至少 9 个阈值 < -T 的点（更暗的点）；=> 当前像素是角点！
+                                // cornerpos 存储当前角点的x值（col值）
+                                // 循环内，都是在一个行下面，所以只需要存储col值即可。
                                 cornerpos[ncorners++] = j;
+                                // 如果需要做 nomax-suppression (非极大值抑制)，就算当前中心点的分
+                                //    这个分，必然是一个正数，且范围在 [treshold - 1, 255] 间，故 uchar 就可以承接
+                                // cornerScore的函数签名为
+                                //   int cornerScore<SZ>(const uchar* ptr, const int pixel[], int threshold)
+                                // ptr 在循环内，是中心点在矩阵的偏移； pixel 是周围点的相对偏移； 
+                                // threshold 即输入的灰度阈值
                                 if(nonmax_suppression)
                                     curr[j] = (uchar)cornerScore<patternSize>(ptr, pixel, threshold);
                                 break;
@@ -201,13 +227,17 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
                         // 2. N 比 K 大的由来： 因为t = 16，至少要连续9个点满足情况；
                         //    把将最后一个像素作为检查起点时(idx = 15)，还需要往后看 8 个, idx = 23；
                         //    则列表最长要 size = 24 …… 但，为何 N 是 25 呢？
+                        //    感觉对位置0，冲突匹配了 1 次？ 反正这么写没问题，就是不知道是否有浪费。
                         else
                             count = 0;
                     }
                 }
 
+                // 进入此 if 条件：d & 10 != 0;  则至少 8 个点的阈值是 2 （即 > T), d 可能是10, 11
                 if( d & 2 )
                 {
+                    // 这里就是 > T 的情况了（更亮）
+                    // 整个逻辑同上，不赘述。
                     int vt = v + threshold, count = 0;
 
                     for( k = 0; k < N; k++ )
@@ -227,9 +257,14 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
                             count = 0;
                     }
                 }
+                // 其他情况不必再测试，肯定不是角点了。
+                // 注意到 b = 11 进入到了两个 if 判定中。这个没有问题，因为内部会更严格判定。
+                // 11的情况，不是角点, 在内部会被过滤掉
             }
         }
 
+        // 如前，cornerpos 初始时 = cpbuf + 1; 所以这里 -1， 其实对应到 cpbuf 的位置；
+        // 存的是 该行的角点数。 很合理，毕竟要有变量存数组的大小！（这里靠数组值其实也能判定，只是不太通用）
         cornerpos[-1] = ncorners;
 
         if( i == 3 )
