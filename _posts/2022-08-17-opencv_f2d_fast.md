@@ -1,9 +1,9 @@
 ---
 layout: post
-title: OpenCV FAST 角点检测算法 CPU 版本实现注解
-date: 2022-05-19
-categories: 杂谈
-tags: 人物 努力生活 路在何方
+title: OpenCV FAST 角点检测算法 CPU 版本实现源码注解
+date: 2022-08-17
+categories: 技术 
+tags: OpenCV FAST角点检测 源码注解
 ---
 > 看高博的“视觉里程计”章节，以为 FAST 算法很简单， 但最近在 OpenCV 的 tutorial 里，发现 FAST 角点
 检测算法没那么 Naive，还有 Machine Learning 在里面呢！ 
@@ -31,6 +31,9 @@ OpenCV 里是咋做的呢？ 是预先训练好的，开发者直接用？ 还�
 需要注意的是，因为 OpenCV 要追求速度，所以在不同硬件、软件环境下有不同的实现，如 OpenGL, OpenVX, HAL 等实现，即使最基本的 CPU 实现，还有 SIMD 等宏分支。这里我能力、时间有限，只看了最基本的 CPU 实现。
 
 ## 代码注解
+
+核心的就 2 个文件， `fast.cpp` 和 `fast_score.cpp`. 
+前者是接口核心实现，后者定义了前者的2个辅助函数：计算周围像素偏移和计算角点分数。
 
 ### 1. fast.cpp
 
@@ -361,8 +364,8 @@ void FAST_t(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bo
 
 // 最主要的入口函数。 下面的类、少参数的版本，核心都是这个函数。
 // 这个函数，最基础的cpu实现，就是前面的 FAST_t 函数
-void FAST(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool nonmax_suppression, FastFeatureDetector::DetectorType type)
-{
+void FAST(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, 
+    bool nonmax_suppression, FastFeatureDetector::DetectorType type) {
     // 做性能测试的代码
     CV_INSTRUMENT_REGION();
 
@@ -411,8 +414,10 @@ void FAST(InputArray _img, std::vector<KeyPoint>& keypoints, int threshold, bool
 class FastFeatureDetector_Impl CV_FINAL : public FastFeatureDetector
 {
 public:
-    FastFeatureDetector_Impl( int _threshold, bool _nonmaxSuppression, FastFeatureDetector::DetectorType _type )
-    : threshold(_threshold), nonmaxSuppression(_nonmaxSuppression), type(_type)
+    FastFeatureDetector_Impl( int _threshold, bool _nonmaxSuppression, 
+        FastFeatureDetector::DetectorType _type ) : 
+            threshold(_threshold), 
+            nonmaxSuppression(_nonmaxSuppression), type(_type)
     {}
 
     void detect( InputArray _image, std::vector<KeyPoint>& keypoints, InputArray _mask ) CV_OVERRIDE
@@ -453,7 +458,8 @@ public:
 };
 
 // 工厂函数，创建上面的实例指针
-Ptr<FastFeatureDetector> FastFeatureDetector::create( int threshold, bool nonmaxSuppression, FastFeatureDetector::DetectorType type ) {
+Ptr<FastFeatureDetector> FastFeatureDetector::create( int threshold, bool nonmaxSuppression, 
+    FastFeatureDetector::DetectorType type ) {
     return makePtr<FastFeatureDetector_Impl>(threshold, nonmaxSuppression, type);
 }
 
@@ -466,7 +472,7 @@ String FastFeatureDetector::getDefaultName() const {
 
 ### 2. fast_score.cpp
 
-```c++
+{% highlight cpp linedivs %}
 #include "fast_score.hpp"
 #include "opencv2/core/hal/intrin.hpp"
 #define VERIFY_CORNERS 0
@@ -580,8 +586,21 @@ int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
 }
 
 } // namespace cv
-```
+{% endhighlight %}
 
+## 实现总结
+
+1. OpenCV 的 FAST 算法实现，没有 Machine Learning 部分。
+2. 但是角点判定的逻辑和原论文描述一致： 需要周围至少*连续的*、*同样亮度类型*的K个点，才是角点
+3. OpenCV 的实现，FAST 只有 16-9, 12-7, 8-5 这 3 种类型，也就是圆半径分别为 3、2、1 的情况。在一种半径下，不能指定 K 值（即高博书中的 FAST-N 的 N)
+4. 非极大值抑制，对比的是半径为1的点（共8个点）的像素分数（如果是角点就是对应角点计算的分数，否则就是0），比所有大才是 KeyPoint. 
+5. 角点分数，不是取中心点与所有周围点像素差异的绝对值和，而是各个起始位置连续K个点的各种 min-max 值，最后是一个 [threshold -1, 255]的范围（之所以不求绝对值和，大概是为了防止和的数值太大？）
+
+## 附
+
+1. 又看了下高博的书，书里其实明确写了是 “连续的” 点，自己马虎了。但是 FAST-N 的说法的的确在代码里没体现。
+2. 这里 [FAST Corner Detection -- Edward Rosten][fast_original] 可以找到原作者的实现，含 ML, 甚至有 Python 实现……
 
 [fast_opencv_tutorial]: https://docs.opencv.org/3.4/df/d0c/tutorial_py_fast.html "FAST Algorithm for Corner Detection"
 [fast_code]: https://github.com/opencv/opencv/blob/master/modules/features2d/src/fast.cpp
+[fast_original]: https://www.edwardrosten.com/work/fast.html 
