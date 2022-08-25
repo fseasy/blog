@@ -382,6 +382,10 @@ a.post-link {
   margin-bottom: 10px;
 }
 
+.post-image img+img {
+  border-left: solid 1px $grey-color;
+}
+
 .post-image p+p {
   text-align: left;
   padding: 0 3em;

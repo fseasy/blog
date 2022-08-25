@@ -1,6 +1,9 @@
 <!--change link target='_blank' -->
 <script>
 Array.from(document.links)
-    .filter(link => link.hostname != window.location.hostname)
+    .filter(link => 
+        link.hostname != window.location.hostname
+        || link.pathname != window.location.pathname
+        )
     .forEach(link => link.target = '_blank');
 </script>
