@@ -19,7 +19,6 @@ kramdown:
 plugins: 
   - jekyll-paginate
   - jekyll-sitemap
-  - jemoji
 
 exclude: [_site, md_templates_, deployment_]
 paginate: 15
