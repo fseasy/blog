@@ -602,6 +602,8 @@ int cornerScore<16>(const uchar* ptr, const int pixel[], int threshold)
 1. 又看了下高博的书，书里其实明确写了是 “连续的” 点，自己马虎了。但是 FAST-N 的说法的的确在代码里没体现。
 2. 这里 [FAST Corner Detection -- Edward Rosten][fast_original] 可以找到原作者的实现，含 ML, 甚至有 Python 实现……
 
+3. 搜了下自己文章的标题，才发现原来挺多写这个的博客。之前怎么没发现呢…… 另外用 “源码分析” 就搜不到这篇博客，感觉 Google Search 还是有优化空间的 :dog:
+
 [fast_opencv_tutorial]: https://docs.opencv.org/3.4/df/d0c/tutorial_py_fast.html "FAST Algorithm for Corner Detection"
 [fast_code]: https://github.com/opencv/opencv/blob/master/modules/features2d/src/fast.cpp
 [fast_original]: https://www.edwardrosten.com/work/fast.html 
