@@ -9,6 +9,25 @@ title: 标签
 
 <script src="{{ '/assets/js/postdata.js' | prepend: site.baseurl }}" type="text/javascript"></script>
 <script>
+
+    // copy from https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript 
+    var SeededRandom = function(){};
+    (function(){
+        function mulberry32(a) {
+            return function() {
+            var t = a += 0x6D2B79F5;
+            t = Math.imul(t ^ t >>> 15, t | 1);
+            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+            }
+        }
+        SeededRandom.prototype.gen = function(seed) {
+            return mulberry32(seed);
+        };
+    })();
+
+    var RNG = new SeededRandom().gen(new Date().getDay());
+
     var tag2posts = (function () {
         var tag2posts = {};
         var posts = postdataNs.posts;
@@ -28,39 +47,127 @@ title: 标签
         return tag2posts;
     })();
 
-    var buildTagDom = function (tag, posts) {
-        var tagDom = document.createElement('SPAN');
-        var styles = ["label-default", "label-primary", "label-success", "label-info", "label-warning", "label-danger"];
-        var fonts = ["Microsoft YaHei", "SimSun", "Microsoft JhengHei", "KaiTi_GB2312", "YouYuan", "STXingkai"];
-        var fontSizes = [12, 14, 16, 18, 20, 30];
-        var fontWeights = [400, 500, 600, 700];
-        var marginHValue = [2, 4, 6];
-        var marginVValue = [1, 2, 3];
-        var freq = posts.length;
+    var Render = function(tag2posts) {
+        this.tag2posts = tag2posts;
+        var postLens = [];
+        for (var tag in tag2posts) { postLens.push(tag2posts[tag].length); }
+        this.postMaxLen = Math.max.apply(null, postLens);
+    };
+    (function(){
+        var getRandomItem = function (a) { 
+            return a[Math.floor(RNG() * a.length + 1) - 1] + "" 
+        };
 
-        var titles = posts.map(p => p.title),
-            titleTipStr = "''" + titles.join(", ") + "'";
-        var tipWords = ["出现了" + freq + "次, 在" + titleTipStr, 
-            "在" + titleTipStr + "中找到了" + freq + "次", 
-            "一共有" + freq + "个, 分别在" + titleTipStr];
-        var getRandomItem = function (a) { return a[Math.floor(Math.random() * a.length + 1) - 1] + "" };
-        var random_style = getRandomItem(styles);
-        var random_fontstyle = ["font:", getRandomItem(fontWeights), getRandomItem(fontSizes) + 'px',
-            getRandomItem(fonts)].join(' ');
-        var margin_style = ["margin:", getRandomItem(marginHValue) + "px", getRandomItem(marginVValue) + "px"].join(" ");
-        var random_tips = getRandomItem(tipWords);
+        Render.prototype.getClass = function(_posts) {
+            // bootstrap classes
+            var classes = [
+                "label-default", "label-primary", "label-success", 
+                "label-info", "label-warning", "label-danger"
+            ];
+            var className = getRandomItem(classes);
+            // bootstrap label usage: label lable-xxx
+            className = ["label", className].join(" ");
+            return className;
+        };
+        
+        Render.prototype.getFontStyle = function(posts) {
+            var fontSizes = [12, 14, 16, 18, 20, 24, 28, 32];
+            var fontWeights = [400, 500, 600, 700];
+            var fonts = [
+                "Microsoft YaHei", 
+                "SimSun", 
+                "Microsoft JhengHei", 
+                "KaiTi_GB2312", 
+                "YouYuan", 
+                "STXingkai",
+                // copy from font-family...
+                "-apple-system", 
+                "BlinkMacSystemFont",  
+                "SFProDisplay-Regular", 
+                "'Helvetica Neue'",
+                "'Times New Roman'",
+                "'Hiragino Sans GB'",
+                "'Heiti SC'",
+                "SimHei",
+                "'WenQuanYi Micro Hei'",
+                "'sans-serif'"
+            ];
+            
+            var randomWeight = getRandomItem(fontWeights);
+            var postLen = posts.length;
+            var linearSizeIndexL = Math.round(postLen / this.postMaxLen * (fontSizes.length - 1));
+            var linearSizeIndex = linearSizeIndexL;
+            if (linearSizeIndex + 1 < fontSizes.length) {
+                let leftSz = Math.round((fontSizes.length - linearSizeIndexL) / 2);
+                let randomStep = Math.floor(RNG() * leftSz);
+                linearSizeIndex = linearSizeIndexL + randomStep;
+            }
+            var linearSize = fontSizes[linearSizeIndex];
+            var font = getRandomItem(fonts);
+            var style = ["font:", randomWeight, linearSize + 'px', font].join(" ");
+            return style;
+        };
+        
+        Render.prototype.getMargin = function(_posts) {
+            var marginHValue = [2, 4, 6];
+            var marginVValue = [1, 2, 3];
+            var m = [
+                "margin:", getRandomItem(marginHValue) + "px", 
+                getRandomItem(marginVValue) + "px"
+            ].join(" ");
+            return m;
+        };
 
-        tagDom.setAttribute("class", ["label", random_style].join(" "));
-        tagDom.setAttribute('style', ["display: inline-block", random_fontstyle, margin_style].join(";"));
-        tagDom.setAttribute('title', random_tips);
-        tagDom.innerHTML = tag;
-        return tagDom;
+        Render.prototype.getTips = function(posts) {
+            var freq = posts.length;
+            var titles = posts.map(p => p.title),
+                titleTipStr = "'" + titles.join(", ") + "'";
+            var tipsCandidates = [
+                "出现了" + freq + "次, 分布在" + titleTipStr, 
+                "在" + titleTipStr + "中共找到了" + freq + "次", 
+                "一共有" + freq + "个, 分别在" + titleTipStr
+            ];
+            var randomTips = getRandomItem(tipsCandidates);
+            return randomTips;
+        };
+        
+        Render.prototype.render = function(tag, posts) {
+            var className = this.getClass(posts);
+            var fontStyle = this.getFontStyle(posts);
+            var margin = this.getMargin(posts);
+            var tips = this.getTips(posts);
+
+            var tagDom = document.createElement('SPAN');
+            tagDom.innerHTML = tag;
+            tagDom.setAttribute("class", className);
+            var inlineStyle = ["display: inline-block", fontStyle, margin].join(";")
+            tagDom.setAttribute('style', inlineStyle);
+            tagDom.setAttribute('title', tips);
+            return tagDom;
+        };
+    })();
+
+    // copy from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    var arrayShuffleInplace = function(array) {
+        let currentIndex = array.length,  
+            randomIndex;
+        // While there remain elements to shuffle.
+        while (currentIndex != 0) {
+            // Pick a remaining element.
+            randomIndex = Math.floor(RNG() * currentIndex);
+            currentIndex--;
+            // And swap it with the current element.
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
     }
 
     var tagDoms = (function (tag2posts) {
-        var tagDom = [];
-        for (var tag in tag2posts) tagDom.push(buildTagDom(tag, tag2posts[tag]));
-        return tagDom;
+        var tagDoms = [];
+        var render = new Render(tag2posts);
+        for (var tag in tag2posts) tagDoms.push(render.render(tag, tag2posts[tag]));
+        arrayShuffleInplace(tagDoms);
+        return tagDoms;
     })(tag2posts);
 
     (function(idName, tagDoms){
