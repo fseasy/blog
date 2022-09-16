@@ -7,12 +7,10 @@
 </head>
 
 <body>
-    <div class="container">
-        
-        {% include page_header.html  %}
-
+    {% include page_header.html  %}
+    <section class="container">
         <div class="row">
-            <div class="contentpanel purple-topborder shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
+            <div class="contentpanel col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
                 {{ content }} 
             </div>   
         </div>
@@ -20,8 +18,8 @@
             <!--load pagenation only when main-index -->
             {% include pagination.html  %}
         {% endif %}
-        {% include page_footer.html %}
-    </div>
+    </section>
+    {% include page_footer.html %}
 
     {% include extra_fn/link_target_blank_script.html %}
 </body>
