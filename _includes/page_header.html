@@ -1,8 +1,19 @@
 <header class="site-page-header">
     <div class="container">
         <div class="row">
-            <div class="col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
-                <div class="sina-blog-head">
+            <!-- <div class="col-md-offset-1 col-md-10 col-xs-12 col-sm-12"> -->
+                <div class="col-md-offset-1 col-md-3 col-xs-4 col-sm-4">
+                    <img src="{% link /assets/site/fslogo.png %}" width="180px"/>
+                    <!-- <img src="{% link /assets/site/fstext.png %}" width="200px"/> -->
+                </div>
+                <div class="col-md-5 col-xs-10 col-sm-10">
+                <h1 class="site-title">
+                    <a href="{{ site.baseurl }}/">{{ site.title }}</a>
+                </h1>
+                <p class="site-description">
+                    {{site.description}}
+                </p>
+                <!-- <div class="sina-blog-head">
                     <div class="topArea">
                         <div class="site-title">
                             <a href="{{ site.baseurl }}/">{{ site.title }}</a>
@@ -20,7 +31,7 @@
                     <div class="search-box">
                         {% include extra_fn/google_search.html %}
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

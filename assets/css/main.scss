@@ -53,13 +53,13 @@ $spacing-unit:     20px;
 $text-color:       #060601;
 $strong-text-color: lighten($text-color, 1%);
 
-$text-dark-color: #444;
+$text-dark-color: #333;
 $text-dark-grey-color: #555;
 $text-dark-strong-color: #222;
+$header-text-color: #00537f;
+$header-text-color-dark: darken($header-text-color, 10%);
 
 $body-bg: #f5fcff;
-$brand-color:      #3fa7cb;
-// $header-bg: #f1f8ff;
 $header-bg: #e1f5ff;
 
 
@@ -71,6 +71,7 @@ $on-palm:          600px;
 $on-laptop:        992px;
 $screen-md-min:    992px; // as bootsrap
 
+$brand-color:      #3fa7cb;
 
 // Using media queries with like this:
 // @include media-query($palm) {

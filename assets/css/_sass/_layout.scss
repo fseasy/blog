@@ -1,22 +1,3 @@
-/**
-    framework
-*/
-// .sinabloga {
-//   background-image: none;
-//   background-repeat: no-repeat;
-//   background-position: center bottom;
-//   width: 100%;
-//   clear: both;
-// }
-
-// .sinablogb {
-//   background-image: none;
-//   background-repeat: no-repeat;
-//   background-position: center top;
-//   width: 100%;
-//   clear: both;
-// }
-
 // set container size
 
 @media (min-width: 1200px) {
@@ -111,8 +92,8 @@ img {
 
 .site-page-header {
   background: $header-bg;
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding: 0;
+  margin: 0;
 }
 
 .site-page-footer {
@@ -149,12 +130,15 @@ img {
 .site-title a:visited {
   float: none;
   font-size: $base-font-size + 16px;
-  color: $text-dark-grey-color;
+  color: $header-text-color;
   text-decoration: none;
+  margin:0;
+  padding:0;
 }
 
-.blog-description {
+.site-description {
   font-size: $base-font-size;
+  color: $header-text-color-dark;
 }
 
 .site-nav {
