@@ -1,0 +1,18 @@
+<p class="post-meta">
+    <span class="glyphicon glyphicon-time post-graph"></span>
+    {{ doc.date | date: "%Y-%m-%d" }}
+    <span class="glyphicon glyphicon-th post-graph"></span>
+    {% if doc.categories %}
+        {% for category in doc.categories %} 
+            <span>{{category}} </span>
+        {% endfor %}
+    {% endif %}
+    <span class="glyphicon glyphicon-tags post-graph"></span>
+    {% if doc.tags %}
+        <span> {{doc.tags | join: ', '}} </span>
+    {% endif %}
+    {% if content %}
+        <span class="glyphicon glyphicon-dashboard post-graph"></span>
+        {{ content | strip_html | strip_newlines | size }} 字
+    {% endif %}
+</p>

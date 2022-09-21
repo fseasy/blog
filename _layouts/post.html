@@ -6,12 +6,11 @@
 </head>
 
 <body>
-    <div class="container">
+    {% include page_header.html  %}
 
-        {% include page_header.html  %}
-
+    <section class="container">
         <div class="row">
-            <div class="contentpanel shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
+            <div class="contentpanel col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
                 <h1 class="post-title">{{ page.title }}</h1>
                 <p class="post-meta">
                     <span class="glyphicon glyphicon-time post-graph"></span>
@@ -55,9 +54,9 @@
                 {% include extra_fn/isso_tag.html %}
             </div>
         </div>
-        {% include page_footer.html %}
 
-    </div>
+    </section>
+    {% include page_footer.html %}
 
     {% include extra_fn/toc_js.html %}
     {% include extra_fn/share_js_script.html %}

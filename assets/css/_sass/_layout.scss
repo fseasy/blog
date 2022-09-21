@@ -102,35 +102,11 @@ img {
   background: $header-bg;
   padding: 0;
   margin: 0;
+  height: 180px;
 }
 
 .site-page-footer {
   background: $header-bg;
-}
-
-// Top Area
-
-.sina-blog-head {
-  width: 100%;
-  height: 165px;
-  clear: both;
-  position: relative;
-  z-index: 10;
-  margin: 0 auto;
-  @include media-query($on-laptop) {
-    height: 150px;
-  }
-}
-
-.topArea {
-  position: absolute;
-  top: 20px;
-  left: 0;
-  background-image: none;
-  background-repeat: no-repeat;
-  @include media-query($on-laptop) {
-    top: 10px;
-  }
 }
 
 .site-logo {
@@ -138,7 +114,7 @@ img {
 }
 
 .site-title {
-  padding-top:30px;
+  padding-top: 20px;
 }
 
 .site-title a, 
@@ -163,70 +139,36 @@ img {
   color: $header-text-color;
 }
 
-.site-nav-list>li>a {
-  color: $header-text-color !important;
+.site-nav #site-navbar-collapse .site-nav-list>li>a {
+  color: $header-text-color;
   padding: 5px 2px;
 }
 
-.site-nav-list>li+li{
+.site-nav #site-navbar-collapse .site-nav-list>li+li{
   margin-left: 10px;
 }
 
-.site-nav-list>.active>a {
+.site-nav #site-navbar-collapse .site-nav-list>.active>a {
   background-color: transparent !important;
   color: $header-text-color-dark;
-  border-bottom: 2px solid lighten($header-bg, 5%);
 }
 
-// .site-nav {
-//   float: none;
-//   line-height: 20px;
-//   margin: 30px 0 20px 0;
-//   @include media-query($on-laptop) {
-//     margin: 20px 0 10px 0;
-//   }
-// }
+.site-search-box {
+  padding-top: 110px;
+}
 
-// .site-nav > a,
-// .site-nav > a:visited {
-//   display: block;
-//   float: left;
-//   color: $text-dark-grey-color;
-//   text-decoration: none;
-// }
+// Google Search box style overwrite
+.site-search-box .gsc-control-cse {
+  background-color: rgba(0, 0, 0, 0);
+  border-color: rgba(0, 0, 0, 0);
+}
 
-// .site-nav > a:hover {
-//   text-decoration: underline;
-// }
+.site-search-box .gsc-search-button-v2 {
+  background-color: $header-text-color;
+}
 
-// .site-nav > a.active {
-//   font-weight: 500;
-//   text-decoration: dashed;
-// }
-
-// .site-nav > a:not(:first-child) {
-//   border-left: 1px dashed #ccc;
-//   text-align: center;
-//   padding-left: 10px;
-//   margin-left: 10px;
-// }
-
-// .site-nav:after {
-//   clear: both;
-//   content: "";
-//   height: 0;
-//   display: table;
-// }
-
-.search-box {
-  position: absolute;
-  top: 60px;
-  right: 0;
-  width: 250px;
-  @include media-query($on-laptop) {
-    top: 5px;
-    width: 170px;
-  }
+.site-search-box .gsc-search-button-v2:hover {
+  background-color: $header-text-color-dark;
 }
 
 // pagenation

@@ -6,7 +6,7 @@
                 <img src="{% link /assets/site/fslogo.png %}" class="site-logo" />
                 <!-- <img src="{% link /assets/site/fstext.png %}" width="200px"/> -->
             </div>
-            <div class="col-md-5 col-xs-12 col-sm-12">
+            <div class="col-md-3 col-xs-12 col-sm-12">
                 <h1 class="site-title">
                     <a href="{{ site.baseurl }}/">{{ site.title }}</a>
                 </h1>
@@ -47,25 +47,11 @@
                         </div><!-- /.navbar-collapse -->
                     </div><!-- /.container-fluid -->
                 </nav>
-                <!-- <div class="sina-blog-head">
-                    <div class="topArea">
-                        <div class="site-title">
-                            <a href="{{ site.baseurl }}/">{{ site.title }}</a>
-                        </div>
-                        <div class="blog-description" id="blog-description">
-                            {{site.description}}
-                        </div>
-                        <nav class="site-nav">
-                            <a href="{{ "/" | prehend site.baseurl }}">首页</a>
-                            <a href="{{ "/categories" | prehend site.baseurl }}">分类</a>
-                            <a href="{{ "/tags" | prehend site.baseurl }}">标签</a>
-                            <a href="{{ "/about" | prehead site.baseurl }}">关于</a>
-                        </nav>
-                    </div>
-                    <div class="search-box">
-                        {% include extra_fn/google_search.html %}
-                    </div>
-                </div> -->
+            </div>
+            <div class="col-md-4">
+                <div class="site-search-box">
+                    {% include extra_fn/google_search.html %}
+                </div>
             </div>
         </div>
     </div>
