@@ -2,11 +2,7 @@
     <div class="container">
         <div class="row">
             <!-- <div class="col-md-offset-1 col-md-10 col-xs-12 col-sm-12"> -->
-            <div class="col-md-offset-1 col-md-3 hidden-xs hidden-sm">
-                <img src="{% link /assets/site/fslogo.png %}" class="site-logo" />
-                <!-- <img src="{% link /assets/site/fstext.png %}" width="200px"/> -->
-            </div>
-            <div class="col-md-3 col-xs-12 col-sm-12">
+            <div class="col-md-offset-1 col-md-6 col-xs-12 col-sm-12">
                 <h1 class="site-title">
                     <a href="{{ site.baseurl }}/">{{ site.title }}</a>
                 </h1>
@@ -48,11 +44,19 @@
                     </div><!-- /.container-fluid -->
                 </nav>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 hidden-xs hidden-sm">
+                <div class="site-logo">
+                    <img src="{% link /assets/site/fslogo.png %}"/>
+                </div>
                 <div class="site-search-box">
                     {% include extra_fn/google_search.html %}
+                    <!-- <img src="{% link /assets/site/fslogo.png %}" class="site-logo" /> -->
                 </div>
+                
             </div>
+            <!-- <div class="col-md-offset-1 col-md-3 hidden-xs hidden-sm">
+                <img src="{% link /assets/site/fslogo.png %}" class="site-logo" />
+            </div> -->
         </div>
     </div>
 </header>

@@ -3,8 +3,6 @@
 ---
 @charset "utf-8";
 
-//pre_define
-$baseurl: '{{ site.baseurl }}' ;
 
 // Our variables
 $body-font-family: 
@@ -53,11 +51,13 @@ $spacing-unit:     20px;
 $text-color:       #060601;
 $strong-text-color: lighten($text-color, 1%);
 
-$text-dark-color: #333;
-$text-dark-grey-color: #555;
-$text-dark-strong-color: #222;
+$text-dark-color: #111;
+$text-dark-grey-color: #333;
+$text-dark-strong-color: #000;
 $header-text-color: #00537f;
 $header-text-color-dark: darken($header-text-color, 10%);
+
+$decorate-color:   rgba(#000, .1);
 
 $body-bg: #f5fcff;
 $header-bg: #e1f5ff;

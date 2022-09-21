@@ -1,6 +1,6 @@
 {% capture pagenation_content %}
     {% if paginator.total_pages > 1 %}
-    <div class="pagination shadow">
+    <div class="pagination">
         <div class="pre">
             {% if paginator.previous_page %}
             <a href="{{paginator.previous_page_path | prepend: site.baseurl | replace: '//','/'}}">上一页</a>

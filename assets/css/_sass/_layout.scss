@@ -100,21 +100,18 @@ img {
 
 .site-page-header {
   background: $header-bg;
-  padding: 0;
+  padding: 45px 0 35px 0;
   margin: 0;
-  height: 180px;
+  height: 200px;
 }
 
 .site-page-footer {
   background: $header-bg;
 }
 
-.site-logo {
-  width: 180px;
-}
-
 .site-title {
-  padding-top: 20px;
+  margin: 0 0 10px 0;
+  padding: 0;
 }
 
 .site-title a, 
@@ -131,12 +128,14 @@ img {
 .site-description {
   font-size: $base-font-size;
   color: $header-text-color-dark;
+  margin-bottom: 20px;
 }
 
 .site-nav {
   background-color: transparent;
   border: none;
   color: $header-text-color;
+  min-height: 32px;
 }
 
 .site-nav #site-navbar-collapse .site-nav-list>li>a {
@@ -153,8 +152,19 @@ img {
   color: $header-text-color-dark;
 }
 
+.site-logo {
+  width: 180px;
+  position: absolute;
+  z-index: 1;
+  right: 255px;
+  top: -35px;
+}
+
 .site-search-box {
-  padding-top: 110px;
+  position: absolute;
+  z-index: 2;
+  top: 12px;
+  left: 55px;
 }
 
 // Google Search box style overwrite
@@ -165,6 +175,7 @@ img {
 
 .site-search-box .gsc-search-button-v2 {
   background-color: $header-text-color;
+  padding: 9.5px 18px;
 }
 
 .site-search-box .gsc-search-button-v2:hover {
@@ -225,13 +236,30 @@ ul.post-list {
   margin-left: 0;
   padding: 0;
   > li {
-    margin-bottom: $spacing-unit;
+    margin: 0;
+    border-bottom: 1px solid $decorate-color;
+    padding-bottom: 10px;
+    > h3 {
+      margin: 0;
+      padding: 20px 0 5px 0;
+    }
   }
 }
 
 .post-meta {
   font-size: $small-font-size;
-  color: $grey-color;
+  color: $text-dark-grey-color;
+  padding: 5px 0;
+}
+
+.post-meta .tag-bubble {
+  background-color: $header-bg;
+  border-radius: 8px;
+  padding: 5px;
+}
+
+.post-meta .tag-bubble+.tag-bubble {
+  margin-left: 10px;
 }
 
 .post-graph {
@@ -253,6 +281,7 @@ a.post-link {
 
 .post-excerpt {
   color: $text-dark-grey-color;
+  padding: 5px 0;
 }
 
 // Posts
