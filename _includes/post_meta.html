@@ -1,8 +1,8 @@
 <p class="post-meta">
-    <span class="glyphicon glyphicon-time post-graph"></span>
+    <span class="glyphicon glyphicon-calendar post-graph"></span>
     {{ doc.date | date: "%Y/%m/%d" }}
     {% if doc.content %}
-        <span class="glyphicon glyphicon-dashboard post-graph"></span>
+        <span class="glyphicon glyphicon-time post-graph"></span>
         {{ doc.content | strip_html | strip_newlines | size }} 字
     {% endif %}
     <span class="pull-right">

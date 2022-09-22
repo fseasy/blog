@@ -44,7 +44,7 @@ figure,
 ul,
 ol {
   margin-left: 0;
-  padding-left: 1.3em;
+  padding-left: 1.6em;
 }
 
 ul {
@@ -67,6 +67,30 @@ blockquote {
 
 strong {
   color: $strong-text-color;
+}
+
+a {
+  color: $link-color;
+}
+
+blockquote:not(:first-child) {
+  background-color: darken($body-bg, 1%);
+  font-size: $small-font-size;
+  padding: 5px 5px;
+  border-left: 2px solid $brand-color;
+}
+
+blockquote + blockquote{
+  margin-top: - $spacing-unit / 4;
+}
+
+code {
+  // overwrite bootstrap color
+  color: $text-color;
+}
+
+.highlight pre code{
+  font-family: $pre-font-family;
 }
 
 /**
@@ -186,9 +210,6 @@ img {
 
 .pagination {
   width: 100%;
-  border: 1px solid #dedede;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #dedede;
   margin: 10px 0;
   padding: 10px 25px;
 }
@@ -225,10 +246,6 @@ img {
   padding: 10px 20px 25px 20px;
 }
 
-.shadow {
-  box-shadow: 1px 1px 2px #ddd;
-}
-
 // post-list in index.html
 
 ul.post-list {
@@ -256,6 +273,7 @@ ul.post-list {
   background-color: $header-bg;
   border-radius: 8px;
   padding: 5px;
+  margin-left: 5px;
 }
 
 .post-meta .tag-bubble+.tag-bubble {
@@ -263,9 +281,9 @@ ul.post-list {
 }
 
 .post-graph {
-  font-size: $small-font-size * 0.8;
+  font-size: $small-font-size * 0.9;
   margin-left: 20px;
-  margin-right: 10px;
+  margin-right: 4px;
 }
 
 .post-graph:first-of-type {
@@ -275,6 +293,7 @@ ul.post-list {
 a.post-link {
   display: block;
   font-size: $base-font-size + 8px;
+  font-family: $header-font-family;
   font-weight: 300;
   color: $text-dark-color;
 }
@@ -358,18 +377,18 @@ a.post-link {
 .footnotes {
   font-size: $small-font-size;
   padding: 5px 0 0 0;
-  border-top: 1px solid $grey-color;
+  border-top: 1px solid $text-dark-grey-color;
 }
 
 .footnotes a {
-  color: $grey-color-dark;
+  color: $text-dark-grey-color;
 }
 
 .post-image {
   text-align: center;
   margin-top: 5px;
   margin-bottom: 5px;
-  color: $grey-color;
+  color: $text-dark-grey-color;
 }
 
 .post-image img {
@@ -377,29 +396,13 @@ a.post-link {
 }
 
 .post-image img+img {
-  border-left: solid 1px $grey-color;
+  border-left: solid 1px $text-dark-grey-color;
 }
 
 .post-image p+p {
   text-align: left;
   padding: 0 3em;
   font-style: italic;
-}
-
-blockquote:not(:first-child) {
-  background-color: darken($body-bg, 1%);
-  font-size: $small-font-size;
-  padding: 5px 5px;
-  border-left: 2px solid $brand-color;
-}
-
-blockquote + blockquote{
-  margin-top: - $spacing-unit / 4;
-}
-
-code {
-  // overwrite bootstrap color
-  color: $text-color;
 }
 
 .media-func {
@@ -427,7 +430,8 @@ code {
 
 // Site footer
 .site-footer {
-  padding: $spacing-unit 0 ($spacing-unit / 2) 0;
+  padding: ($spacing-unit * 2) 0 $spacing-unit 0;
+  background-color: $footer-bg;
 }
 
 .contact-list,
@@ -440,4 +444,10 @@ code {
 .text-decoration-none {
   text-decoration: none !important;
   color: $text-color;
+}
+
+// Categories
+
+#category_panel {
+  background-color: $body-bg;
 }
