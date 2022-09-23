@@ -313,7 +313,7 @@ a.post-link {
   font-family: $header-font-family;
   font-size: $base-font-size + 14px;
   font-weight: 400;
-  margin: 10px 0 20px 0;
+  margin: 20px 0 20px 0;
   color: $strong-text-color;
   @include media-query($on-laptop) {
     font-size: $small-font-size + 14px;
@@ -450,4 +450,9 @@ a.post-link {
 
 #category_panel {
   background-color: $body-bg;
+
+  .list-group-item {
+    background-color: transparent;
+    border: none;
+  }
 }
