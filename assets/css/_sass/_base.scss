@@ -1,0 +1,120 @@
+// set container size
+
+@media (min-width: 1200px) {
+    .container {
+        width: 970px;
+    }
+}
+
+// GLOBAL
+
+/**
+   * elements
+   */
+
+body {
+    font-family: $body-font-family;
+    font-size: $base-font-size;
+    line-height: $base-line-height;
+    font-weight: 350;
+    color: $text-dark-color;
+    background-color: $body-bg;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+ul,
+ol,
+dl,
+figure,
+%vertical-rhythm {
+    margin-bottom: $spacing-unit / 2;
+}
+
+ul,
+ol {
+    margin-left: 0;
+    padding-left: 1.6em;
+}
+
+ul {
+    list-style-type: square;
+}
+
+li>p {
+    text-indent: 0;
+    margin: 5px 0;
+}
+
+li {
+    margin: 3px 0;
+}
+
+blockquote {
+    border-left: 3px solid $brand-color;
+    font-family: $blockquote-font-family;
+}
+
+strong {
+    color: $text-dark-strong-color;
+}
+
+a {
+    color: $link-color;
+}
+
+blockquote:not(:first-child) {
+    background-color: darken($body-bg, 1%);
+    font-size: $small-font-size;
+    padding: 5px 5px;
+    border-left: 2px solid $brand-color;
+}
+
+blockquote+blockquote {
+    margin-top: - $spacing-unit / 4;
+}
+
+code {
+    // overwrite bootstrap color
+    color: $text-dark-color;
+}
+
+.highlight pre code {
+    font-family: $pre-font-family;
+}
+
+/**
+  *  Helper
+  */
+.no-padding {
+    padding: 0;
+}
+
+/**
+ * Images
+ */
+img {
+    max-width: 100%;
+    vertical-align: middle;
+}
+
+/**
+   * Clearfix
+   */
+%clearfix {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}

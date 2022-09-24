@@ -5,21 +5,29 @@
     </svg>
 {% endcapture %}
 
-<footer class="row">
-    <div class="col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
-        <div class="row site-footer">
-            <div class="col-md-12 text-center">
-                {% if site.github_username %}
-                <a href="https://github.com/{{ site.github_username }}" 
-                   class="text-decoration-none">
-                    <span class="icon">{{ github_svg }}</span>
-                </a>
-                {% endif %}
-                {{ site.title }} @{{ site.time | date: "%Y.%m" }}
+<footer class="site-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        {% if site.github_username %}
+                        <a href="https://github.com/{{ site.github_username }}" 
+                           class="text-decoration-none">
+                            <span class="icon">{{ github_svg }}</span>
+                        </a>
+                        {% endif %}
+                        {{ site.title }} @{{ site.time | date: "%Y.%m" }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    <div class="site-signature hidden-xs hidden-sm">
+        <img src="{% link /assets/site/fstext.png  %}">
+    </div>
 </footer>
+
 
 {% include extra_fn/google_analytics_js.html %}
 {% include extra_fn/quick_stop.html %}

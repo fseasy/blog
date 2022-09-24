@@ -1,22 +1,2 @@
 <script async src="https://cse.google.com/cse.js?cx=60b40cc0cd1cd437f" id="search_load_script"></script>
 <div class="gcse-search"></div>
-
-<script>
-    (function () {
-        var onload_fn = window.onload;
-        window.onload = function () {
-            if (onload_fn) {
-                onload_fn();
-            }
-            var cses = document.getElementsByClassName("gsc-control-cse");
-            if (cses.length < 1) {
-                console.warn("failed to Got google-search-engine")
-                return;
-            }
-            var cse = cses[0];
-            cse.style["background-color"] = "rgba(0, 0, 0, 0)";
-            cse.style["border-color"] = "rgba(0, 0, 0, 0)";
-        };
-
-    })();
-</script>

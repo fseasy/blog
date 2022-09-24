@@ -6,31 +6,14 @@
 </head>
 
 <body>
-    <div class="container">
+    {% include page_header.html  %}
 
-        {% include page_header.html  %}
-
+    <section class="container">
         <div class="row">
-            <div class="contentpanel shadow col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
+            <div class="contentpanel col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
                 <h1 class="post-title">{{ page.title }}</h1>
-                <p class="post-meta">
-                    <span class="glyphicon glyphicon-time post-graph"></span>
-                    {{ page.date | date: "%Y-%m-%d" }}
-                    <span class="glyphicon glyphicon-th post-graph"></span>
-                    {% if page.categories %}
-                        {% for category in page.categories %} 
-                            <span>{{category}} </span>
-                        {% endfor %}
-                    {% endif %}
-                    <span class="glyphicon glyphicon-tags post-graph"></span>
-                    {% if page.tags %}
-                        <span> {{page.tags | join: ', '}} </span>
-                    {% endif %}
-                    {% if content %}
-                        <span class="glyphicon glyphicon-dashboard post-graph"></span>
-                        {{ content | strip_html | strip_newlines | size }} 字
-                    {% endif %}
-                </p>
+                {% assign doc=page %}
+                {% include post_meta.html  %}
                 <!-- TOC -->
                 {% include extra_fn/toc_content_top_tag.html %}
                 <!-- post-content -->
@@ -55,9 +38,9 @@
                 {% include extra_fn/isso_tag.html %}
             </div>
         </div>
-        {% include page_footer.html %}
 
-    </div>
+    </section>
+    {% include page_footer.html %}
 
     {% include extra_fn/toc_js.html %}
     {% include extra_fn/share_js_script.html %}

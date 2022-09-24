@@ -10,7 +10,7 @@
         {
                 "title": "{{ post.title | escape }}" ,
                 "url": "{{ post.url | prepend: site.baseurl }}" ,
-                "date": '{{ post.date | date: "%b %d, %Y" }}' ,
+                "date": '{{ post.date | date: "%Y/%m/%d" }}' ,
                 "tags": [ 
                             {% for tag in post.tags %}
                                 "{{tag | escape }}"
