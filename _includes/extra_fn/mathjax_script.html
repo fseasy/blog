@@ -2,35 +2,28 @@
 <script>
 (function () {
     {% comment %}
-        if one post define `need_mathjax` in head , then we should load it.
+        if one post explicitly define `need_mathjax` in head , then we should load it.
     {% endcomment %}
     {% if page.need_mathjax %}
-        var needMathjax = true;
+        var explicitNeedMathjax = true;
     {% else %}
-        var needMathjax = false;
+        var explicitNeedMathjax = false;
     {% endif %}
     var hasMath = (function() {
-        var ps = document.getElementsByTagName("P");
-        var textHasMathEnv = function(t) {
-            if (!t) {
-                return false;
-            }
-            console.log(t);
-            return t.match(/(?:\$|\\\(|\\\[|\\begin\{.*?})/);
+        var text = document.body.innerText;
+        var INLINE_MATH_SIGN = "$",
+            DISPLAYED_MATH_SIGN = "\\[";
+        if (text.indexOf(INLINE_MATH_SIGN) == -1 && text.indexOf(DISPLAYED_MATH_SIGN) == -1) {
+            return false;
         }
-        for (var idx in ps) {
-            console.log(idx, ps[idx]);
-            if (textHasMathEnv(ps[idx].textContent)) {
-                return true;
-            }
-        }
-        return false;
+        return true;
     })();
 
-    if (!hasMath && !needMathjax) {
-        console.log("no need load mathjax");
+    if (!explicitNeedMathjax && !hasMath) {
+        console.info("This Page does not need to load Mathjax");
         return;
     }
+    console.info("> Loading Mathjax");
     if (!window.MathJax) {
         window.MathJax = {
             tex: {
