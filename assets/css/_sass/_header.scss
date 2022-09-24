@@ -1,0 +1,83 @@
+.site-page-header {
+    background: $header-bg;
+    padding: 45px 0 35px 0;
+    margin: 0;
+    height: 200px;
+}
+
+.site-page-footer {
+    background: $header-bg;
+}
+
+.site-title {
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+.site-title a,
+.site-title a:hover,
+.site-title a:visited {
+    float: none;
+    font-size: $base-font-size + 16px;
+    color: $header-text-color;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+}
+
+.site-description {
+    font-size: $base-font-size;
+    color: $header-text-color-dark;
+    margin-bottom: 20px;
+}
+
+.site-nav {
+    background-color: transparent;
+    border: none;
+    color: $header-text-color;
+    min-height: 32px;
+}
+
+.site-nav #site-navbar-collapse .site-nav-list>li>a {
+    color: $header-text-color;
+    padding: 5px 2px;
+}
+
+.site-nav #site-navbar-collapse .site-nav-list>li+li {
+    margin-left: 10px;
+}
+
+.site-nav #site-navbar-collapse .site-nav-list>.active>a {
+    background-color: transparent !important;
+    color: $header-text-color-dark;
+}
+
+.site-logo {
+    width: 180px;
+    position: absolute;
+    z-index: 1;
+    right: 255px;
+    top: -35px;
+}
+
+.site-search-box {
+    position: absolute;
+    z-index: 2;
+    top: 12px;
+    left: 55px;
+}
+
+// Google Search box style overwrite
+.site-search-box .gsc-control-cse {
+    background-color: rgba(0, 0, 0, 0);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.site-search-box .gsc-search-button-v2 {
+    background-color: $header-text-color;
+    padding: 9.5px 18px;
+}
+
+.site-search-box .gsc-search-button-v2:hover {
+    background-color: $header-text-color-dark;
+}

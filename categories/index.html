@@ -7,7 +7,7 @@ title: 索引目录
 <div class="row">
     <div class="col-md-3 clear-padding-horizontal" id="navibar">
     </div>
-    <div class="col-md-offset-1 col-md-8" id="listcontent">
+    <div class="col-md-9" id="listcontent">
         内容加载中
     </div>
 </div>
@@ -199,7 +199,6 @@ title: 索引目录
             var _buildPostDOMs = function (showPosts) {
                 var _buildPostDOM = function (post) {
                     var liDOM = document.createElement('LI'),
-                        dateDOM = document.createElement('SPAN'),
                         contentDOM = document.createElement('H3'),
                         excerptDOM = document.createElement('P'),
                         hrefDOM = document.createElement('A');
@@ -212,10 +211,10 @@ title: 索引目录
                     hrefDOM.innerHTML = post.title;
 
                     excerptDOM.setAttribute('class', 'post-excerpt');
-                    excerptDOM.innerHTML = [post.date, post.excerpt].join(" | ");
+                    // excerptDOM.innerHTML = [post.date, post.excerpt].join("");
+                    excerptDOM.innerHTML = "<em>" + post.date + "</em> " + post.excerpt;
 
                     contentDOM.appendChild(hrefDOM);
-                    // liDOM.appendChild(dateDOM);
                     liDOM.appendChild(contentDOM);
                     liDOM.appendChild(excerptDOM);
 

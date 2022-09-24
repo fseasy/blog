@@ -1,0 +1,10 @@
+// Site footer
+.site-footer {
+    padding: ($spacing-unit * 2) 0 $spacing-unit 0;
+    background-color: $footer-bg;
+}
+
+.text-decoration-none {
+    text-decoration: none !important;
+    color: $text-dark-color;
+}

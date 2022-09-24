@@ -15,9 +15,11 @@
             if (!t) {
                 return false;
             }
+            console.log(t);
             return t.match(/(?:\$|\\\(|\\\[|\\begin\{.*?})/);
         }
         for (var idx in ps) {
+            console.log(idx, ps[idx]);
             if (textHasMathEnv(ps[idx].textContent)) {
                 return true;
             }
@@ -26,7 +28,7 @@
     })();
 
     if (!hasMath && !needMathjax) {
-        console.debug("no need load mathjax");
+        console.log("no need load mathjax");
         return;
     }
     if (!window.MathJax) {

@@ -1,13 +1,10 @@
----
-# Only the main Sass file needs front matter (the dashes are enough)
----
+--- 
+# Only the main Sass file needs front matter (the dashes are enough) 
+--- 
 @charset "utf-8";
 
-
-// Our variables
-$body-font-family: 
-    -apple-system, //针对 Web 页面
-    BlinkMacSystemFont,  //针对 Mac Chrome 页面
+$body-font-family: -apple-system, //针对 Web 页面
+    BlinkMacSystemFont, //针对 Mac Chrome 页面
     SFProDisplay-Regular, //针对微信小程序
     'Helvetica Neue', Menlo, // apple english
     consolas, // win english
@@ -15,7 +12,7 @@ $body-font-family:
     'PingFang SC', // apple Chinese
     'Microsoft YaHei', // win Chinese
     'Noto Sans CJK SC', 'WenQuanYi Micro Hei' // ubuntu english
-    ;
+;
 
 $header-font-family: "Ubuntu", $body-font-family; // replace Ubuntu Mono, more formal
 
@@ -24,20 +21,16 @@ $blockquote-font-family: // use KaiTi
     KaiTi,
     $body-font-family;
 
-$pre-font-family: 
-    "Monaco", "Menlo", // apple
+$pre-font-family: "Monaco", "Menlo", // apple
     "consolas", // win
     "Ubuntu Mono", // ubuntu
-    $body-font-family; 
+    $body-font-family;
 
-$base-font-size:   16px;
-$small-font-size:  $base-font-size * 0.875;
+$base-font-size: 16px;
+$small-font-size: $base-font-size * 0.875;
 $base-line-height: 1.6;
 
-$spacing-unit:     20px;
-
-$text-color:       #060601;
-$strong-text-color: lighten($text-color, 1%);
+$spacing-unit: 20px;
 
 $text-dark-color: #111;
 $text-dark-grey-color: #333;
@@ -46,16 +39,16 @@ $header-text-color: #00537f;
 $header-text-color-dark: darken($header-text-color, 10%);
 $link-color: $header-text-color;
 
-$decorate-color:   rgba(#000, .1);
-$brand-color:      #3fa7cb;
+$decorate-color: rgba(#000, .1);
+$brand-color: #3fa7cb;
 
 $body-bg: #f5fcff;
 $header-bg: #e1f5ff;
 $footer-bg: $header-bg;
 
-$on-palm:          600px;
-$on-laptop:        992px;
-$screen-md-min:    992px; // as bootsrap
+$on-palm: 600px;
+$on-laptop: 992px;
+$screen-md-min: 992px; // as bootsrap
 
 // Using media queries with like this:
 // @include media-query($palm) {
@@ -71,10 +64,13 @@ $screen-md-min:    992px; // as bootsrap
 }
 
 // Import partials from `sass_dir` (defaults to `_sass`)
-@import
-        "layout",
-        // for TOC style
-        "toc",
-        // code highlight
-        "nimbus-pygments"
-;
+@import "base",
+    "header",
+    "footer",
+    "layout",
+    "post",
+    // for TOC style
+    "toc",
+    // code highlight
+    "nimbus-pygments"
+    ;
