@@ -6,15 +6,15 @@
         {{ doc.content | strip_html | strip_newlines | size }} 字
     {% endif %}
     <span class="pull-right">
-        <span class="glyphicon glyphicon-th post-graph"></span>
         {% if doc.categories %}
+            <span class="glyphicon glyphicon-th post-graph"></span>
+
             {% for category in doc.categories %} 
                 <span>{{category}} </span>
             {% endfor %}
         {% endif %}
-        <span class="glyphicon glyphicon-tags post-graph"></span>
         {% if doc.tags %}
-            <!-- <span> {{doc.tags | join: ', '}} </span> -->
+            <span class="glyphicon glyphicon-tags post-graph"></span>
             {% for tag in doc.tags %} 
                 <span class="tag-bubble">{{tag}} </span>
             {% endfor %}
