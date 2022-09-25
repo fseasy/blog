@@ -10,14 +10,17 @@
             <span class="glyphicon glyphicon-th post-graph"></span>
 
             {% for category in doc.categories %} 
-                <span>{{category}} </span>
+                <span>{{category}}</span>
             {% endfor %}
         {% endif %}
-        {% if doc.tags %}
-            <span class="glyphicon glyphicon-tags post-graph"></span>
-            {% for tag in doc.tags %} 
-                <span class="tag-bubble">{{tag}} </span>
-            {% endfor %}
-        {% endif %}
+        <span class="tag-wrapper">
+            {% if doc.tags %}
+                <span class="glyphicon glyphicon-tags post-graph"></span>
+                {% for tag in doc.tags %} 
+                    <span class="tag-bubble">{{tag}}</span>
+                {% endfor %}
+            {% endif %}
+        </span>
+
     </span>
 </p>

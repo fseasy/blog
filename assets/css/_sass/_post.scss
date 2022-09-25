@@ -6,12 +6,12 @@
 
 .post-title {
     font-family: $header-font-family;
-    font-size: $base-font-size + 14px;
-    font-weight: 400;
+    font-size: $base-font-size + 10px;
+    font-weight: 350;
     margin: 20px 0 20px 0;
 
     @include media-query($on-laptop) {
-        font-size: $small-font-size + 14px;
+        font-size: $small-font-size + 10px;
     }
 }
 
@@ -29,7 +29,7 @@
 
     h2 {
         font-size: $base-font-size + 8px;
-        font-weight: 400;
+        font-weight: 350;
     }
 
     h3 {

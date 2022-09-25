@@ -35,7 +35,6 @@
 
 .contentpanel {
   margin-bottom: 10px;
-  padding: 10px 20px 25px 20px;
 }
 
 // post-list in index.html
@@ -89,6 +88,12 @@ a.post-link {
   margin-left: 10px;
 }
 
+@include media-query($on-laptop) {
+  .post-meta .tag-wrapper {
+    display: none;
+  }
+}
+
 .post-graph {
   font-size: $small-font-size * 0.9;
   margin-left: 20px;
@@ -121,6 +126,9 @@ a.post-link {
   .list-group-item {
     background-color: transparent;
     border: none;
+  }
+  ul.list-group {
+    margin-left: 0;
   }
 }
 
