@@ -1,2 +1,33 @@
-<script async src="https://cse.google.com/cse.js?cx=60b40cc0cd1cd437f" id="search_load_script"></script>
 <div class="gcse-search"></div>
+
+<script>
+(function () {
+    // 在文档加载完成后，再设置一个延时来加载cse脚本。
+    // 经过测试，在访问cse很慢/不通的情况下，这种方式可以避免浏览器一直转圈的问题（这是 `async` 标签不能实现的）
+    document.addEventListener("DOMContentLoaded", function () {
+        // before load, set logo position to right most.
+        var logoDiv = document.querySelector(".site-logo");
+        if (logoDiv) {
+            logoDiv.setAttribute("style", "right: 0;")
+        }
+        setTimeout(function () {
+            console.log("Start Load Google CSE");
+            var script = document.createElement("SCRIPT");
+            script.src = "https://cse.google.com/cse.js?cx=60b40cc0cd1cd437f";
+            script.setAttribute("async", "");
+            // if load success, restore the logo position.
+            script.addEventListener("load", function(){
+                if (!logoDiv) {
+                    return;
+                }
+                logoDiv.removeAttribute("style");
+                console.log("CSE load success.")
+            });
+            script.addEventListener("error", function(){
+                console.warn("CSE load error. Everything stills get fine except search-in-site");
+            });
+            document.body.appendChild(script);
+        }, 1000);
+    });
+})();
+</script>
