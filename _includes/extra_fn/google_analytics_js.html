@@ -1,9 +1,25 @@
 <!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-13Y3RR63GX"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-13Y3RR63GX');
+
+  // dynamic add script
+  document.addEventListener("DOMContentLoaded", function () {
+        setTimeout(function () {
+            console.log("Start Load Google Analytics");
+            var script = document.createElement("SCRIPT");
+            script.src = "https://www.googletagmanager.com/gtag/js?id=G-13Y3RR63GX";
+            script.setAttribute("async", "");
+            // if load success, restore the logo position.
+            script.addEventListener("load", function(){
+                console.log("Analytics load success.")
+            });
+            script.addEventListener("error", function(){
+                console.warn("Analytics load error. Everything fine except analytics");
+            });
+            document.body.appendChild(script);
+        }, 2000);
+    });
 </script>
