@@ -48,7 +48,7 @@ figure,
 
 ol {
     // 非常关键！
-    // list-style-position 必须是 outside, 这样才能保证list换行后的文本是在 list-item只外的；
+    // list-style-position 必须是 outside, 这样才能保证list换行后的文本是在 list-item之外的；
     // 这时，我们去看 marker 的宽。 简单计算下，对 ol, 就是 1.5 倍的字体大小，即 1.5em;
     // 对 ul, 似乎设置为 1 比较合适；
     margin-left: 1.5em;

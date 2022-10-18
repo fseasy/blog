@@ -11,7 +11,7 @@ tags: vslam code-notes
 
 1. `cv::Mat` 用起来方便，但还是挺容易有坑的！最大的问题，就是 `.at<T>`, 如果 `T` 不是实际类型，运算结果会错误，但程序多半不会挂…… 譬如， `cv::recoverPose` api 返回的 `R`, 类型是 `CV_64F`, 即 `double`, 如果用 `.at<float>`, 结果就错了。这要求我们必须得知道输出的类型具体是啥。然而，api 上不一定会标注出来…… 
 
-   一些已知的： 相机矩阵K，一般要声明为double的；R、t 都是 double的；传给 `cv::triangulatePoints` 必须传入 `float`. 
+   目前明确的类型：多视图几何相关的 api 里：相机矩阵K，一般要声明为`double`; R、t 都是 `double` 的；传给 `cv::triangulatePoints` 必须传入 `float`. 
 
    尽量少用 `.at`, 可以使用 `.copyTo` 来赋值，这类函数，内部一般会做好类型转换，不会出问题。
 
