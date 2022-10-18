@@ -21,7 +21,6 @@ body {
     font-family: $body-font-family;
     font-size: $base-font-size;
     line-height: $base-line-height;
-    font-weight: 350;
     color: $text-dark-color;
     background-color: $body-bg;
     -webkit-text-size-adjust: 100%;
@@ -48,10 +47,9 @@ figure,
 
 ol {
     // 非常关键！
-    // list-style-position 必须是 outside, 这样才能保证list换行后的文本是在 list-item之外的；
-    // 这时，我们去看 marker 的宽。 简单计算下，对 ol, 就是 1.5 倍的字体大小，即 1.5em;
-    // 对 ul, 似乎设置为 1 比较合适；
-    margin-left: 1.5em;
+    // list-style-position 必须是 outside, 这样才能保证list换行后的文本是在 list-item 之外的；
+    // 具体 margin 多少，需要根据字体来判定…… 这需要JS来支持。
+    margin-left: 1.6em;
 }
 
 ul {
@@ -75,6 +73,10 @@ blockquote {
     border-left: 2px solid $brand-color;
     font-family: $blockquote-font-family;
     padding: 10px 10px;
+}
+
+p {
+    text-align: justify;
 }
 
 strong {

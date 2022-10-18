@@ -1,0 +1,53 @@
+<!-- We may need dynamic set some style -->
+
+<script>
+
+// copy and modifing from https://stackoverflow.com/questions/7444451/\
+// how-to-get-the-actual-rendered-font-when-its-not-defined-in-css/38910481#38910481
+function renderedfont(ele) {
+    var getDefaultFonts = function () {
+        var iframe = document.createElement('iframe');
+        var html = '<html><body>';
+        var fonts;
+        document.body.appendChild(iframe);
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write(html);
+        var subele = iframe.contentWindow.document.createElement(ele.tagName);
+        iframe.contentWindow.document.body.appendChild(subele);
+        fonts = getComputedStyle(subele)['font-family'];
+        document.body.removeChild(iframe);
+        return fonts;
+    }
+    var fonts = getComputedStyle(ele)['font-family'] + ',' + getDefaultFonts();
+    var fontsArray = fonts.split(',');
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext("2d");
+    var testString = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()ñ";
+    var prevImageData;
+    document.body.appendChild(canvas);
+    canvas.width = 500;
+    canvas.height = 300;
+    fontsArray.unshift('"Font That Doesnt Exists ' + Math.random() + '"');
+
+    for (var i = 0; i < fontsArray.length; i++) {
+        var fontName = fontsArray[i].trim();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '16px ' + fontName + ', monospace';
+        ctx.fillText(testString, 10, 100);
+        var idata = ctx.getImageData(0, 0, canvas.width, canvas.height); 
+        var data = idata.data
+        if (prevImageData) {
+            for (var j = 0; j < data.length; j += 3) {
+                if (prevImageData[j + 3] !== data[j + 3]) {
+                    document.body.removeChild(canvas);
+                    return fontName;
+                }
+            }
+        }
+        prevImageData = data;
+    }
+
+    document.body.removeChild(canvas);
+    return 'monospace';
+}
+</script>
