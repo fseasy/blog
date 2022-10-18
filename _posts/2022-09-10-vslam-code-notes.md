@@ -7,7 +7,15 @@ tags: vslam code-notes
 ---
 > 学习 vslam 过程中的一些代码记录。
 
-## 1 相机与图像
+## OpenCV 基础
+
+1. `cv::Mat` 用起来方便，但还是挺容易有坑的！最大的问题，就是 `.at<T>`, 如果 `T` 不是实际类型，运算结果会错误，但程序多半不会挂…… 譬如， `cv::recoverPose` api 返回的 `R`, 类型是 `CV_64F`, 即 `double`, 如果用 `.at<float>`, 结果就错了。这要求我们必须得知道输出的类型具体是啥。然而，api 上不一定会标注出来…… 
+
+   一些已知的： 相机矩阵K，一般要声明为double的；R、t 都是 double的；传给 `cv::triangulatePoints` 必须传入 `float`. 
+
+   尽量少用 `.at`, 可以使用 `.copyTo` 来赋值，这类函数，内部一般会做好类型转换，不会出问题。
+
+## 相机与图像
 
 1.  像素点坐标 $p$ 到归一化平面上的3d坐标 $P$
 
@@ -30,3 +38,7 @@ tags: vslam code-notes
         );
     };
     ```
+
+    > 注1：经过实际测试，上述做法，和 $K^{-1} p$ 结果一致。
+    
+    > 注2：代码中 `static_cast<cv::Mat_<double>>(camera_intrinsic)`，其实是调用了 `cv::Mat_` 的构造函数： `Mat_ (const Mat &m)`, 这个包含了拷贝或转换逻辑，是有代价的！尽量不应该这么做。
