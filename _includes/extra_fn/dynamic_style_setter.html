@@ -1,53 +1,75 @@
 <!-- We may need dynamic set some style -->
 
 <script>
-
+(function(){
 // copy and modifing from https://stackoverflow.com/questions/7444451/\
 // how-to-get-the-actual-rendered-font-when-its-not-defined-in-css/38910481#38910481
-function renderedfont(ele) {
-    var getDefaultFonts = function () {
-        var iframe = document.createElement('iframe');
-        var html = '<html><body>';
-        var fonts;
-        document.body.appendChild(iframe);
-        iframe.contentWindow.document.open();
-        iframe.contentWindow.document.write(html);
-        var subele = iframe.contentWindow.document.createElement(ele.tagName);
-        iframe.contentWindow.document.body.appendChild(subele);
-        fonts = getComputedStyle(subele)['font-family'];
-        document.body.removeChild(iframe);
-        return fonts;
-    }
-    var fonts = getComputedStyle(ele)['font-family'] + ',' + getDefaultFonts();
-    var fontsArray = fonts.split(',');
+function testRenderedFont(testString, testFonts) {
     var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext("2d");
-    var testString = "abcdefghijklmnopqrstuvwxyz!@#$%^&*()ñ";
-    var prevImageData;
+    canvas.setAttribute("hidden", "hidden");
+    var ctx = canvas.getContext("2d", {willReadFrequently: true});
     document.body.appendChild(canvas);
-    canvas.width = 500;
-    canvas.height = 300;
-    fontsArray.unshift('"Font That Doesnt Exists ' + Math.random() + '"');
+    canvas.width = 50;
+    canvas.height = 100;
+    
+    var getDefaultFonts = function () {
+        var fontFamily = window.getComputedStyle(document.body)['font-family'];
+        return fontFamily;
+    }
 
-    for (var i = 0; i < fontsArray.length; i++) {
-        var fontName = fontsArray[i].trim();
+    var getDrawData = function(fontName) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = '16px ' + fontName + ', monospace';
-        ctx.fillText(testString, 10, 100);
+        ctx.font = '16px ' + fontName;
+        ctx.fillText(testString, 5, 50);
         var idata = ctx.getImageData(0, 0, canvas.width, canvas.height); 
         var data = idata.data
-        if (prevImageData) {
-            for (var j = 0; j < data.length; j += 3) {
-                if (prevImageData[j + 3] !== data[j + 3]) {
-                    document.body.removeChild(canvas);
-                    return fontName;
-                }
+        return data
+    };
+
+    var defaultFontData = getDrawData(getDefaultFonts());
+
+    for (var i = 0; i < testFonts.length; i++) {
+        var fontName = testFonts[i].trim();
+        var data = getDrawData(fontName);
+        var isThisFont = true;
+        for (var j = 0; j < data.length; j += 3) {
+            if (defaultFontData[j + 3] !== data[j + 3]) {
+                isThisFont = false;
+                break;
             }
         }
-        prevImageData = data;
+        if (isThisFont) {
+            return fontName;
+        }
     }
-
-    document.body.removeChild(canvas);
-    return 'monospace';
+    return undefined;
 }
+
+const macDigitFont = 'Helvetica Neue';
+const linuxDigitFont = 'Ubuntu Mono';
+const winDigitFont = 'consolas';
+var digitRenderFont = testRenderedFont("12", [macDigitFont, linuxDigitFont, winDigitFont]);
+var newStyle = undefined;
+switch (digitRenderFont) {
+    case macDigitFont:
+        newStyle = "ol { margin-left: 1.17em; }";
+        break;
+    case linuxDigitFont:
+        newStyle = "ol { margin-left: 1.6em; }";
+        break;
+    default:
+        break;
+}
+
+console.log("This brower render digit use font: %s", digitRenderFont);
+
+if (newStyle !== undefined) {
+    var s = document.createElement("STYLE");
+    s.setAttribute("type", "text/css");
+    s.innerHTML = newStyle;
+    document.head.appendChild(s);
+}
+
+})();
+
 </script>
