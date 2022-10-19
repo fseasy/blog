@@ -1,74 +1,24 @@
 <!-- We may need dynamic set some style -->
 
 <script>
+
+// set ol margin-left to align paragraph (because ol>li' list-style-position = outsider
+// => marker not aligned. but we shouldn't set it to insider, because we need li 
+// content align)
 (function(){
-// copy and modifing from https://stackoverflow.com/questions/7444451/\
-// how-to-get-the-actual-rendered-font-when-its-not-defined-in-css/38910481#38910481
-function testRenderedFont(testString, testFonts) {
-    var canvas = document.createElement('canvas');
-    canvas.setAttribute("hidden", "hidden");
-    var ctx = canvas.getContext("2d", {willReadFrequently: true});
-    document.body.appendChild(canvas);
-    canvas.width = 50;
-    canvas.height = 100;
-    
-    var getDefaultFonts = function () {
-        var fontFamily = window.getComputedStyle(document.body)['font-family'];
-        return fontFamily;
-    }
-
-    var getDrawData = function(fontName) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.font = '16px ' + fontName;
-        ctx.fillText(testString, 5, 50);
-        var idata = ctx.getImageData(0, 0, canvas.width, canvas.height); 
-        var data = idata.data
-        return data
-    };
-
-    var defaultFontData = getDrawData(getDefaultFonts());
-
-    for (var i = 0; i < testFonts.length; i++) {
-        var fontName = testFonts[i].trim();
-        var data = getDrawData(fontName);
-        var isThisFont = true;
-        for (var j = 0; j < data.length; j += 3) {
-            if (defaultFontData[j + 3] !== data[j + 3]) {
-                isThisFont = false;
-                break;
-            }
-        }
-        if (isThisFont) {
-            return fontName;
-        }
-    }
-    return undefined;
+// you can only get pseudo element by getComputedStyle
+// see https://insidethediv.com/select-css-pseudo-element-using-javascript
+const li = document.querySelector("ol>li");
+if (li === null) {
+    return;
 }
+const widthStr = window.getComputedStyle(li, "::marker")["width"];
+console.log("This browser render ol marker width = %s", widthStr);
 
-const macDigitFont = 'Helvetica Neue';
-const linuxDigitFont = 'Ubuntu Mono';
-const winDigitFont = 'consolas';
-var digitRenderFont = testRenderedFont("12", [macDigitFont, linuxDigitFont, winDigitFont]);
-var newStyle = undefined;
-switch (digitRenderFont) {
-    case macDigitFont:
-        newStyle = "ol { margin-left: 1.17em; }";
-        break;
-    case linuxDigitFont:
-        newStyle = "ol { margin-left: 1.6em; }";
-        break;
-    default:
-        break;
-}
-
-console.log("This brower render digit use font: %s", digitRenderFont);
-
-if (newStyle !== undefined) {
-    var s = document.createElement("STYLE");
-    s.setAttribute("type", "text/css");
-    s.innerHTML = newStyle;
-    document.head.appendChild(s);
-}
+var s = document.createElement("STYLE");
+s.setAttribute("type", "text/css");
+s.innerHTML = `ol { margin-left: ${widthStr}; }`;
+document.head.appendChild(s);
 
 })();
 
