@@ -9,36 +9,83 @@ tags: vslam code-notes
 
 ## OpenCV 基础
 
-1. `cv::Mat` 用起来方便，但还是挺容易有坑的！最大的问题，就是 `.at<T>`, 如果 `T` 不是实际类型，运算结果会错误，但程序多半不会挂…… 譬如， `cv::recoverPose` api 返回的 `R`, 类型是 `CV_64F`, 即 `double`, 如果用 `.at<float>`, 结果就错了。这要求我们必须得知道输出的类型具体是啥。然而，api 上不一定会标注出来…… 
+1\. `cv::Mat` 用起来方便，但还是挺容易有坑的！最大的问题，就是 `.at<T>`, 如果 `T` 不是实际类型，运算结果会错误，但程序多半不会挂…… 譬如， `cv::recoverPose` api 返回的 `R`, 类型是 `CV_64F`, 即 `double`, 如果用 `.at<float>`, 结果就错了。这要求我们必须得知道输出的类型具体是啥。然而，api 上不一定会标注出来…… 
 
-   目前明确的类型：多视图几何相关的 api 里：相机矩阵K，一般要声明为`double`; R、t 都是 `double` 的；传给 `cv::triangulatePoints` 必须传入 `float`. 
+目前明确的类型：多视图几何相关的 api 里：相机矩阵K，一般要声明为`double`; R、t 都是 `double` 的；传给 `cv::triangulatePoints` 必须传入 `float`. 
 
-   尽量少用 `.at`, 可以使用 `.copyTo` 来赋值，这类函数，内部一般会做好类型转换，不会出问题。
+尽量少用 `.at`, 可以使用 `.copyTo` 来赋值，这类函数，内部一般会做好类型转换，不会出问题。
 
 ## 相机与图像
 
-1.  像素点坐标 $p$ 到归一化平面上的3d坐标 $P$
+1\. 像素点坐标 $p$ 到归一化平面上的3d坐标 $P$
 
-    按 $p = K P$ 看， $P = K^{-1} p $, 但没必要这样算，直接按照求 p 的逆运算即可：
+按 $p = K P$ 看， $P = K^{-1} p $, 但没必要这样算，直接按照求 p 的逆运算即可：
 
-    - 先减去中心偏移
-    - 再除以缩放系数(focal)
+- 先减去中心偏移
+- 再除以缩放系数(focal)
 
-    ```c++
-    cv::Mat _pixel_pnt2camera_3d(const cv::Point2f& p, const cv::Mat& camera_intrinsic) {
-        auto K_ = static_cast<cv::Mat_<double>>(camera_intrinsic);
-        double cx = K_(0, 2);
-        double cy = K_(1, 2);
-        double fx = K_(0, 0);
-        double fy = K_(1, 1);
-        return (cv::Mat_<double>(3, 1) << 
-            (p.x - cx) / fx,
-            (p.y - cy) / fy,
-            1
-        );
-    };
-    ```
+```c++
+cv::Mat _pixel_pnt2camera_3d(const cv::Point2f& p, const cv::Mat& camera_intrinsic) {
+    auto K_ = static_cast<cv::Mat_<double>>(camera_intrinsic);
+    double cx = K_(0, 2);
+    double cy = K_(1, 2);
+    double fx = K_(0, 0);
+    double fy = K_(1, 1);
+    return (cv::Mat_<double>(3, 1) << 
+        (p.x - cx) / fx,
+        (p.y - cy) / fy,
+        1
+    );
+};
+```
 
-    > 注1：经过实际测试，上述做法，和 $K^{-1} p$ 结果一致。
-    
-    > 注2：代码中 `static_cast<cv::Mat_<double>>(camera_intrinsic)`，其实是调用了 `cv::Mat_` 的构造函数： `Mat_ (const Mat &m)`, 这个包含了拷贝或转换逻辑，是有代价的！尽量不应该这么做。
+> 注1：经过实际测试，上述做法，和 $K^{-1} p$ 结果一致。
+
+> 注2：代码中 `static_cast<cv::Mat_<double>>(camera_intrinsic)`，其实是调用了 `cv::Mat_` 的构造函数： `Mat_ (const Mat &m)`, 这个包含了拷贝或转换逻辑，是有代价的！尽量不应该这么做。
+
+2\. 三角化计算
+
+调用 OpenCV 的 `triangulatePoints`, 需要做如下步骤的准备：
+
+1. 获得用于三角化的、来自两个图片的匹配点对 $\{(p1, q1), \cdots \}$
+2. 根据相机内参 $K$, 将点对（即像素坐标）转为相机空间的归一化坐标 $\{(pn1, qn1), \cdots\}$. 特别注意，本来归一化坐标是3维的（最后 $z=1$），然而**这里只取 2 维**，即抛弃到 $z$！
+3. 准备2个映射矩阵 $T$，维度是 $3 \times 4$. $T1$ 对应第一张图片，即基准图片， 则设置其为 $\begin{bmatrix} E & \boldsymbol{0} \end{bmatrix}$; $T2$ 对应第二张图片，即运动后的图片，设置其为 $\begin{bmatrix} R & \boldsymbol{t} \end{bmatrix}$. 可以通过 `.copyTo` 来赋值。
+4. 保证点对、$T$ 都是 `float` 类型的！ 调用 `cv::triangulatePoints`, 得到的是一个 $4 \times N$ 的矩阵！
+5. 对 $4 \times N$ 转换为 3 维的点列表； $p4 \rightarrow p3$ 时，每个维度除以第 4 维，再丢掉第 4 维就是转换后的结果。
+
+关键代码如下：
+
+```c++
+// pixel -> camera, and drop last dim
+std::vector<std::vector<cv::Point2f>> match_points_camera(2);
+for (std::size_t i = 0U; i < match_points.at(0).size(); ++i) {
+    auto point1 = _pixel2camera(match_points.at(0).at(i));
+    auto point2 = _pixel2camera(match_points.at(1).at(i));
+    match_points_camera.at(0).push_back(cv::Point2f(point1.x, point1.y));
+    match_points_camera.at(1).push_back(cv::Point2f(point2.x, point2.y));
+}
+// build T1, T2
+cv::Mat T1 = (cv::Mat_<float>(3, 4) << 
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0
+            );
+cv::Mat T2(3, 4, CV_32F);
+R.copyTo(T2.colRange(0, 3));
+t.copyTo(T2.colRange(3, 4));
+// triangulate and post-process
+cv::Mat points4f{};
+cv::triangulatePoints(T1, T2, 
+    match_points_camera.at(0), match_points_camera.at(1),
+    points4f);
+// points4f shape = 4 x N
+points3.clear();
+for (int i = 0; i < points4f.cols; ++i) {
+    auto p = points4f.col(i);
+    p /= p.at<float>(3, 0);
+    auto p_ = static_cast<cv::Mat_<float>>(p);
+    points3.emplace_back(p_(0, 0), p_(1, 0), p_(2, 0));
+}
+```
+
+> 注：为何三角化后是 4 维？为什么要除以第 4 维？ 现在还不太懂……
