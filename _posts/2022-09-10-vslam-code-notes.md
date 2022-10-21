@@ -88,4 +88,9 @@ for (int i = 0; i < points4f.cols; ++i) {
 }
 ```
 
-> 注：为何三角化后是 4 维？为什么要除以第 4 维？ 现在还不太懂……
+> 注：为何三角化后是 4 维？是因为求解点时，需要用齐次坐标（[why](https://www.cnblogs.com/csyisong/archive/2008/12/09/1351372.html)）. 齐次坐标就是在尾部扩展 1 维，从而 3 维变 4 维； 最后处理第 4 维，其实就是齐次坐标变为笛卡尔坐标的处理[^1]。
+
+> 三角化是通过直接线性变换法(DLT)实现的。具体原理和 plain 实现，参考 [三角化（码—opencv)](https://blog.csdn.net/AAAA202012/article/details/117396962). 
+
+[^1]: https://www.zhihu.com/question/59595799/answer/301242100 "什么是齐次坐标系?为什么要用齐次坐标系？ - 格东西的回答 - 知乎"
+
