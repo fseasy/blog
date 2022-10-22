@@ -75,6 +75,7 @@ a.post-link {
   font-size: $small-font-size;
   color: $text-dark-grey-color;
   padding: 5px 0;
+  line-height: 1.6;
 }
 
 .post-meta .tag-bubble {
@@ -88,9 +89,15 @@ a.post-link {
   margin-left: 10px;
 }
 
-@include media-query($on-laptop) {
-  .post-meta .tag-wrapper {
-    display: none;
+.post-meta .cate-tag-group {
+  max-width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.post-meta .tag-group {
+  @include media-query($on-laptop) {
+      display: none;
   }
 }
 

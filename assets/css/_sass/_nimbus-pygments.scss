@@ -112,26 +112,21 @@ $nimbus-fringe:         #262626;
  * Code formatting
  */
 
-$code-font-family: 'Hack', monospace !default;
-$light-purple:     #eef !default;
 $lightest-purple:  #f1f1ff !default;
-$dark-purple:      #400c73 !default;
-
 $gray:             #828282 !default;
-
 $dark-gray:        darken($gray, 15%) !default;
 
 /* Applies to all code */
 pre, code {
-    // font-size: $code-font-size;
-    font-family: $code-font-family;
+    font-family: $pre-font-family;
     font-style: normal;
 
     font-feature-settings: "kern" off;
     font-kerning: none;
     font-variant: none;
 
-    background-color: $light-purple;
+    color: $text-dark-color;
+    background-color: darken($body-bg, 2%);
 
     ::selection {
         color: $nimbus-bg;
@@ -153,12 +148,11 @@ pre, code {
 code {
     padding: 2px 4px;
     border-radius: 3px;
-
-    white-space: nowrap;
 }
 
 blockquote code {
-    color: $dark-gray;
+    color: $text-dark-color;
+    background-color: darken($body-bg, 3%);
 }
 
 /* Inline code, highlight */
@@ -171,8 +165,8 @@ code.highlight {
 
 /* Block code, no highlight */
 pre {
-    border-radius: 5px;
-    margin: $spacing-unit * 0.75 $spacing-unit / 2;
+    border-radius: 3px;
+    margin: $spacing-unit * 0.75 0;
     padding: 8px 12px;
     overflow-x: auto;
     background-color: $lightest-purple;

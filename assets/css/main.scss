@@ -26,7 +26,7 @@ $pre-font-family: "Monaco", "Menlo", // apple
     $body-font-family;
 
 $base-font-size: 16px;
-$small-font-size: $base-font-size * 0.875;
+$small-font-size: 15px;
 $base-line-height: 1.6;
 
 $spacing-unit: 20px;
@@ -36,7 +36,7 @@ $text-dark-grey-color: #333;
 $text-dark-strong-color: #000;
 $header-text-color: #00537f;
 $header-text-color-dark: darken($header-text-color, 10%);
-$link-color: $header-text-color;
+$link-color: lighten($header-text-color, 5%);
 
 $decorate-color: rgba(#000, .1);
 $brand-color: #3fa7cb;

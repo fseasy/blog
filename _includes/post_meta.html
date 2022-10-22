@@ -5,7 +5,7 @@
         <span class="glyphicon glyphicon-time post-graph"></span>
         {{ doc.content | strip_html | strip_newlines | size }} 字
     {% endif %}
-    <span class="pull-right">
+    <span class="pull-right cate-tag-group">
         {% if doc.categories %}
             <span class="glyphicon glyphicon-th post-graph"></span>
 
@@ -13,7 +13,7 @@
                 <span>{{category}}</span>
             {% endfor %}
         {% endif %}
-        <span class="tag-wrapper">
+        <span class="tag-group">
             {% if doc.tags %}
                 <span class="glyphicon glyphicon-tags post-graph"></span>
                 {% for tag in doc.tags %} 
