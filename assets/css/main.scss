@@ -45,6 +45,8 @@ $body-bg: #f5fcff;
 $header-bg: #e1f5ff;
 $footer-bg: $header-bg;
 
+$font-dir: "/assets/site/font";
+
 $on-palm: 600px;
 $on-laptop: 992px;
 $screen-md-min: 992px; // as bootsrap
@@ -71,5 +73,6 @@ $screen-md-min: 992px; // as bootsrap
     // for TOC style
     "toc",
     // code highlight
-    "nimbus-pygments"
+    "nimbus-pygments",
+    "webfont"
     ;

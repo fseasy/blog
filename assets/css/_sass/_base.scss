@@ -82,17 +82,9 @@ strong {
 }
 
 a {
-    // color: $link-color;
-    color: $text-dark-color;
-    border-bottom: 2px solid $link-color;
-    text-decoration: none;
-    line-height: 1;
+    color: $link-color;
 }
 
-a:hover {
-    transition: box-shadow .2s linear;
-    box-shadow: inset 0 -10px $link-color;
-}
 
 blockquote {
     font-size: $base-font-size;
@@ -112,7 +104,8 @@ blockquote:first-child {
 
 blockquote:first-child::before {
     content: open-quote;
-    font-family: "Open Sans", sans-serif;
+    font-family: "webfont", "Open Sans", sans-serif;
+    color: $text-dark-grey-color;
     line-height: .1em;
     position: absolute;
     left: -.5em;
@@ -122,7 +115,8 @@ blockquote:first-child::before {
 
 blockquote:first-child::after {
     content: close-quote;
-    font-family: "Open Sans", sans-serif;
+    font-family: "webfont", "Open Sans", sans-serif;
+    color: $text-dark-grey-color;
     line-height: .1em;
     position: absolute;
     right: -.5em;

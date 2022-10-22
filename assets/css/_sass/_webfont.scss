@@ -1,0 +1,17 @@
+// define here is most suitable. because following may use this.
+@font-face {
+    font-family: 'webfont';
+    font-display: swap;
+    src: url($font-dir + '/webfont.eot'); /* IE9 */
+    src: url($font-dir + '/webfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url($font-dir + '/webfont.woff2') format('woff2'),
+    url($font-dir + '/webfont.woff') format('woff'), /* chrome、firefox */
+    url($font-dir + '/webfont.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url($font-dir + '/webfont.svg#webfont') format('svg'); /* iOS 4.1- */
+}
+
+.web-font {
+    font-family: "webfont" !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
