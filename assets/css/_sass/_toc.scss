@@ -58,14 +58,14 @@
   padding: 4px 0px;
   font-size: $base-font-size;
   font-weight: 500;
-  color: #767676;
+  color: $text-dark-more-grey-color;
 }
 
 .nav-list .nav > li > a:hover,
 .nav-list .nav > li > a:focus {
   padding-left: 0px;
-  color: #563d7c;
-  text-decoration: none;
+  color: $link-color;
+  // text-decoration: none;
   background-color: transparent;
   // border-left: 1px solid #563d7c;
 }
@@ -75,7 +75,7 @@
 .nav-list .nav > .active:focus > a {
   padding-left: 0px;
   font-weight: bold;
-  color: #563d7c;
+  color: $link-color;
   background-color: transparent;
   // border-left: 2px solid #563d7c;
 }
@@ -106,16 +106,16 @@
 
 /* Back to top (hidden on mobile) */
 .back-to-top {
-  display: none;
-  padding: 4px 10px;
+  padding: 4px 0;
   margin-top: 10px;
-  margin-left: 10px;
+  margin-left: 0;
   font-size: 14px;
   font-weight: 500;
   color: #999;
 }
+
 .back-to-top:hover {
-  color: #563d7c;
+  // color: #563d7c;
   text-decoration: none;
 }
 

@@ -15,9 +15,6 @@
     }
 }
 
-@use "sass:string"
-@debug string.quote($link-visited-color);
-
 .post-content {
     // no h1 in content
     h2,
@@ -78,26 +75,6 @@
         // background-color: #3fa7cb;
 
         text-align: center;
-    }
-
-    a {
-        color: $text-dark-color;
-        border-bottom: 2px solid $link-color;
-        text-decoration: none; // use border as underline, disable default.
-        line-height: 1;
-    }
-    
-    a:hover {
-        transition: box-shadow .2s linear;
-        box-shadow: inset 0 -0.4em $link-visited-color;
-        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift 1.8s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23" + str-slice("" + $link-visited-color, 2) + "' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
-        background-position: 0 100%;
-        background-size: auto 0.3em;
-        background-repeat: repeat-x;
-    }
-
-    a:visited {
-        border-bottom: 2px solid $link-visited-color;
     }
 }
 
