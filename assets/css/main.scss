@@ -36,7 +36,8 @@ $text-dark-grey-color: #333;
 $text-dark-strong-color: #000;
 $header-text-color: #00537f;
 $header-text-color-dark: darken($header-text-color, 10%);
-$link-color: lighten($header-text-color, 5%);
+$link-color: #009dc4; // ocean blue
+$link-visited-color: #78e4ff;
 
 $decorate-color: rgba(#000, .1);
 $brand-color: #3fa7cb;
