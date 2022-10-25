@@ -23,29 +23,29 @@
     h5,
     h6 {
         font-family: $header-font-family;
-        margin: 20px 0 15px 0;
+        margin: 30px 0 25px 0;
         color: $text-dark-strong-color;
     }
 
     h2 {
-        font-size: $base-font-size + 8px;
+        font-size: $base-font-size + 6px;
         font-weight: 350;
     }
 
     h3 {
-        font-size: $base-font-size + 6px;
-        font-weight: 300;
+        font-size: $base-font-size + 4px;
+        font-weight: 350;
     }
 
     h4 {
-        font-size: $base-font-size + 4px;
-        font-weight: 300;
+        font-size: $base-font-size + 2px;
+        font-weight: 350;
     }
 
     h5,
     h6 {
-        font-size: $base-font-size + 2px;
-        font-weight: 300;
+        font-size: $base-font-size;
+        font-weight: 350;
     }
 
     p+p {
