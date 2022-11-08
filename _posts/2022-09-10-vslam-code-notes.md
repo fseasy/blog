@@ -92,5 +92,11 @@ for (int i = 0; i < points4f.cols; ++i) {
 
 > 三角化是通过直接线性变换法(DLT)实现的。具体原理和 plain 实现，参考 [三角化（码—opencv)](https://blog.csdn.net/AAAA202012/article/details/117396962). 
 
+3\. PnP 3D 坐标转换
+
+PnP 建模的是 2d 坐标和另一个坐标系下的 3d 点的关系。
+
+
+
 [^1]: https://www.zhihu.com/question/59595799/answer/301242100 "什么是齐次坐标系?为什么要用齐次坐标系？ - 格东西的回答 - 知乎"
 
