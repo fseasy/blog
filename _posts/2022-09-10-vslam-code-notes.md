@@ -25,7 +25,7 @@ tags: vslam code-notes
 - 再除以缩放系数(focal)
 
 ```c++
-cv::Mat _pixel_pnt2camera_3d(const cv::Point2f& p, const cv::Mat& camera_intrinsic) {
+cv::Mat pixel_pnt2camera_3d(const cv::Point2f& p, const cv::Mat& camera_intrinsic) {
     auto K_ = static_cast<cv::Mat_<double>>(camera_intrinsic);
     double cx = K_(0, 2);
     double cy = K_(1, 2);
@@ -92,11 +92,45 @@ for (int i = 0; i < points4f.cols; ++i) {
 
 > 三角化是通过直接线性变换法(DLT)实现的。具体原理和 plain 实现，参考 [三角化（码—opencv)](https://blog.csdn.net/AAAA202012/article/details/117396962). 
 
-3\. PnP 3D 坐标转换
+3\. PnP 中 3d 坐标准备
 
-PnP 建模的是 2d 坐标和另一个坐标系下的 3d 点的关系。
+PnP 建模的是 2d 坐标和另一个坐标系下的 3d 点的关系。在高博的 PnP 示例里，实际拥有的数据如下： 
 
+1. 基准图片关键点坐标；移动后的图片关键点坐标（与基准图片关键点一一对应）
+2. 基准图片里各个像素的深度值
 
+并没有直接的 3d 坐标，需要基于图片中像素坐标和深度值来计算 3d 坐标。因为深度值是相对与相机的，所以这个 3d 点坐标是相机坐标系下的。所以，计算方式为
+
+1. 先将基准图片的像素坐标 $p$ 变换为相机坐标 $P_{norm}$（即用上面的`pixel_pnt2camera_3d`），此坐标落在相机坐标系里的归一化平面上（即 $Z = 1$）
+2. 再将深度值 $d$ 乘上归一化坐标 $P_{norm}$, 即得到用于 PnP 计算的 3d 坐标了
+
+```c++
+// 这里的片段展示了加载深度、构造2d、3d点对的过程。
+// 一定要注意二者需要一一匹配：深度值可能会错误，这时匹配的 2d 点也要抛弃
+using p3d2d_t = std::pair<std::vector<cv::Point3f>, std::vector<cv::Point2f>>;
+p3d2d_t load_depth_and_make_3d2d_points(const std::string& depth_fpath,
+    const std::vector<cv::Point2f>& points2d,
+    const cv::Mat& K,
+    const std::vector<cv::Point2f>& other_points2d) {
+    auto depth_mat = cv::imread(depth_fpath, cv::IMREAD_UNCHANGED);
+    std::vector<cv::Point3f> objects{}; // ignore .reserve for compact
+    std::vector<cv::Point2f> img_points{};
+    for (std::size_t i = 0U; i < points2d.size(); ++i) {
+        auto& p = points2d.at(i);
+        auto raw_depth = depth_mat.at<ushort>(p.y, p.x);
+        // bad
+        if (raw_depth == 0) { continue; }
+        // as slambook example. I don't know why.
+        float actual_depth = raw_depth / 5000.f;
+        // 深度，其实是相机空间下的；所以，x，y也需要转换到相机空间下！
+        cv::Point3f camera3d_norm = pixel_pnt2camera_3d(p, K);
+        cv::Point3f camera3d = camera3d_norm * actual_depth;
+        objects.push_back(std::move(camera3d));
+        img_points.push_back(other_points2d.at(i));
+    }
+    return std::make_pair(std::move(objects), std::move(img_points));
+}
+```
 
 [^1]: https://www.zhihu.com/question/59595799/answer/301242100 "什么是齐次坐标系?为什么要用齐次坐标系？ - 格东西的回答 - 知乎"
 
