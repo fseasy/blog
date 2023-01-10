@@ -90,23 +90,26 @@
 
 .post-image {
     text-align: center;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: $text-dark-grey-color;
+    margin-top: 1.3em;
+    margin-bottom: 1.3em;
+    color: $text-dark-more-grey-color;
 }
 
 .post-image img {
-    margin-bottom: 10px;
+    margin-bottom: 0.8em;
 }
 
-.post-image img+img {
+.post-image .img-float {
     border-left: solid 1px $text-dark-grey-color;
 }
 
-.post-image p+p {
+.post-image .caption-short {
+    text-align: center;
+}
+
+.post-image .caption-long {
     text-align: left;
     padding: 0 3em;
-    font-style: italic;
 }
 
 .media-func {
