@@ -33,7 +33,12 @@
         };
         
         // A var from liquid template
-        var buildTocCmd = "{{ post.toc }}";
+        {% if page.toc %}
+            {% assign toc_build_cmd = page.toc %}
+        {% else %}
+            {% assign toc_build_cmd = post.toc %}
+        {% endif %}
+        var buildTocCmd = "{{ toc_build_cmd }}";
         var CONTENT_TOC_CLASS = ".content_toc_wrapper";
         if (buildTocCmd == "enable") {
             // always make 
@@ -42,6 +47,7 @@
             }
         } else if (buildTocCmd == "disable") {
             // do nothing.
+            console.log("disable toc gen");
         } else {
             // not set, or other vlaue.
             if (makeToc(4)) {
