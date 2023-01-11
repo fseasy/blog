@@ -15,7 +15,7 @@ tags: OpenCV FAST角点检测 源码注解
     }
 </style>
 
-从 [FAST Algorithm for Corner Detection][fast_opencv_tutorial] 中看到，该算法远比高博书里讲得复杂。其甚至包含一个 ID3 的决策数来确定怎么选点来让整个检测更快速， 而且注意到其论文名字就是 *Machine learning for high-speed corner detection*. 那问题来了，既然有 ML，那肯定得有模型吧，
+从 [FAST Algorithm for Corner Detection][fast_opencv_tutorial] 中看到，该算法远比高博书里讲得复杂。其甚至包含一个 ID3 的决策树来确定怎么选点来让整个检测更快速， 而且注意到其论文名字就是 *Machine learning for high-speed corner detection*. 那问题来了，既然有 ML，那肯定得有模型吧，
 OpenCV 里是咋做的呢？ 是预先训练好的，开发者直接用？ 还是有一个 train 接口，支持在目标数据上重训呢？
 另外，我之前一直以为 FAST-12，就是只要有至少 12 个点和中心点有亮度差异就行了，但是看这个 tutoral/论文，
 看起来要求：
