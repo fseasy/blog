@@ -20,7 +20,7 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
 
-exclude: [_site, md_templates_, deployment_]
+exclude: [_site, md_templates_, deployment_, private_]
 paginate: 15
 
 #social info
