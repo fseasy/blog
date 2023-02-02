@@ -12,4 +12,7 @@ tags: vslam orb-slam2 code-reading
 
 - 描述子数组转换： `std::vector<cv::Mat> toDescriptorVector(const cv::Mat &Descriptors);`
 
-- `cv::Mat`, `g2o::Sim3` $\Rightarrow$ `g2o::SE3Quat`
+- `cv::Mat`, `g2o::Sim3` $\to$ `g2o::SE3Quat`
+- `g2o::SE3Quat`, `g2o::Sim3` $\to$ `cv::Mat`; Eigen 类型的 $T, R, t, R+t$ $\to$ `cv::Mat`
+- `cv::Mat` 和 `cv::Point3f` 到 Eigen 的 `Vector3d`; `cv::Mat` 到 Eigen `Matrix3d`
+- `cv::Mat` 到 `std::vector<float>` 的四元数
