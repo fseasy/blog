@@ -4,6 +4,7 @@
   width: 100%;
   margin: 10px 0;
   padding: 10px 25px;
+  font-family: $header-font-family;
 }
 
 .pagination .pre {
@@ -35,6 +36,7 @@
 
 .contentpanel {
   margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .contentpanel a {
@@ -79,7 +81,7 @@ ul.post-list {
 a.post-link {
   font-size: $base-font-size + 6px;
   font-family: $header-font-family;
-  font-weight: 400;
+  font-weight: 300;
   color: $text-dark-color;
   border-bottom: none;
 }
@@ -91,6 +93,8 @@ a.post-link:hover {
 .post-excerpt {
   color: $text-dark-grey-color;
   padding: 5px 0;
+  font-family: $header-font-family;
+  font-weight: 300;
 }
 
 // post-meta, in index.html and posts.

@@ -3,6 +3,17 @@
 --- 
 @charset "utf-8";
 
+$header-font-family: 
+    SFProDisplay-Regular, //针对微信小程序
+    'Helvetica Neue', Menlo, // apple english
+    consolas, // win english
+    'Ubuntu', // ubuntu english
+    'PingFang SC', // apple Chinese
+    'Microsoft YaHei', // win Chinese
+    'Source Han Serif SC','Source Han Serif CN',
+    'Noto Serif CJK SC SemiBold','Noto Serif SC',serif // ubuntu Chinese
+;
+
 $body-font-family: 
     SFProDisplay-Regular, //针对微信小程序
     'Helvetica Neue', Menlo, // apple english
@@ -12,8 +23,6 @@ $body-font-family:
     'Microsoft YaHei', // win Chinese
     'Noto Sans CJK SC', 'WenQuanYi Micro Hei' // ubuntu Chinese
 ;
-
-$header-font-family: "Ubuntu", $body-font-family; // replace Ubuntu Mono, more formal
 
 $blockquote-font-family: // use KaiTi
     STKaiti,
@@ -37,13 +46,14 @@ $text-dark-more-grey-color: #767676;
 $text-dark-strong-color: #000;
 $header-text-color: #00537f;
 $header-text-color-dark: darken($header-text-color, 10%);
-$link-color: #00bdec; 
+$link-color: #b0e4ff; 
 $link-visited-color: #c1f2fe;
+$explicit-link-color: $header-text-color; // use in explicit href, instead of text.
 
 $decorate-color: rgba(#000, .1);
 $brand-color: #3fa7cb;
 
-$body-bg: #f5fcff;
+$body-bg: #fcfeff;
 $header-bg: #e1f5ff;
 $footer-bg: $header-bg;
 
