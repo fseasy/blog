@@ -64,6 +64,14 @@ Tracking(System *pSys,
 cv::Mat GrabImageMonocular(const cv::Mat &im, const double &timestamp)
 ```
 
+抽象得很简单：
+
+1. 将输入 `im` 做必要的转换，存储到成员变量 `mIMGray`，。
+  - 调用 [cvtColor](https://docs.opencv.org/3.4/d8/d01/group__imgproc__color__conversions.html#ga397ae87e1288a81d2363b61574eb8cab) 函数，三通道用 `cv::COLOR_RGB2GRAY`, 四通道用 `cv::COLOR_RGBA2GRAY`.
+
+2. 根据当前跟踪状态，构造一个 `Frame` 并赋值给 `mCurrentFrame`. 
+3. 调用 `Track`
+4. 返回 `mCurrentFrame.mTcw.clone()`
 
 
 [1]: https://www.zhihu.com/question/458395216/answer/1876737852 "C语言 乘以0.01快？还是除以100快？ - 北极的回答 - 知乎"
