@@ -91,8 +91,36 @@ void Tracking::Track();
       - 如果匀速模型没有建立，或者当前帧距离上次重定位帧少于2帧（即是重定位之后的1帧），则用 `TrackReferenceKeyFrame` 来跟踪。
       - 否则，匀速模型是好的，帧也稳定，用 `TrackWithMotionModel` 来跟踪。如果跟踪失败，还是回退到 `TrackReferenceKeyFrame`.
     - 否则，当前跟踪不成功，调用 `Relocalization` 重定位。
+    - 记录最终跟踪是否成功
   - 否则，当前是*仅定位*模式：
-    - 
+    - 如果跟丢了，调用 `Relocalization` 重定位。
+    - 否则，若当前为非 VO 模式时(`mbVO` = false, 表示上一帧能够跟踪到足够多的地图点)
+      - 如果匀速模型不为空，则用匀速模型跟踪 `TrackWithMotionModel`; 
+      - 否则用 `TrackReferenceKeyFrame` 跟踪
+    - 否则当前为 VO 模式(`mbVO` = true, 上一帧没跟踪到足够的 MapPoints, 只跟踪到了一定的特征点)
+      - 分别用 匀速模型 `TrackWithMotionModel` 和 重定位模式 `Relocalization` 计算跟踪位姿
+      - 如果重定位失败且匀速成功，就取匀速模型的结果。且如果此时 `mbVO` 还为真，就增加当前帧观测到的MapPoints的 `found` 次数。
+        - **这里没太懂**，`mbVO` 会被 Relocalization 更改？放这里更新次数是不是也不太好？
+      - 如果重定位成功，取重定位结果，且把 `mbVO` 设为 false. (重定位成功意味这足够多的地图点被跟踪到了)
+      - 最后记录此次最终是否成功（上述两个逻辑都可能失败）
+  
+  - 将求解得到的 `参考关键帧` 赋值到当前关键帧上 
+    - `mCurrentFrame.mpReferenceKF = mpReferenceKF;`
+  
+  - 考虑是否做 `TrackLocalMap`:
+    - 如果是*建图+定位*模式：如果前面跟踪成功，则继续 TrackLocalMap
+    - 如果是*仅定位*模式，如果前面跟踪成功且为非 VO 模式，则 TrackLocalMap
+    - 记录跟踪是否成功（直接覆盖前面的跟踪结果）
+  - 更新内部状态：如果前面都跟踪成功，则设置当前内部状态为 `OK`; 否则为 `LOST`.
+    - 所以前面两个跟踪步骤的结果，是 && 的关系
+  - 更新画布（传入整个 Tracking 对象）
+    - 所以未初始化成功时，画布不会更新的
+  - 如果跟踪成功，则考虑是否**插入关键帧**：
+  - 如果跟踪失败且初始化不久(地图中关键帧数量≤5个)，就直接重置系统.
+    `mpSystem->Reset();`
+  - 再次设置 `mCurrentFrame.mpReferenceKF = mpReferenceKF`——当其为空时才设置。
+    - **注意**：前面已经设置过一次了（无条件）。这里是在 TrackLocalMap 后重新设置的，可能是前面的参考帧不一定存在，可能在 TrackLocalMap 是找到新的；但如果前面存在，则优先级比这里高
+
 
 
 
