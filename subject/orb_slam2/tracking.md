@@ -82,8 +82,12 @@ void Tracking::Track();
 `Track` 函数是单目、双目等公共调用的函数，这里只看单目的逻辑：
 
 1. 更新内部状态 `mState`：如果是当前状态是 `NO_IMAGES_YET`, 则变为 `NOT_INITIALIZED`. 其他不变。
-2. 如果当前状态是 `NOT_INITIALIZED`, 则走 **单目初始化** `MonocularInitialization` 分支；
-3. 否则，系统已经初始化。
+2. 锁住 Map 的更新，直到整个 Track 完成 
+3. 如果当前状态是 `NOT_INITIALIZED`, 
+  - 则走 **单目初始化** `MonocularInitialization` 分支；
+  - 调用 `mpFrameDrawer` 更新画布
+  - 如果当前未跟踪成功（没有收集到 2 帧，未初始化成功），则直接返回，不执行后续步骤
+4. 否则，系统已经初始化，进行 Track.
   - 如果系统为*建图+定位*模式：
     - 如果内部状态为 `OK`, 则
       - 首先检查回环检测模块对地图点的更新：`CheckReplacedInLastFrame` (与回环同步)
@@ -120,6 +124,11 @@ void Tracking::Track();
     `mpSystem->Reset();`
   - 再次设置 `mCurrentFrame.mpReferenceKF = mpReferenceKF`——当其为空时才设置。
     - **注意**：前面已经设置过一次了（无条件）。这里是在 TrackLocalMap 后重新设置的，可能是前面的参考帧不一定存在，可能在 TrackLocalMap 是找到新的；但如果前面存在，则优先级比这里高
+  - 设置 `mLastFrame` 为当前的 Frame （用了显式的拷贝构造函数）
+
+5. 保存当前帧相对关键帧的位姿：
+  - 如果当前帧绝对位姿计算成功（Track 成功），就计算相对 `mpReferenceKF` 的相对位姿到 `mlRelativeFramePoses` 并保存对应的参考帧、当前帧时间和跟踪是否 LOST 的状态
+  - 否则，跟踪没成功（或者还在初始化），往 `mlRelativeFramePoses` 等数据结构里灌上一个元素值……
 
 
 
