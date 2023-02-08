@@ -130,7 +130,7 @@ void Tracking::Track();
   - 如果当前帧绝对位姿计算成功（Track 成功），就计算相对 `mpReferenceKF` 的相对位姿到 `mlRelativeFramePoses` 并保存对应的参考帧、当前帧时间和跟踪是否 LOST 的状态
   - 否则，跟踪没成功（或者还在初始化），往 `mlRelativeFramePoses` 等数据结构里灌上一个元素值……
 
-
+#### 2.3 MonocularInitialization
 
 
 [1]: https://www.zhihu.com/question/458395216/answer/1876737852 "C语言 乘以0.01快？还是除以100快？ - 北极的回答 - 知乎"
