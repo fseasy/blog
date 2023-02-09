@@ -21,3 +21,12 @@ For Web Service.
 1. 小技巧：Markdown的blockquote, 如果想换行，可以在最原始文本一行的末尾加**2个额外空格**，就可以！([ref](https://stackoverflow.com/questions/26991997/multiple-line-quote-in-markdown))
 
 2. 代码带行号渲染，参考： [Jekyll: Syntax Highlighting And Line Numbers](https://www.bytedude.com/jekyll-syntax-highlighting-and-line-numbers/)，效果其实也不算特别好…… 或许有其他更好的方案（除了hightlight.js等只高亮的，还想有折叠、copy等博客平台常有的功能）
+
+3. 内部跳转
+   正向、反向跳转
+   
+   ```markdown
+
+   source部分<span id="j_ex_orb_s"></span>[⇂](#j_ex_orb_t) 
+   target部分<span id="j_ex_orb_t"></span>[↾](#j_ex_orb_s)
+   ```
