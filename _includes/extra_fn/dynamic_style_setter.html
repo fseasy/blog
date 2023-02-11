@@ -23,3 +23,35 @@ document.head.appendChild(s);
 })();
 
 </script>
+
+<script>
+    (function(){
+        {% include extra_fn/dependency_3rd/font-detect-cmd.js %}
+        var UBUNTU_FEATURE_FONT = "Noto Sans CJK SC";
+        
+        var fonts = [
+            UBUNTU_FEATURE_FONT
+        ];
+        var ubuntu_handler = function() {
+            document.body.style.fontWeight = 300;
+            console.log("In Ubuntu feature font '%s', set font weight -> 300", 
+                UBUNTU_FEATURE_FONT);
+        }
+
+        var fontDetector = new FontDetector();
+
+        fontDetector.detect(fonts, function(err, results) {
+            for(var i = 0; i < results.length; i++) {
+                var available = results[i],
+                    font = fonts[i];
+                if (!available) {
+                    continue;
+                }
+                switch (font) {
+                    case UBUNTU_FEATURE_FONT:
+                        ubuntu_handler();
+                }
+            }
+        });
+    })();
+</script>

@@ -3,40 +3,46 @@
 --- 
 @charset "utf-8";
 
-$header-font-family: 
-    SFProDisplay-Regular, //针对微信小程序
-    'Helvetica Neue', Menlo, // apple english
-    consolas, // win english
-    'Ubuntu', // ubuntu english
-    'PingFang SC', // apple Chinese
-    'Microsoft YaHei', // win Chinese
-    'Source Han Serif SC','Source Han Serif CN',
-    'Noto Serif CJK SC SemiBold','Noto Serif SC',serif // ubuntu Chinese
+$font-special: 
+    SFProDisplay-Regular //针对微信小程序
 ;
-
-$body-font-family: 
-    SFProDisplay-Regular, //针对微信小程序
-    'Helvetica Neue', Menlo, // apple english
+$font-en-formal:
+    'San Francisco', 'Helvetica Neue', Menlo, // apple english
     consolas, // win english
-    'Ubuntu Mono', // ubuntu english
-    'PingFang SC', // apple Chinese
+    'Ubuntu' // ubuntu english
+;
+$font-en-easy:
+    'San Francisco', 'Helvetica Neue', Menlo, // apple english
+    consolas, // win english
+    'Ubuntu Mono' // ubuntu english
+;
+$font-cn-sans:
+    'PingFang SC', // mac Chinese
     'Microsoft YaHei', // win Chinese
     'Noto Sans CJK SC', 'WenQuanYi Micro Hei' // ubuntu Chinese
 ;
 
-$blockquote-font-family: // use KaiTi
-    STKaiti,
-    KaiTi,
-    $body-font-family;
+$font-cn-serif:
+    "Songti SC", //mac
+    "SimSun", //win
+    "AR PL Sungti", "Noto Serif CJK SC" // ubuntu
+;
 
-$pre-font-family: "Monaco", "Menlo", // apple
+$font-kai:
+    "STKaiti", Kai, // mac
+    "KaiTi", // win
+    "AR PL UKai CN" // ubuntu
+;  
+
+$font-code: 
+    "Monaco", "Menlo", // apple
     "consolas", // win
-    "Ubuntu Mono", // ubuntu
-    $body-font-family;
+    "Ubuntu Mono" // ubuntu
+;
 
 $base-font-size: 18px;
 $small-font-size: 15px;
-$base-line-height: 1.6;
+$base-line-height: 1.65;
 
 $spacing-unit: 20px;
 

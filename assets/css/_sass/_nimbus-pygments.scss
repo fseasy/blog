@@ -118,7 +118,7 @@ $dark-gray:        darken($gray, 15%) !default;
 
 /* Applies to all code */
 pre, code {
-    font-family: $pre-font-family;
+    font-family: $font-code, $font-cn-sans;
     font-style: normal;
 
     font-feature-settings: "kern" off;

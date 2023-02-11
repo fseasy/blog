@@ -4,7 +4,6 @@
   width: 100%;
   margin: 10px 0;
   padding: 10px 25px;
-  font-family: $header-font-family;
 }
 
 .pagination .pre {
@@ -69,7 +68,7 @@ ul.post-list {
   >li {
     margin: 0;
     border-bottom: 1px solid $decorate-color;
-    padding: 10px 0;
+    padding: 18px 0;
 
     >h3 {
       margin: 0;
@@ -80,7 +79,6 @@ ul.post-list {
 
 a.post-link {
   font-size: $base-font-size + 6px;
-  font-family: $header-font-family;
   font-weight: 300;
   color: $text-dark-color;
   border-bottom: none;
@@ -93,7 +91,6 @@ a.post-link:hover {
 .post-excerpt {
   color: $text-dark-grey-color;
   padding: 5px 0;
-  font-family: $header-font-family;
   font-weight: 300;
 }
 

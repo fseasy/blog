@@ -1,7 +1,9 @@
 <!-- depent on JQuery -->
 {% include third_resource/jquery.html %}
 
-<script src="{% link /assets/third-party/toc/toc.js %}"></script>
+<script>
+    {% include extra_fn/dependency_3rd/toc.js %}
+</script>
 
 <script>
     $(document).ready(function () {

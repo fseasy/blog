@@ -29,7 +29,6 @@
     font-size: $base-font-size;
     color: $header-text-color-dark;
     margin-bottom: 20px;
-    font-family: $header-font-family;
 }
 
 .site-nav {
@@ -37,7 +36,6 @@
     border: none;
     color: $header-text-color;
     min-height: 32px;
-    font-family: $header-font-family;
 }
 
 .site-nav #site-navbar-collapse .site-nav-list>li>a {

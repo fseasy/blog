@@ -18,7 +18,7 @@
 }
 
 body {
-    font-family: $body-font-family;
+    font-family: $font-special, $font-en-formal, $font-cn-sans;
     font-size: $base-font-size;
     line-height: $base-line-height;
     color: $text-dark-color;
@@ -75,18 +75,18 @@ a:hover {
 
 blockquote {
     font-size: $base-font-size;
-    font-family: $blockquote-font-family;
+    font-family: $font-en-easy, $font-kai;
     background-color: darken($body-bg, 1%);
     border-left: 0.6em solid $header-bg;
     padding: 6px 5px;
 }
 
 blockquote:first-child {
-    font-family: $body-font-family;
     background-color: darken($body-bg, 2%);
     border-left: 1em solid $header-bg;
     padding:1em 1.5em 1em 1.5em;
     position: relative;
+    margin-bottom: 2em;
 }
 
 blockquote:first-child::before {
