@@ -20,7 +20,7 @@
 /* COMPONENT 1: content-top */
 
 .toc_bar {
-  font-size: $base-font-size;
+  font-size: 1em;
 }
 
 /* COMPONENT 2: side-bar nav.*/
@@ -56,7 +56,7 @@
 .nav-list .nav > li > a {
   display: block;
   padding: 4px 0px;
-  font-size: $base-font-size;
+  font-size: 1em;
   font-weight: 500;
   color: $text-dark-more-grey-color;
 }
@@ -89,7 +89,7 @@
   padding-top: 1px;
   padding-bottom: 1px;
   padding-left: 1em;
-  font-size: $small-font-size;
+  font-size: 0.7em;
   font-weight: normal;
 }
 .nav-list .nav .nav > li > a:hover,

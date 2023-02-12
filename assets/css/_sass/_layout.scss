@@ -78,7 +78,7 @@ ul.post-list {
 }
 
 a.post-link {
-  font-size: $base-font-size + 6px;
+  font-size: 1.4rem;
   font-weight: 300;
   color: $text-dark-color;
   border-bottom: none;
@@ -97,7 +97,7 @@ a.post-link:hover {
 // post-meta, in index.html and posts.
 
 .post-meta {
-  font-size: $small-font-size;
+  font-size: 0.8em;
   color: $text-dark-grey-color;
   padding: 5px 0;
   line-height: 1.6;
@@ -121,13 +121,13 @@ a.post-link:hover {
 }
 
 .post-meta .tag-group {
-  @include media-query($on-laptop) {
+  @include media-query($on-phone) {
       display: none;
   }
 }
 
 .post-graph {
-  font-size: $small-font-size * 0.9;
+  font-size: 0.7em;
   margin-left: 20px;
   margin-right: 4px;
 }
@@ -162,8 +162,15 @@ a.post-link:hover {
   ul.list-group {
     margin-left: 0;
   }
+
+  .badge {
+    background-color: $header-bg;
+    color: $header-text-color
+  }
 }
 
 #listcontent {
   padding-left: 20px
 }
+
+

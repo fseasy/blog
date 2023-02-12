@@ -1,8 +1,7 @@
-<!-- We may need dynamic set some style -->
+<!-- dynamic set some style -->
 
 <script>
-
-// set ol margin-left to align paragraph (because ol>li' list-style-position = outsider
+// SET ol>li margin-left to align paragraph (because ol>li' list-style-position = outsider
 // => marker not aligned. but we shouldn't set it to insider, because we need li 
 // content align)
 (function(){
@@ -13,12 +12,21 @@ if (li === null) {
     return;
 }
 const widthStr = window.getComputedStyle(li, "::marker")["width"];
-console.log("This browser render ol marker width = %s", widthStr);
+const markerWidth = parseInt(widthStr);
+const REASONABLE_MARKER_MAX_WIDTH = 60;
 
-var s = document.createElement("STYLE");
-s.setAttribute("type", "text/css");
-s.innerHTML = `ol { margin-left: ${widthStr}; }`;
-document.head.appendChild(s);
+if (markerWidth <= REASONABLE_MARKER_MAX_WIDTH) {
+    var s = document.createElement("STYLE");
+    s.setAttribute("type", "text/css");
+    s.innerHTML = `ol { margin-left: ${widthStr}; }`;
+    document.head.appendChild(s);
+    console.log("This browser render li marker width = %s, "
+        + "set it's 'margin-left' attr to align.", widthStr);
+} else {
+    console.log("This browser render li marker width = %s, "
+        + "it seem invalid, do nothing.", widthStr);
+}
+
 
 })();
 
@@ -33,7 +41,13 @@ document.head.appendChild(s);
             UBUNTU_FEATURE_FONT
         ];
         var ubuntu_handler = function() {
-            document.body.style.fontWeight = 300;
+            var nodes = document.getElementsByClassName('post-content');
+            if (!nodes) {
+                return;
+            }
+            var content = nodes[0];
+            content.style.fontWeight = 300;
+
             console.log("In Ubuntu feature font '%s', set font weight -> 300", 
                 UBUNTU_FEATURE_FONT);
         }

@@ -5,14 +5,10 @@
 }
 
 .post-title {
-    font-size: $base-font-size + 12px;
+    font-size: 1.8rem;
     font-weight: 400;
     margin: 35px 0 40px 0;
     text-align: center;
-
-    @include media-query($on-laptop) {
-        font-size: $small-font-size + 10px;
-    }
 }
 
 .post-content {
@@ -27,23 +23,23 @@
     }
 
     h2 {
-        font-size: $base-font-size + 6px;
+        font-size: 1.3rem;
         font-weight: 350;
     }
 
     h3 {
-        font-size: $base-font-size + 4px;
+        font-size: 1.2rem;
         font-weight: 350;
     }
 
     h4 {
-        font-size: $base-font-size + 2px;
+        font-size: 1.1rem;
         font-weight: 350;
     }
 
     h5,
     h6 {
-        font-size: $base-font-size;
+        font-size: 1em;
         font-weight: 350;
     }
 
@@ -78,36 +74,42 @@
 }
 
 .footnotes {
-    font-size: $small-font-size;
-    padding: 1em 1em 1em 0em;
-    margin-top: 4em;
+    font-size: 0.8rem;
+    padding: 1rem 1rem 0.5rem 1rem;
+    margin-top: 4rem;
     position: relative;
     background-color: darken($body-bg, 2%);
 }
 
 .footnotes::before {
-    content: "Notes";
+    content: "Footnotes";
     font-family: "webfont", "Open Sans", sans-serif;
     color: $header-bg;
-    line-height: .1em;
     position: absolute;
-    top: -0.2em;
-    font-size: 2.2em;
+    line-height: .1rem;
+    top: -0.2rem;
+    left: -0.1rem;
+    font-size: 2.2rem;
 }
 
 .footnotes a {
     color: $text-dark-grey-color;
 }
 
+.footnotes p {
+    font-size: 0.8rem;
+    text-align: justify;
+}
+
 .post-image {
     text-align: center;
-    margin-top: 1.3em;
-    margin-bottom: 1.3em;
+    margin-top: 1.3rem;
+    margin-bottom: 1.3rem;
     color: $text-dark-more-grey-color;
 }
 
 .post-image img {
-    margin-bottom: 0.8em;
+    margin-bottom: 0.8rem;
 }
 
 .post-image .img-float {

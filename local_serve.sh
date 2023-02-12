@@ -7,4 +7,4 @@ else
 fi
 
 echo "PLEASE clone blog-extra-file to root and rename to bef"
-bundle exec jekyll serve -w "$inc_args" --host 127.0.0.1
+bundle exec jekyll serve -w "$inc_args" --host 0.0.0.0

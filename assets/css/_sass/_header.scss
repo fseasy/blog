@@ -18,7 +18,7 @@
 .site-title a:hover,
 .site-title a:visited {
     float: none;
-    font-size: $base-font-size + 16px;
+    font-size: 2rem;
     color: $header-text-color;
     text-decoration: none;
     margin: 0;
@@ -26,7 +26,6 @@
 }
 
 .site-description {
-    font-size: $base-font-size;
     color: $header-text-color-dark;
     margin-bottom: 20px;
 }
@@ -52,7 +51,10 @@
     color: $header-text-color-dark;
 }
 
-@include media-query($on-laptop) {
+@include media-query-range("0px", $on-phone) {
+    .site-nav {
+        margin-top: -3.6rem; // let the nav horizon to site title
+    }
     .navbar-nav {
         margin-left: 10px;
     }
@@ -61,6 +63,15 @@
     }
     .site-nav #site-navbar-collapse .site-nav-list>li {
         margin-left: 5px;
+    }
+    .navbar-default .navbar-toggle, 
+    .navbar-default .navbar-toggle:hover,
+    .navbar-default .navbar-toggle:focus {
+        background: none;
+        border: none;
+    }
+    .navbar-default .navbar-toggle .icon-bar {
+        background-color: $header-text-color;
     }
 }
 

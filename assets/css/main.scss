@@ -40,10 +40,6 @@ $font-code:
     "Ubuntu Mono" // ubuntu
 ;
 
-$base-font-size: 18px;
-$small-font-size: 15px;
-$base-line-height: 1.65;
-
 $spacing-unit: 20px;
 
 $text-dark-color: #111;
@@ -65,19 +61,27 @@ $footer-bg: $header-bg;
 
 $font-dir: "/assets/site/font";
 
-$on-palm: 600px;
-$on-laptop: 992px;
-$screen-md-min: 992px; // as bootsrap
+// see https://v3.bootcss.com/css/#overview
+$screen-sm-min: 768px;
+$screen-md-min: 992px; 
+$screen-lg-min: 1200px;
 
-// Using media queries with like this:
-// @include media-query($palm) {
-//     .wrapper {
-//         padding-right: $spacing-unit / 2;
-//         padding-left: $spacing-unit / 2;
-//     }
-// }
-@mixin media-query($device) {
-    @media screen and (max-width: $device) {
+$on-phone: $screen-sm-min; 
+$on-desktop: $screen-md-min;
+$on-large-desktop: $screen-lg-min;
+
+$phone-font-size: 15px;
+$desktop-font-size: 18px;
+$base-line-height: 1.65;
+
+@mixin media-query($min_width) {
+    @media screen and (min-width: $min_width) {
+        @content;
+    }
+}
+
+@mixin media-query-range($min_width, $max_width) {
+    @media screen and (min-width: $min_width) and (max-width: $max_width) {
         @content;
     }
 }

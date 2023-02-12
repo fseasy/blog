@@ -1,10 +1,21 @@
-// set container size
+// Media-Query base setting
+// - desktop, as default (no max). ORDER is important. 
+// - any meet contion in the later will overwrite the previous. 
+// - so minimum device should write latter because `media-query` is condition on 
+// - max-width
+html {
+    font-size: $phone-font-size;
+}
 
-@media (min-width: 1200px) {
+@include media-query($on-desktop) {
+    html {
+        font-size: $desktop-font-size;
+    }
     .container {
-        width: 970px;
+        width: $on-desktop;
     }
 }
+
 
 // GLOBAL
 
@@ -18,17 +29,19 @@
 }
 
 body {
+    font-size: 1rem;
     font-family: $font-special, $font-en-formal, $font-cn-sans;
-    font-size: $base-font-size;
     line-height: $base-line-height;
     color: $text-dark-color;
     background-color: $body-bg;
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    word-break: break-all;
 }
 
 ol {
+    font-size: 1rem;
     // 非常关键！
     // list-style-position 必须是 outside, 这样才能保证list换行后的文本是在 list-item 之外的；
     // 具体 margin 多少，需要根据字体来判定…… 这需要JS来支持。
@@ -36,11 +49,13 @@ ol {
 }
 
 ul {
+    font-size: 1rem;
     margin-left: 1em;
+    list-style-type: square;
 }
 
-ul {
-    list-style-type: square;
+li {
+    margin: 3px 0;
 }
 
 li>p {
@@ -48,11 +63,8 @@ li>p {
     margin: 5px 0;
 }
 
-li {
-    margin: 3px 0;
-}
-
 p {
+    font-size: 1rem;
     text-align: justify;
 }
 
@@ -74,7 +86,7 @@ a:hover {
 
 
 blockquote {
-    font-size: $base-font-size;
+    font-size: 1rem;
     font-family: $font-en-easy, $font-kai;
     background-color: darken($body-bg, 1%);
     border-left: 0.6em solid $header-bg;
@@ -106,13 +118,17 @@ blockquote:first-child::after {
     color: $text-dark-grey-color;
     line-height: .1em;
     position: absolute;
-    right: -.5em;
+    right: -.2em;
     bottom: 0;
     font-size: 2.2em;
 }
 
 blockquote+blockquote {
     margin-top: - $spacing-unit / 4;
+}
+
+sub, sup {
+    font-size: 85%;
 }
 
 /**
