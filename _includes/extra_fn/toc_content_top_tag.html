@@ -1,7 +1,5 @@
+<!-- DON't USE '.hidden' class of Bootstrap, because it has the highest priority, and `show` not work -->
 <!-- hidden at init. only when toc not disable and toc.js got result the toc-content will show -->
-<div class="content_toc_wrapper" style="display: none;">
-    <div class="toc_bar">目录 
-        <span class="glyphicon glyphicon-new-window toc_change text-muted hidden-xs hidden-sm" title="移动目录到侧边栏"></span> 
-    </div>
+<div id="content-toc-container" style="display: none;">
     <div id="toc-content"></div>
 </div>

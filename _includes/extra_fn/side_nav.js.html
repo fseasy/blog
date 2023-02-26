@@ -1,0 +1,37 @@
+{% include third_resource/jquery.html %}
+
+<script>
+$(document).ready(function () {
+    // make side-nav container sticky (affix) and spy scrolling.
+    (function ($) {
+        var side_nav = $(".side-nav");
+        var main_content = $(".contentpanel"),
+            main_content_top = main_content.offset().top,
+            main_content_margin_bottom =
+                parseInt(main_content.css("margin-bottom"), 0);
+
+        // set affix style
+        side_nav.affix({
+            offset: {
+                top: function () {
+                    var pre_change_len = 10;
+                    return main_content_top - pre_change_len;
+                },
+                bottom: function () {
+                    var main_content_bottom = main_content_top +
+                        main_content.outerHeight(true) -
+                        main_content_margin_bottom;
+                    var bottom_offset = $(document).height() - main_content_bottom;
+                    return bottom_offset;
+                }
+            },
+            target: $(window)
+        });
+
+        // scroll-listening: set expand according to scroll
+        $('body').scrollspy({ target: ".side-nav" });
+    })(window.jQuery)
+});
+</script>
+
+{% include extra_fn/back2top_js.html %}

@@ -1,5 +1,23 @@
 // Posts
 
+#toc-content {
+    background: darken($body-bg, 2%); // same as blockquote:first-child
+    border-top: 4px solid $header-bg;
+    padding-top: 0.5rem;
+    padding-bottom: 0.3rem;
+    position: relative;
+}
+
+#toc-content::before {
+    content: "目录";
+    display: block;
+    position: absolute;
+    bottom: 0.3rem;
+    right: 1rem;
+    font-size: 2.5rem;
+    color: $header-bg;
+}
+
 .post-header {
     margin-bottom: $spacing-unit;
 }

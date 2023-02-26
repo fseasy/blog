@@ -3,6 +3,9 @@
     padding: 45px 0 35px 0;
     margin: 0;
     height: 200px;
+    @include media-query-range("0px", $on-phone) {
+        height: auto;
+    }
 }
 
 .site-page-footer {
@@ -72,6 +75,9 @@
     }
     .navbar-default .navbar-toggle .icon-bar {
         background-color: $header-text-color;
+    }
+    .navbar-default .navbar-collapse {
+        border: none;
     }
 }
 

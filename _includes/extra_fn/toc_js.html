@@ -1,125 +1,138 @@
-<!-- depent on JQuery -->
+<!-- depend on JQuery -->
 {% include third_resource/jquery.html %}
 
+<!-- include toc.js and utils.js -->
 <script>
     {% include extra_fn/dependency_3rd/toc.js %}
+    {% include extra_fn/dependency_3rd/utils.js%}
 </script>
 
 <script>
     $(document).ready(function () {
-        var makeToc = function (minHeaderNum) {
-            // init the TOC
-            var navTocMakeStatus = $('#toc-nav').toc({
-                listType: "ul",
-                classes: {
-                    list: "nav",
-                    item: ""
-                },
-                headers: 'h1, h2, h3, h4',
-                minimumHeaders: minHeaderNum,
-                showEffect: 'none'
-            });
-
-            var contentTocMakeStatus = $('#toc-content').toc({
-                listType: "ul",
-                classes: {
-                    list: "",
-                    item: ""
-                },
-                headers: 'h1, h2, h3',
-                minimumHeaders: minHeaderNum,
-                showEffect: 'none'
-            });
-
-            return navTocMakeStatus && contentTocMakeStatus;
-        };
-        
-        // A var from liquid template
-        {% if page.toc %}
-            {% assign toc_build_cmd = page.toc %}
-        {% else %}
-            {% assign toc_build_cmd = post.toc %}
-        {% endif %}
-        var buildTocCmd = "{{ toc_build_cmd }}";
-        var CONTENT_TOC_CLASS = ".content_toc_wrapper";
-        if (buildTocCmd == "enable") {
-            // always make 
-            if (makeToc(0)) {
-                $(CONTENT_TOC_CLASS).show();
-            }
-        } else if (buildTocCmd == "disable") {
-            // do nothing.
-            console.log("disable toc gen");
-        } else {
-            // not set, or other vlaue.
-            if (makeToc(4)) {
-                $(CONTENT_TOC_CLASS).show();
-            }
-        }
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        // make side-nav container sticky (affix) and spy scrolling.
-        (function ($) {
-            var side_nav = $(".side-nav");
-            var main_content = $(".contentpanel"),
-                main_content_top = main_content.offset().top,
-                main_content_margin_bottom =
-                    parseInt(main_content.css("margin-bottom"), 0);
-
-            // set affix style
-            side_nav.affix({
-                offset: {
-                    top: function () {
-                        var pre_change_len = 10;
-                        return main_content_top - pre_change_len;
+        var buildTocIfNecessary = function() {
+            // A var from liquid template
+            {% if page.toc %}
+                {% assign toc_build_cmd = page.toc %}
+            {% else %}
+                {% assign toc_build_cmd = post.toc %}
+            {% endif %}
+            var buildTocCmd = "{{ toc_build_cmd }}",
+                buildSuccess = false;
+            // Make Toc by third-party toc.js
+            var makeTocDom = function (minHeaderNum) {
+                var navTocMakeStatus = $('#toc-nav').toc({
+                    listType: "ul",
+                    classes: {
+                        list: "nav",
+                        item: ""
                     },
-                    bottom: function () {
-                        var main_content_bottom = main_content_top +
-                            main_content.outerHeight(true) -
-                            main_content_margin_bottom;
-                        var bottom_offset = $(document).height() - main_content_bottom;
-                        return bottom_offset;
-                    }
-                },
-                target: $(window)
-            });
+                    headers: 'h1, h2, h3, h4',
+                    minimumHeaders: minHeaderNum,
+                    showEffect: 'none'
+                });
 
-            // scroll-listening: set expand according to scroll
-            $('body').scrollspy({ target: ".side-nav" });
-        })(window.jQuery)
-    });
-</script>
+                var contentTocMakeStatus = $('#toc-content').toc({
+                    listType: "ul",
+                    classes: {
+                        list: "",
+                        item: ""
+                    },
+                    headers: 'h1, h2, h3',
+                    minimumHeaders: minHeaderNum,
+                    showEffect: 'none'
+                });
 
-<script>
-    $(document).ready(function () {
-        // switch content TOC & side-nav TOC
-        var SWITCH_CLASS = ".toc_change";
-        var SIDE_NAV_CLASS = ".side-nav",
-            CONTENT_TOC_CLASS = ".content_toc_wrapper";
-        var ORIGIN_CONTENT_WIDE_CLASS = "col-md-10",
-            NEW_CONTENT_WIDE_CLASS = "col-md-9",
-            ORIGIN_SIDE_WIDE_CLASS = "col-md-1",
-            NEW_SIDE_WIDE_CLASS = "col-md-2";
-        var content_panel = $(".contentpanel"),
-            right_side = $(".right-side");
+                return navTocMakeStatus && contentTocMakeStatus;
+            };
 
-        $(SWITCH_CLASS).click(function () {
-            if ($(SIDE_NAV_CLASS).is(":hidden")) {
-                // close the content-toc & show the nav
-                // smaller the content-panel and extend the side
-                $(CONTENT_TOC_CLASS).hide();
-                $(SIDE_NAV_CLASS).show();
-                content_panel.addClass(NEW_CONTENT_WIDE_CLASS).removeClass(ORIGIN_CONTENT_WIDE_CLASS);
-                right_side.addClass(NEW_SIDE_WIDE_CLASS).removeClass(ORIGIN_SIDE_WIDE_CLASS);
+            if (buildTocCmd == "enable") {
+                // always make toc
+                buildSuccess = makeTocDom(0);
+            } else if (buildTocCmd == "disable") {
+                // don't make toc.
+                console.log("disable toc gen");
             } else {
-                $(SIDE_NAV_CLASS).hide();
-                $(CONTENT_TOC_CLASS).show();
-                content_panel.addClass(ORIGIN_CONTENT_WIDE_CLASS).removeClass(NEW_CONTENT_WIDE_CLASS);
-                right_side.addClass(ORIGIN_SIDE_WIDE_CLASS).removeClass(NEW_SIDE_WIDE_CLASS);
+                // not set, or other value => make Toc according to page content.
+                buildSuccess = makeTocDom(4);
             }
-        });
+            return buildSuccess;
+        };
+
+        var showToc = function() {
+
+            var splitContentToc2Columns = function() {
+                // 逻辑： 只在顶层的 li 上划分为 2 列；
+                //      需要找到在顶层的哪个 li 上划分，因为我们想要平衡 2 边，所以在最底层的li上，
+                //      看平分底层 li 的时候，对应的顶层 li 在哪里，就将其设为划分点
+                //
+                const tocContent = $("#toc-content"),
+                    tocTopUl = tocContent.children("ul"),
+                    topLi = tocTopUl.children("li");
+                if (topLi.length <= 1) { return; }
+                var detailLi2TopLi = [];
+                for (var i = 0; i < topLi.length; ++i) {
+                    var curLi = topLi.eq(i),
+                        allLi = curLi.find("li");
+                    detailLi2TopLi.push(i); // 需要将顶层 li 也放入。否则不对（顶层li也算一项）
+                    for (var _i = 0; _i < allLi.length; ++_i) {
+                        detailLi2TopLi.push(i);
+                    }
+                }
+                var detailLiSz = detailLi2TopLi.length,
+                    mediumIdx = Math.floor(detailLiSz / 2), // need Math.floor, or may get float
+                    splitIdx = detailLi2TopLi[mediumIdx];
+                if (splitIdx + 1 == topLi.length) { splitIdx -= 1; }
+                var col1Ul = tocTopUl.clone(),
+                    col2Ul = {};
+                col1Ul.empty();
+                col2Ul = col1Ul.clone();
+                for (var i = 0; i <= splitIdx; ++i) {
+                    // in this way, the append will do `move`, instead of clone.
+                    // so topLi.at(i) will be removed in original container.
+                    // see http://api.jquery.com/append/
+                    col1Ul.append(topLi.eq(i));
+                }
+                for (var i = splitIdx + 1; i < topLi.length; ++i) {
+                    col2Ul.append(topLi.eq(i));
+                }
+                tocTopUl.remove();
+                tocContent.append(
+                    $("<div/>", {"class": "row"}).append([
+                        $("<div/>", {"class": "col-xs-12 col-md-5 col-md-offset-1"}).append(col1Ul),
+                        $("<div/>", {"class": "col-xs-12 col-md-5 col-md-offset-0"}).append(col2Ul)
+                    ])
+                );
+            }
+
+            splitContentToc2Columns();
+            
+            const contentTocContainer = $("#content-toc-container"),
+                sideNavTocContainer = $("#side-nav-toc-container");
+            // content-toc always show.
+            contentTocContainer.show();
+            
+            const SIDE_NAV_TOC_ENABLE_MIN_WIDTH = 1300,
+                SIDE_NAV_TOC_SHOW_UP_OFFSET = contentTocContainer.offset().top 
+                                              + contentTocContainer.outerHeight();
+            var showNavToc = function() {
+                if ($(window).width() >= SIDE_NAV_TOC_ENABLE_MIN_WIDTH
+                    && $(window).scrollTop() >= SIDE_NAV_TOC_SHOW_UP_OFFSET) {
+                    sideNavTocContainer.show();
+                } else {
+                    sideNavTocContainer.hide();
+                }
+            };
+            $(window).resize(function(){
+                // add a delay => when resize finished, we adjust the toc show.
+                waitForFinalEvent(showNavToc, 500, "ShowTocResize");
+            });
+            $(window).scroll(function() {
+                waitForFinalEvent(showNavToc, 100, "ShowTocScroll");
+            });
+        }
+
+        if (buildTocIfNecessary()) {
+            showToc();
+        }
     });
 </script>

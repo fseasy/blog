@@ -121,8 +121,9 @@ a.post-link:hover {
 }
 
 .post-meta .tag-group {
-  @include media-query($on-phone) {
-      display: none;
+  display: none;
+  @include media-query($on-desktop) {
+    display: inline;
   }
 }
 

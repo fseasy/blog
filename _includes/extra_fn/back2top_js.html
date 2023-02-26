@@ -1,0 +1,50 @@
+{% include third_resource/jquery.html %}
+<script>
+$(document).ready(function () {
+    // back-to-top button
+    // position is `absolute` based on side-nav
+    // 但我们需要限制按钮在全局文档的位置，同时减少不必要的展示： 
+    // 1. 不能太靠下面，超过了文档的高度（不超过footer）；
+    // 2. 不能在文档无需滚动的时候出现
+    //    - footer < 1000 时文档太短，无需按钮
+    //    - side-nav 离 top 少于 500 时，无需按钮
+    // 位置计算：
+    // - 距离视口底部： 50px; 不能超过 footer 
+    // - 转换为 文档层面绝对高度比较简单 
+    //   > view_bottom 视口底部文档层面绝对高度 = 滚动高度 + 窗口高度
+    //     footer 高度 = footer.top
+    //     height_on_doc = min(view_bottom - 50, footer.top)
+    //     相对side-nav的高度： top_on_nav = hight_on_doc - side_nav.top
+    // 为什么不用 sticky? 因为要想sticy，必须把父元素至少设置为 right-side, 但可惜 right-side 的高度并非
+    //          与container 等高，甚至是 0，所以无效
+    // 如果设置为 container 的子元素， 又发现 left/right 无效。真的服了，看网上都说是 parent overflow的问题
+    // 但是检查半天也没有问题啊，崩溃…… 估计是哪个元素设置了 overflow, 但是的确没查出来
+    const side_nav = $(".side-nav"),
+        footer = $(".site-footer"),
+        back2top = $("#back-to-top");
+    const FOOTER_TOP_LOWERBOUND = 1000,
+        SIDE_NAV_TOP_LOWERBOUND = 500,
+        MARGIN_BOTTOM = 100;
+    if (footer.offset().top < FOOTER_TOP_LOWERBOUND) {
+        console.debug("page is short, no need back-to-top");
+        back2top.css("display", "none");
+        return;
+    }
+    var adjust = function() {
+        const nav_offset_top = side_nav.offset().top,
+            footer_top = footer.offset().top;
+        if (nav_offset_top < SIDE_NAV_TOP_LOWERBOUND) {
+            back2top.css("display", "none");
+            return;
+        }
+        var view_bottom = $(document).scrollTop() + $(window).height();
+        var top2doc = Math.min(view_bottom - MARGIN_BOTTOM, footer_top);
+        var top2nav = top2doc - nav_offset_top;
+        back2top.css({"top": top2nav + "px", "display": "block"});
+    };
+    $(window).scroll(function(){
+        adjust();
+    });
+});
+
+</script>

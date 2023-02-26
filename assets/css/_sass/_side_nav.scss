@@ -20,25 +20,28 @@
 /* COMPONENT 1: content-top */
 
 .toc_bar {
-  font-size: 1em;
+  font-size: 1rem;
 }
 
 /* COMPONENT 2: side-bar nav.*/
 
 .nav_toc_bar {
-  font-size: 18px;
+  font-size: 1rem;
+  white-space: nowrap;
+  color: $text-dark-more-grey-color;
 }
 
-/* Show and affix the side nav when space allows it */
-@media (min-width: 992px) {
-  /* Widen the fixed sidebar */
-  .side-nav.affix {
-    position: fixed;
-    top: 10px;
-  }
-  .side-nav.affix-bottom {
-    position: absolute;
-  }
+.side-nav {
+  position: relative;
+}
+
+.side-nav.affix {
+  position: fixed;
+  top: 10px;
+}
+
+.side-nav.affix-bottom {
+  position: absolute;
 }
 
 /* First level of nav */
@@ -46,6 +49,10 @@
   margin-top: 20px;
   margin-bottom: 20px;
   margin-left: 10px;
+}
+
+.nav-list #toc-nav {
+  white-space: nowrap
 }
 
 .nav-list #toc-nav ul {
@@ -56,18 +63,15 @@
 .nav-list .nav > li > a {
   display: block;
   padding: 4px 0px;
-  font-size: 1em;
-  font-weight: 500;
+  font-size: 1rem;
   color: $text-dark-more-grey-color;
 }
 
 .nav-list .nav > li > a:hover,
 .nav-list .nav > li > a:focus {
   padding-left: 0px;
-  color: $link-color;
-  // text-decoration: none;
+  color: $text-dark-color;
   background-color: transparent;
-  // border-left: 1px solid #563d7c;
 }
 
 .nav-list .nav > .active > a,
@@ -75,9 +79,8 @@
 .nav-list .nav > .active:focus > a {
   padding-left: 0px;
   font-weight: bold;
-  color: $link-color;
+  color: $text-dark-color;
   background-color: transparent;
-  // border-left: 2px solid #563d7c;
 }
 
 /* Nav: second level (shown on .active) */
@@ -88,40 +91,41 @@
 .nav-list .nav .nav > li > a {
   padding-top: 1px;
   padding-bottom: 1px;
-  padding-left: 1em;
-  font-size: 0.7em;
+  padding-left: 0.1rem;
+  font-size: 0.7rem;
   font-weight: normal;
 }
 .nav-list .nav .nav > li > a:hover,
 .nav-list .nav .nav > li > a:focus {
-  padding-left: 1em;
+  padding-left: 0.1rem;
 }
 .nav-list .nav .nav > .active > a,
 .nav-list .nav .nav > .active:hover > a,
 .nav-list .nav .nav > .active:focus > a {
-  padding-left: 1em;
-  font-weight: 500;
   text-decoration: underline;
 }
 
+.nav-list .nav > .active > ul {
+  display: block;
+}
+
 /* Back to top (hidden on mobile) */
-.back-to-top {
-  padding: 4px 0;
-  margin-top: 10px;
-  margin-left: 0;
-  font-size: 14px;
-  font-weight: 500;
-  color: #999;
+#back-to-top {
+  font-size: 1.3rem;
+  position: absolute;
+  display: none;
 }
 
-.back-to-top:hover {
-  // color: #563d7c;
+#back-to-top a{
+  color: $text-dark-more-grey-color;
+  padding: 6px;
+  display: block;
+  margin-left: 1rem;
+}
+
+#back-to-top a:hover {
   text-decoration: none;
+  color: $text-dark-color;
+  transition: color .5s ease-out;
 }
 
-/* Show and affix the side nav when space allows it */
-@media (min-width: 992px) {
-  .nav-list .nav > .active > ul {
-    display: block;
-  }
-}
