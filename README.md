@@ -26,7 +26,9 @@ For Web Service.
    正向、反向跳转
    
    ```markdown
-
-   source部分<span id="j_ex_orb_s"></span>[⇂](#j_ex_orb_t) 
-   target部分<span id="j_ex_orb_t"></span>[↾](#j_ex_orb_s)
+   source(from)部分: `<span id="j_ex_orb_s"></span>[⇂](#j_ex_orb_t)`
+   target(to)部分: `<span id="j_ex_orb_t"></span>[↾](#j_ex_orb_s)`
    ```
+
+   原理比较简单：通过 span 的 id 创建锚点；再通过 Markdown 的链接实现页面内跳转。
+   写这里方便复制，注意修改 id.
