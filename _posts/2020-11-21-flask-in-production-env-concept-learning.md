@@ -4,7 +4,6 @@ title: Flask 生产环境部署 概念学习
 date: 2020-11-21
 categories: 技术 
 tags: Flask
-toc: disable
 ---
 > 前不久看到同事在周报里说的用 Gunicorn 让 Flask 应用效率更高，于是看了下 Flask 的生产环境部署，发现非常多的“新”名词，于是大概了解了一下。
 

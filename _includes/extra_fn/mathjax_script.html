@@ -2,9 +2,10 @@
 <script>
 (function () {
     {% comment %}
-        if one post explicitly define `need_mathjax` in head , then we should load it.
+        if one post explicitly define `mathjax` param and `mathjax=force_enable`,
+        then we should load it.
     {% endcomment %}
-    {% if page.need_mathjax %}
+    {% if page.mathjax == "force_enable" %}
         var explicitNeedMathjax = true;
     {% else %}
         var explicitNeedMathjax = false;

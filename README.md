@@ -16,13 +16,24 @@ For Web Service.
 
 1. 现在依赖 `blog-extra-file` 这个仓库。它存储博客额外的、非关键文件(如非核心图片等)。服务器部署会通过 Nginx 自动设置位置（通过 `alias`），其访问路径为 `/bef/$PATH`. 本地部署 Jekyll server 不能设置路径映射，只能尝试把文件夹放到 _site 下。尝试了很久， jekyll 始终不能将符号文件自动拷贝到 `_site`（ `safe=false` 不行），所以就只能将 blog-extra-file 这个仓库拉到根目录，并改名为 `bef` 了——因为已经为当前的 .gitignore 添加了 `bef`, 所以不会影响当前仓库的 git. 只是这样有可能会让每次构建都拷贝文件，造成写浪费（实际上不确定是否会重复拷贝啦）。
 
-## 其他
+## 博客撰写注意事项
 
-1. 小技巧：Markdown的blockquote, 如果想换行，可以在最原始文本一行的末尾加**2个额外空格**，就可以！([ref](https://stackoverflow.com/questions/26991997/multiple-line-quote-in-markdown))
+1. `Front Matter` 自定义参数：
 
-2. 代码带行号渲染，参考： [Jekyll: Syntax Highlighting And Line Numbers](https://www.bytedude.com/jekyll-syntax-highlighting-and-line-numbers/)，效果其实也不算特别好…… 或许有其他更好的方案（除了hightlight.js等只高亮的，还想有折叠、copy等博客平台常有的功能）
+   ```ini
+   # 设置 Toc 渲染：
+   # - disable 禁止； 
+   # - force_enable 强制渲染； 
+   # - 其他值，根据层级数量阈值内部判断是否要渲染
+   toc: "disable"|"force_enable"|any-other-or-empty
+   # 设置 mathjax 渲染：
+   # - disable 禁止引入 Mathjax 依赖
+   # - force_enable 强制引入 Mathjax 依赖
+   # - 其他值，根据内容判断是否要引入 Mathjax 依赖
+   mathjax: "disable"|"force_enable"|any-other-or-empty
+   ```
 
-3. 内部跳转
+2. 添加内部跳转
    正向、反向跳转
    
    ```markdown
@@ -32,3 +43,11 @@ For Web Service.
 
    原理比较简单：通过 span 的 id 创建锚点；再通过 Markdown 的链接实现页面内跳转。
    写这里方便复制，注意修改 id.
+
+
+## 其他
+
+1. 小技巧：Markdown的blockquote, 如果想换行，可以在最原始文本一行的末尾加**2个额外空格**，就可以！([ref](https://stackoverflow.com/questions/26991997/multiple-line-quote-in-markdown))
+
+2. 代码带行号渲染，参考： [Jekyll: Syntax Highlighting And Line Numbers](https://www.bytedude.com/jekyll-syntax-highlighting-and-line-numbers/)，效果其实也不算特别好…… 或许有其他更好的方案（除了hightlight.js等只高亮的，还想有折叠、copy等博客平台常有的功能）
+

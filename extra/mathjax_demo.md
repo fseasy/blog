@@ -2,16 +2,21 @@
 layout: post
 categories: 工具
 tags: mathjax
-need_mathjax: true
+mathjax: force_enable
+date: 2019-01-01
+title: MathJax Demo测试
 ---
 
-<h1 class="text-center">MathJax Demo测试</h1>
-
 <blockquote>
-本页面来自MathJax在Github上的<a href="https://github.com/mathjax/MathJax-demos-web/blob/master/input-tex2chtml.html.md">demo</a>.
+本页面脚本来自 MathJax 在 Github上 的<a href="https://github.com/mathjax/MathJax-demos-web/blob/master/input-tex2chtml.html.md">demo</a>.
 </blockquote>
 
 <p>输入Tex</p>
+
+Tips: 
+
+1. 无需 `$$`
+2. 换行可以用 Latex 中的 `\begin{split}...\end{split}` 环境，配合 `\\ 和 &`
 
 <div class="row form-group">
   <div class="col-md-12">

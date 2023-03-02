@@ -45,7 +45,7 @@
                 return navTocMakeStatus && contentTocMakeStatus;
             };
 
-            if (buildTocCmd == "enable") {
+            if (buildTocCmd == "force_enable") {
                 // always make toc
                 buildSuccess = makeTocDom(0);
             } else if (buildTocCmd == "disable") {
