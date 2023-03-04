@@ -33,23 +33,26 @@ if (markerWidth <= REASONABLE_MARKER_MAX_WIDTH) {
 </script>
 
 <script>
+    // set font-weight according to render font.
     (function(){
+        // include font-detect-cmd.js
         {% include extra_fn/dependency_3rd/font-detect-cmd.js %}
-        var UBUNTU_FEATURE_FONT = "Noto Sans CJK SC";
+        // start self logic.
+        const UBUNTU_FEATURE_FONT = "Noto Sans CJK SC",
+            WIN_FEATURE_FONT = "Microsoft YaHei";
         
         var fonts = [
-            UBUNTU_FEATURE_FONT
+            UBUNTU_FEATURE_FONT,
+            WIN_FEATURE_FONT
         ];
-        var ubuntu_handler = function() {
+        var setFontWeight = function(weight, font, system) {
             var nodes = document.getElementsByClassName('post-content');
             if (!nodes) {
                 return;
             }
             var content = nodes[0];
-            content.style.fontWeight = 300;
-
-            console.log("In Ubuntu feature font '%s', set font weight -> 300", 
-                UBUNTU_FEATURE_FONT);
+            content.style.fontWeight = weight;
+            console.log("In %s feature font '%s', set font weight -> %s", system, font, weight);
         }
 
         var fontDetector = new FontDetector();
@@ -63,7 +66,11 @@ if (markerWidth <= REASONABLE_MARKER_MAX_WIDTH) {
                 }
                 switch (font) {
                     case UBUNTU_FEATURE_FONT:
-                        ubuntu_handler();
+                        setFontWeight(300, font, "Ubuntu");
+                        break;
+                    case WIN_FEATURE_FONT:
+                        setFontWeight(300, font, "Windows");
+                        break;
                 }
             }
         });

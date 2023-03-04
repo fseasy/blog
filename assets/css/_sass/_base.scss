@@ -92,7 +92,8 @@ blockquote {
     font-family: $font-en-easy, $font-kai;
     background-color: darken($body-bg, 1%);
     border-left: 0.6em solid $header-bg;
-    padding: 6px 5px;
+    padding: 0.5rem;
+    margin: 1rem 0;
 }
 
 blockquote:first-child {
@@ -100,7 +101,7 @@ blockquote:first-child {
     border-left: 1em solid $header-bg;
     padding:1em 1.5em 1em 1.5em;
     position: relative;
-    margin-bottom: 2em;
+    margin-bottom: 2rem;
 }
 
 blockquote:first-child::before {

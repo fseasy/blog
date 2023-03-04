@@ -1,6 +1,7 @@
 {% unless loadUtilsDone %}
 
-// wait for final. copy from https://stackoverflow.com/a/4541963/4869018
+// wait for final event, avoid call too frequently in continuous event(e.g. resize, scroll)
+// copy from https://stackoverflow.com/a/4541963/4869018
 var waitForFinalEvent = (function () {
     var timers = {};
     return function (callback, ms, uniqueId) {
