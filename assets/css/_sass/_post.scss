@@ -48,27 +48,39 @@
 
     h2 {
         font-size: 1.3rem;
-        font-weight: 350;
     }
 
     h3 {
         font-size: 1.2rem;
-        font-weight: 350;
     }
 
     h4 {
         font-size: 1.1rem;
-        font-weight: 350;
     }
 
     h5,
     h6 {
         font-size: 1em;
-        font-weight: 350;
     }
 
     p {
         margin: 1rem 0;
+        word-break: break-word;
+    }
+
+    ol>li,ul>li {
+        margin-top: 0.7rem;
+        margin-bottom: 0.7rem;
+    }
+    ol,ul {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    }
+    p+ul, p+ol {
+        margin-top: -0.3rem;
+    }
+    li p {
+        margin: 0.7rem inherit;
     }
 
     table {
