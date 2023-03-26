@@ -96,36 +96,6 @@ blockquote {
     margin: 1rem 0;
 }
 
-blockquote:first-child {
-    background-color: darken($body-bg, 2%);
-    border-left: 1em solid $header-bg;
-    padding:1em 1.5em 1em 1.5em;
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-blockquote:first-child::before {
-    content: open-quote;
-    font-family: "webfont", "Open Sans", sans-serif;
-    color: $text-dark-grey-color;
-    line-height: .1em;
-    position: absolute;
-    left: -.5em;
-    top: .6em;
-    font-size: 2.2em;
-}
-
-blockquote:first-child::after {
-    content: close-quote;
-    font-family: "webfont", "Open Sans", sans-serif;
-    color: $text-dark-grey-color;
-    line-height: .1em;
-    position: absolute;
-    right: -.2em;
-    bottom: 0;
-    font-size: 2.2em;
-}
-
 blockquote+blockquote {
     margin-top: - $spacing-unit / 4;
 }

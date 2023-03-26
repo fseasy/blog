@@ -1,0 +1,30 @@
+/**
+ * Code formatting
+ */
+
+pre {
+    max-height: 40rem;
+}
+
+pre, code {
+    font-family: $font-code, $font-cn-sans !important;
+    font-style: normal !important;
+
+    font-feature-settings: "kern" off !important;
+    font-kerning: none !important;
+    font-variant: none !important;
+
+    background-color: darken($body-bg, 2%) !important;
+}
+
+/* Inline code, no highlight */
+code {
+    padding: 2px 4px;
+    border-radius: 3px;
+    color: $text-dark-color;
+}
+
+blockquote code {
+    color: $text-dark-color;
+    background-color: darken($body-bg, 3%) !important;
+}

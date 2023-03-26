@@ -137,12 +137,25 @@ LangChain 在实现这个功能时，使用了 3 个概念（抽象/模块）：
 
 - 生成最终结果，返回
 
-  ```
+  ```plain
   Thought: I now know the final answer
   Final Answer: Jason Sudeikis, Olivia Wilde's boyfriend, is 47 years old and his age raised to the 0.23 power is 2.4242784855673896.
   ```
 
 看完这个流程，觉得真牛啊……
+
+### 记录历史信息： Memory
+
+如果服务是有状态的，那么就需要一个 Memory 来记录历史的信息。这里是用 Chatbot 任务来举例的：
+一般地，新的对话依赖前面的对话内容，即 *short-term memory*；
+特定情况下（如“你还记得大明湖畔的夏雨荷吗？”），还需要很久之前信息来作为上下文，即 *long-term memory*.
+
+LangChain 在这里没有直接暴露 Memory 接口，而是使用了包含记忆的 *ConversationChain* 来做例子。
+从例子里看到，LLMs 本身是无状态的，
+通过将 memory 记录的历史数据($\{\rm{user\mbox{-}input}, \rm{LLM\mbox{-}response}\} \times T$)
+填充进 prompts 来让整个对话看起来有状态。
+这块其实还是挺低效的（不知道 LLMs 内部是否有做缓存，按照以前的经验，在一句话解码时肯定是用了缓存的，
+但这种模型之外连续增量调用的情况下，不知是否有缓存）。
 
 [_repo]: https://github.com/hwchase17/langchain "LangChain Github repo"
 [_parrot]: https://emojis.wiki/parrot/ "parrot emogis wiki"

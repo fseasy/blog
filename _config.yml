@@ -11,10 +11,11 @@ url: "https://blog.fseasy.top" # the base hostname & protocol for your site
 
 # Build settings
 markdown: kramdown
-highlighter: rouge
+highlighter: none
 kramdown:
   input: GFM
-  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    disable : true
 
 plugins: 
   - jekyll-paginate

@@ -1,0 +1,84 @@
+<!-- Prism for code highlight  -->
+<script>
+    (function () {
+        var hasCodeBlocks = (function () {
+            var text = document.body.innerHTML;
+            const PRE_SIGN = "<pre",
+                CODE_SIGN = "<code";
+            if (text.indexOf(PRE_SIGN) != -1 && text.indexOf(CODE_SIGN) != -1) {
+                return true;
+            }
+            return false;
+        })();
+
+        if (!hasCodeBlocks) {
+            console.info("This Page does not need to load Prism");
+            return;
+        }
+        // Has Code.
+        // 1. Do some preprocess
+        var preElements = document.getElementsByTagName("PRE");
+        Array.from(preElements).forEach((preElement, idx) => {
+            var hasLang = (function () {
+                const classNames = preElement.getAttribute("class");
+                return classNames && classNames.indexOf("lang") != -1;
+            })();
+            if (!hasLang) {
+                // enable Prism
+                preElement.classList.add("language-plain");
+            }
+            const text = preElement.textContent,
+                lineNum = text.split("\n").length;
+            const LINENUM_THRESHOLD = 5;
+            if (lineNum > LINENUM_THRESHOLD) {
+                // add linenumber and linkable
+                preElement.classList.add("line-numbers", "linkable-line-numbers");
+            } else {
+                preElement.classList.add("no-line-numbers");
+            }
+            // set pre-wrap.
+            (function () {
+                const PRE_WRAP_VALUE = "white-space:pre-wrap;";
+                preElement.setAttribute("style", PRE_WRAP_VALUE);
+                const codes = preElement.getElementsByTagName("CODE");
+                Array.from(codes).forEach((ele) => ele.setAttribute("style", PRE_WRAP_VALUE));
+            })();
+            // set id for line highlight
+            preElement.setAttribute("id", "pre-code-" + idx);
+        });
+
+        console.info("> Loading Prism");
+        var addScript = function (src, attrs) {
+            var script = document.createElement("SCRIPT");
+            script.src = src;
+            if (attrs) {
+                for (const [key, value] of Object.entries(attrs)) {
+                    script.setAttribute(key, value);
+                }
+            }
+            document.head.appendChild(script);
+            return script;
+        }
+        var addCSS = function (href) {
+            var link = document.createElement("LINK");
+            link.setAttribute("rel", "stylesheet");
+            link.setAttribute("type", "text/css");
+            link.setAttribute("href", href);
+            document.getElementsByTagName("head")[0].appendChild(link);
+        }
+
+        // add css & js
+        const PRISM_JS_PATH = "{% link assets/third-party/prism/prism.js %}",
+            PRISM_CSS_PATH = "{% link assets/third-party/prism/prism.css %}",
+            AUTOLOADER_SRC = "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js";
+
+        addCSS(PRISM_CSS_PATH);
+        addScript(PRISM_JS_PATH);
+        addScript(
+            AUTOLOADER_SRC, {
+            "integrity": "sha512-SkmBfuA2hqjzEVpmnMt/LINrjop3GKWqsuLSSB3e7iBmYK7JuWw4ldmmxwD9mdm2IRTTi0OxSAfEGvgEi0i2Kw==",
+            "crossorigin": "anonymous",
+            "referrerpolicy": "no-referrer"
+        });
+    })();
+</script>
