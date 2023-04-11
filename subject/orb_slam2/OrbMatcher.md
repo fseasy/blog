@@ -17,7 +17,7 @@ tags: vslam orb-slam2 code-reading
   汉明距离。
 
 - 在 Tracking 和 Loop Closing 的投影匹配：
-  ```c++
+  ```cpp
     int SearchByProjection(Frame &F, 
     const std::vector<MapPoint*> &vpMapPoints, 
     const float th=3);
@@ -35,7 +35,7 @@ tags: vslam orb-slam2 code-reading
   ```
 
 - 基于 BOW 匹配：
-  ```c++
+  ```cpp
     int SearchByBoW(KeyFrame *pKF, 
         Frame &F, 
         std::vector<MapPoint*> &vpMapPointMatches);
@@ -45,7 +45,7 @@ tags: vslam orb-slam2 code-reading
   ```
 
 - 初始化匹配：
-  ```c++
+  ```cpp
     int SearchForInitialization(Frame &F1, 
         Frame &F2, 
         std::vector<cv::Point2f> &vbPrevMatched, 
@@ -54,7 +54,7 @@ tags: vslam orb-slam2 code-reading
   ```
 
 - 三角化匹配：
-  ```c++
+  ```cpp
     int SearchForTriangulation(KeyFrame *pKF1, 
         KeyFrame* pKF2, 
         cv::Mat F12,
@@ -63,7 +63,7 @@ tags: vslam orb-slam2 code-reading
   ```
 
 - 相似变换(sim3)后匹配
-  ```c++
+  ```cpp
     int SearchBySim3(KeyFrame* pKF1, 
         KeyFrame* pKF2, 
         std::vector<MapPoint *> &vpMatches12, 
@@ -74,7 +74,7 @@ tags: vslam orb-slam2 code-reading
   ```
 
 - 融合
-  ```c++
+  ```cpp
     int Fuse(KeyFrame* pKF, 
         const vector<MapPoint *> &vpMapPoints, 
         const float th=3.0);

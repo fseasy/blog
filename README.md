@@ -53,4 +53,6 @@ For Web Service.
 
    - mathjax 中要写连字符，不能用 `-`, 会被变成减号，用 `\mbox{-}`. 如 $abc\mbox{-}def$
 
-2. 代码渲染，现在使用 [Prism](https://prismjs.com/)
+2. 代码渲染，现在使用 [Prism](https://prismjs.com/). 
+  
+  - 发现 Prism 渲染的bug：`c++` 不能被正确渲染，`cpp` 可以。后续用 `cpp` 表达。

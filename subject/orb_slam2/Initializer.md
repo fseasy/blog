@@ -16,7 +16,7 @@ tags: vslam orb-slam2 code-reading
 
 - 初始化逻辑：给定了当前帧和与参考帧的匹配关系。
   
-  ```c++
+  ```cpp
   bool Initialize(const Frame &CurrentFrame, const vector<int> &vMatches12,
         cv::Mat &R21, cv::Mat &t21, 
         vector<cv::Point3f> &vP3D, 

@@ -12,7 +12,7 @@ tags: vslam orb-slam2 code-reading
 
 - 构造函数：接受地图、关键帧数据库和词典。
 
-  ```c++
+  ```cpp
   LoopClosing(Map* pMap, KeyFrameDatabase* pDB, ORBVocabulary* pVoc,const bool bFixScale);
   ```
 

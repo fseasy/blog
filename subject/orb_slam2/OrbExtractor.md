@@ -11,12 +11,12 @@ ORB 特征抽取器，计算关键点和对应的描述子。
 ## 关键接口
 
 - 构造函数：
-  ```c++
+  ```cpp
   ORBextractor(int nfeatures, float scaleFactor, int nlevels, int iniThFAST, int minThFAST);
   ```
 
 - 特征抽取：
-  ```c++
+  ```cpp
   void operator()(
       cv::InputArray image, 
       cv::InputArray mask, // 当前实现没用这个

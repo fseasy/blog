@@ -45,7 +45,7 @@ Frame 接收原始输入信息（图像+深度），并具备如下功能
 
 #### 1.1 单目初始化
 
-```c++
+```cpp
 Frame::Frame(const cv::Mat &imGray, 
   const double &timeStamp, 
   ORBextractor* extractor,
@@ -58,7 +58,7 @@ Frame::Frame(const cv::Mat &imGray,
 
 先看初始化列表的操作：
 
-```c++
+```cpp
 mpORBvocabulary(voc),
 mpORBextractorLeft(extractor), // 放到 Left 
 mpORBextractorRight(static_cast<ORBextractor*>(NULL)), // 右边就置为空

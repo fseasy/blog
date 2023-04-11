@@ -24,7 +24,7 @@ tags: vslam code-notes
 - 先减去中心偏移
 - 再除以缩放系数(focal)
 
-```c++
+```cpp
 cv::Mat pixel_pnt2camera_3d(const cv::Point2f& p, const cv::Mat& camera_intrinsic) {
     auto K_ = static_cast<cv::Mat_<double>>(camera_intrinsic);
     double cx = K_(0, 2);
@@ -55,7 +55,7 @@ cv::Mat pixel_pnt2camera_3d(const cv::Point2f& p, const cv::Mat& camera_intrinsi
 
 关键代码如下：
 
-```c++
+```cpp
 // pixel -> camera, and drop last dim
 std::vector<std::vector<cv::Point2f>> match_points_camera(2);
 for (std::size_t i = 0U; i < match_points.at(0).size(); ++i) {
@@ -104,7 +104,7 @@ PnP 建模的是 2d 坐标和另一个坐标系下的 3d 点的关系。在高�
 1. 先将基准图片的像素坐标 $p$ 变换为相机坐标 $P_{norm}$（即用上面的`pixel_pnt2camera_3d`），此坐标落在相机坐标系里的归一化平面上（即 $Z = 1$）
 2. 再将深度值 $d$ 乘上归一化坐标 $P_{norm}$, 即得到用于 PnP 计算的 3d 坐标了
 
-```c++
+```cpp
 // 这里的片段展示了加载深度、构造2d、3d点对的过程。
 // 一定要注意二者需要一一匹配：深度值可能会错误，这时匹配的 2d 点也要抛弃
 using p3d2d_t = std::pair<std::vector<cv::Point3f>, std::vector<cv::Point2f>>;

@@ -13,7 +13,7 @@ tags: vslam orb-slam2 code-reading
 全部为静态成员函数。
 
 - 基础 BA, 给定关键帧和地图点。
-  ```c++
+  ```cpp
     void static BundleAdjustment(
         const std::vector<KeyFrame*> &vpKF, 
         const std::vector<MapPoint*> &vpMP,
@@ -24,7 +24,7 @@ tags: vslam orb-slam2 code-reading
   ```
   
 - Global BA, 给定地图。
-  ```c++
+  ```cpp
   void static GlobalBundleAdjustemnt(
         Map* pMap, 
         int nIterations=5, 
@@ -34,7 +34,7 @@ tags: vslam orb-slam2 code-reading
   ```
 
 - 局部 BA, 给定插入的关键帧和地图。
-  ```c++
+  ```cpp
   void static LocalBundleAdjustment(KeyFrame* pKF, bool *pbStopFlag, Map *pMap);
   ```
 
@@ -42,7 +42,7 @@ tags: vslam orb-slam2 code-reading
 
 - 位姿优化：`int static PoseOptimization(Frame* pFrame);`
 - 优化本质图：
-  ```c++
+  ```cpp
     void static OptimizeEssentialGraph(Map* pMap, 
         KeyFrame* pLoopKF, 
         KeyFrame* pCurKF,
@@ -54,7 +54,7 @@ tags: vslam orb-slam2 code-reading
   输入当前关键帧和找到的回环关键帧，做 Essential Graph 优化。 `bFixScale` 为真表示尺度需要优化（单目）。
 
 - 优化 Sim3: 
-  ```c++
+  ```cpp
   static int OptimizeSim3(
     KeyFrame* pKF1, 
     KeyFrame* pKF2, 

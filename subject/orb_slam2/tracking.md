@@ -16,7 +16,7 @@ Tracking 主要职责为:
 ## 关键接口
 
 - 构造函数：
-  ```c++
+  ```cpp
     Tracking(
         System* pSys, 
         ORBVocabulary* pVoc, 
@@ -32,7 +32,7 @@ Tracking 主要职责为:
 
 ### 1. 构造函数
 
-```c++
+```cpp
 Tracking(System *pSys, 
   ORBVocabulary* pVoc, 
   FrameDrawer *pFrameDrawer, 
@@ -60,7 +60,7 @@ Tracking(System *pSys,
 
 ### 2. 单目 Track 流程
 
-```c++
+```cpp
 cv::Mat GrabImageMonocular(const cv::Mat &im, const double &timestamp);
 void Tracking::Track();
 ```

@@ -14,7 +14,7 @@ PnP Solver，完成 MapPoints(3D) 与 Frame 中关键点(2D) 的匹配。
   `PnPsolver(const Frame &F, const vector<MapPoint*> &vpMapPointMatches);`
 
 - 设置 RANSAC 参数：
-  ```c++
+  ```cpp
     void SetRansacParameters(
         double probability = 0.99, 
         int minInliers = 8 , 
@@ -28,7 +28,7 @@ PnP Solver，完成 MapPoints(3D) 与 Frame 中关键点(2D) 的匹配。
   `cv::Mat find(vector<bool> &vbInliers, int &nInliers);`
 
 - 迭代计算位姿和内点：
-  ```c++
+  ```cpp
     cv::Mat iterate(int nIterations, 
         bool &bNoMore, 
         vector<bool> &vbInliers, 
