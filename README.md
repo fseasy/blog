@@ -53,6 +53,19 @@ For Web Service.
 
    - mathjax 中要写连字符，不能用 `-`, 会被变成减号，用 `\mbox{-}`. 如 $abc\mbox{-}def$
 
+   - 数学公式里的花括号显示问题： 在 span-level 的公式里，用 `${a, b}$` 最后渲染出来没有花括号；
+     这是因为 Latex 里`{}` 都[是特殊字符，必须转义才行][curly_braces_tex]。
+     然而，就算用 `$\{a, b\}$` 也还是不行！原来，Jekyll 预处理时把 `\{\}` 中转义符吞掉了(kmarkdown 渲染器). 要在 markdown 里用 `\\{\\}` 最终在页面里才能看到 ${}$. 然而这样的做法又不通用（不是标准写法）
+
+     目前可行的方案是用 `\lbrace \rbrace` 来显示 `{}`.
+
+     参考 [mathjax curly brackets dont show-up using jekyll][curly_braces_jekyll], 关键词 `curly brackets`, `curly braces`
+
 2. 代码渲染，现在使用 [Prism](https://prismjs.com/). 
   
   - 发现 Prism 渲染的bug：`c++` 不能被正确渲染，`cpp` 可以。后续用 `cpp` 表达。
+
+
+[curly_braces_tex]: https://tex.stackexchange.com/questions/123050/quick-question-about-curly-braces-not-showing-up
+
+[curly_braces_jekyll]: https://stackoverflow.com/questions/41312777/mathjax-curly-brackets-dont-show-up-using-jekyll

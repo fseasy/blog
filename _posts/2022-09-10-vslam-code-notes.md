@@ -47,7 +47,7 @@ cv::Mat pixel_pnt2camera_3d(const cv::Point2f& p, const cv::Mat& camera_intrinsi
 
 调用 OpenCV 的 `triangulatePoints`, 需要做如下步骤的准备：
 
-1. 获得用于三角化的、来自两个图片的匹配点对 $\{(p1, q1), \cdots \}$
+1. 获得用于三角化的、来自两个图片的匹配点对 $\lbrace (p1, q1), \cdots \rbrace$
 2. 根据相机内参 $K$, 将点对（即像素坐标）转为相机空间的归一化坐标 $\{(pn1, qn1), \cdots\}$. 特别注意，本来归一化坐标是3维的（最后 $z=1$），然而**这里只取 2 维**，即抛弃到 $z$！
 3. 准备2个映射矩阵 $T$，维度是 $3 \times 4$. $T1$ 对应第一张图片，即基准图片， 则设置其为 $\begin{bmatrix} E & \boldsymbol{0} \end{bmatrix}$; $T2$ 对应第二张图片，即运动后的图片，设置其为 $\begin{bmatrix} R & \boldsymbol{t} \end{bmatrix}$. 可以通过 `.copyTo` 来赋值。
 4. 保证点对、$T$ 都是 `float` 类型的！ 调用 `cv::triangulatePoints`, 得到的是一个 $4 \times N$ 的矩阵！
