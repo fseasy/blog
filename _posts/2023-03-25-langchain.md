@@ -152,7 +152,7 @@ LangChain 在实现这个功能时，使用了 3 个概念（抽象/模块）：
 
 LangChain 在这里没有直接暴露 Memory 接口，而是使用了包含记忆的 *ConversationChain* 来做例子。
 从例子里看到，LLMs 本身是无状态的，
-通过将 memory 记录的历史数据($\{\rm{user\mbox{-}input}, \rm{LLM\mbox{-}response}\} \times T$)
+通过将 memory 记录的历史数据($\\{\rm{user\mbox{-}input}, \rm{LLM\mbox{-}response}\\} \times T$)
 填充进 prompts 来让整个对话看起来有状态。
 这块其实还是挺低效的（不知道 LLMs 内部是否有做缓存，按照以前的经验，在一句话解码时肯定是用了缓存的，
 但这种模型之外连续增量调用的情况下，不知是否有缓存）。
