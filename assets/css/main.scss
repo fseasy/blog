@@ -2,6 +2,7 @@
 # Only the main Sass file needs front matter (the dashes are enough) 
 --- 
 @charset "utf-8";
+@use 'sass:math';
 
 $font-special: 
     SFProDisplay-Regular //针对微信小程序
