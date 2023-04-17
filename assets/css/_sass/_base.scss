@@ -97,7 +97,7 @@ blockquote {
 }
 
 blockquote+blockquote {
-    margin-top: math.div(-$spacing-unit, 4);
+    margin-top: 0.3rem;
 }
 
 sub, sup {
