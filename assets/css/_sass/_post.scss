@@ -143,6 +143,8 @@
     }
 }
 
+.footnote::before { content: " "; }
+
 .footnotes {
     font-size: 0.8rem;
     padding: 1rem 1rem 0.5rem 1rem;
