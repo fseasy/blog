@@ -74,6 +74,13 @@ p {
     text-align: center;
 }
 
+.text-highlight {
+    color: $text-highlight-color;
+    background-color: $text-highlight-bg-color;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+}
+
 strong {
     color: $text-dark-strong-color;
 }

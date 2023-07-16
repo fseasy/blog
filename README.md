@@ -44,7 +44,7 @@ For Web Service.
    原理比较简单：通过 span 的 id 创建锚点；再通过 Markdown 的链接实现页面内跳转。
    写这里方便复制，注意修改 id.
 
-3. 文本居中样式
+3. 文本段落居中
 
    ```html
    <div class="text-center">
@@ -53,6 +53,9 @@ For Web Service.
    </div>
    ```
 
+4. 文本 span 样式：
+
+   `.text-highlight`: 高亮样式
 
 ## 其他
 
