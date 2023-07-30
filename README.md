@@ -63,7 +63,8 @@ For Web Service.
    
    - Markdown的blockquote, 如果想换行，可以在最原始文本一行的末尾加**2个额外空格**，就可以！([ref](https://stackoverflow.com/questions/26991997/multiple-line-quote-in-markdown))
 
-   - mathjax 中要写连字符，不能用 `-`, 会被变成减号，用 `\mbox{-}`. 如 $abc\mbox{-}def$
+   - mathjax 中要写连字符，不能用 `-`, 会被变成减号，用 `\mbox{-}`. 如 $abc\mbox{-}def$；
+     > 在 lark 文档里这个方法不行，[推荐方法](https://katex.org/docs/supported.html#symbols-and-punctuation)是用 `\text{-}`, `\text{--}` 或者 `\text{\textendash}`
 
    - 数学公式里的花括号显示问题： 在 span-level 的公式里，用 `${a, b}$` 最后渲染出来没有花括号；
      这是因为 Latex 里`{}` 都[是特殊字符，必须转义才行][curly_braces_tex]。
