@@ -577,7 +577,7 @@ so don't stress or take it too seriously.
   
 好了，写完就是新的一年了。调整好心态，平静努力的迎接每一天吧.
 
-Fingers crossed for Happy Days on most days.
+Fingers crossed for Happy Days throughout most of 2025.
 
 > Write started at 12.30 and ended at 1.04.
 
