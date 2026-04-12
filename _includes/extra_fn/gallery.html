@@ -1,0 +1,59 @@
+{% comment %} <!-- double comment to prevent IDE autoformat the following indent
+优化版 Gallery 组件
+参数：
+- data: (必填) 数据文件名，对应到 _data/xxxx.yml 中的 xxx，数据结构为：
+  data_group_id:
+    - relative_path: str
+      caption: str
+      dt_utc: str
+      poster: NotRequired[str]
+    ...
+- data_group_id: (必填) 对应数据分组 ID (即前面的 data_group_id)
+- base_dir: (可选) data 中定义的文件路径前的文件夹前缀，例如 "2026/annual", 则最终路径为： base_dir / relative_path | absolute_url
+-->{% endcomment %}
+
+{%- assign data_file = include.data -%}
+{%- assign gallery_data = site.data[data_file][include.data_group_id] -%}
+
+{% comment %} 构建 Base URL {% endcomment %}
+{%- if include.base_dir -%}
+{%- assign base_url = include.base_dir | absolute_url -%}
+{%- else -%}
+{%- assign base_url = "/" | absolute_url -%}
+{%- endif -%}
+
+{% if gallery_data %}
+<div class="gallery-scroll">
+  {% for item in gallery_data %}
+  {% comment %} 获取后缀并转为小写 {% endcomment %}
+  {%- assign ext = item.relative_path | split: "." | last | downcase -%}
+
+  {%- assign is_video = false -%}
+  {%- if ext == "mp4" or ext == "webm" -%}
+  {%- assign is_video = true -%}
+  {%- endif -%}
+
+  <figure class="gallery-item">
+    {% if is_video %}
+    <video class="lazy-video" data-src="{{ base_url }}{{ item.relative_path }}" poster="{{ base_url }}{{ item.poster }}"
+      loop muted playsinline preload="none">
+    </video>
+    {% else %}
+    <img src="{{ base_url }}{{ item.relative_path }}" loading="lazy" decoding="async"
+      alt="{{ item.caption | default: 'Gallery Image' }}">
+    {% endif %}
+
+    {% if item.caption %}
+    <figcaption class="gallery-caption">{{ item.caption }}</figcaption>
+    {% endif %}
+  </figure>
+  {% endfor %}
+</div>
+{% else %}
+<!-- 调试提示：如果 ID 填错或数据未找到，在开发模式下可见 -->
+{% if jekyll.environment == "development" %}
+<p style="color: red;">Gallery Error: No data found for ID "{{ include.data_group_id }}"
+  in "site.data.{{ data_file }}"
+</p>
+{% endif %}
+{% endif %}

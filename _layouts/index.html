@@ -3,26 +3,26 @@
 <html lang="zh-Hans-CN">
 
 <head>
-{% include head.html %}
+  {% include head.html %}
 </head>
 
 <body>
-    {% include page_header.html  %}
-    <section class="container">
-        <div class="row">
-            <div class="contentpanel col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
-                {{ content }} 
-            </div>   
-        </div>
-        {% if page.index_name == "主页" %}
-            <!--load pagenation only when main-index -->
-            {% include pagination.html  %}
-        {% endif %}
-    </section>
-    {% include page_footer.html %}
+  {% include page_header.html %}
+  <section class="container">
+    <div class="row">
+      <div class="contentpanel col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
+        {{ content }}
+      </div>
+    </div>
+    {% if page.index_name == "主页" %}
+    <!--load Pagination only when main-index -->
+    {% include pagination.html %}
+    {% endif %}
+  </section>
+  {% include page_footer.html %}
 
-    {% include extra_fn/link_target_blank_script.html %}
-    {% include third_resource/bootstrap_js.html %}
+  {% include extra_fn/link_target_blank_script.html %}
+  {% include third_resource/bootstrap_js.html %}
 </body>
 
 </html>

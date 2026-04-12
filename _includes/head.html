@@ -1,29 +1,29 @@
 {% capture title_val %}
-  {% if page.title %}
-    {{ page.title }} | {{ site.title }}
-  {% else %}
-    {% if paginator.page and paginator.page > 1 %}
-      第 {{ paginator.page }} 页 | {{ site.title }}
-    {% else %}
-      {{ site.title }}
-    {% endif %}
-  {% endif %}
+{% if page.title %}
+{{ page.title }} | {{ site.title }}
+{% else %}
+{% if paginator.page and paginator.page > 1 %}
+第 {{ paginator.page }} 页 | {{ site.title }}
+{% else %}
+{{ site.title }}
+{% endif %}
+{% endif %}
 {% endcapture %}
 
 {% capture description_val %}
-  {% if page %}
-    {% if page.onewords %}
-      {{ page.onewords }}
-    {% elsif page.excerpt %}
-      {{ page.excerpt | strip_html }}
-    {% elsif page.index_name %}
-      {{ site.title }} - {{ page.index_name }} {{ paginator.page }}
-    {% else %}
-      {{ page.content | strip_html | truncatewords: 100, " >>" }}
-    {% endif %}
-  {% else %}
-    {{ site.description }}
-  {% endif %}
+{% if page %}
+{% if page.onewords %}
+{{ page.onewords }}
+{% elsif page.excerpt %}
+{{ page.excerpt | strip_html }}
+{% elsif page.index_name %}
+{{ site.title }} - {{ page.index_name }} {{ paginator.page }}
+{% else %}
+{{ page.content | strip_html | truncatewords: 100, " >>" }}
+{% endif %}
+{% else %}
+{{ site.description }}
+{% endif %}
 {% endcapture %}
 
 <meta charset="utf-8">
@@ -32,15 +32,20 @@
 <title>{{ title_val | strip }}</title>
 <meta property="og:title" content="{{ title_val | strip }}">
 <meta name="description" property="og:description" content="{{ description_val | strip }}">
-{% if page.tags  %}
-  <meta name="keywords" content="{{ page.tags | join: ','}}">
+{% if page.tags %}
+<meta name="keywords" content="{{ page.tags | join: ','}}">
 {% endif %}
 {% if paginator.page and paginator.page > 1 %}
-  <!-- index page and > 1, disable search-engine index -->
-  <meta name="robots" content="noindex">
+<!-- index page and > 1, disable search-engine index -->
+<meta name="robots" content="noindex">
 {% endif %}
-<link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
-<link rel="shortcut icon" href="{{ '/favicon.ico' | prepend: site.baseurl | prepend: site.url }}">
+<link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
+<link rel="shortcut icon" href="{{ '/favicon.ico' | absolute_url }}">
 <!-- stylesheet -->
 {% include third_resource/bootstrap_css.html %}
-<link rel="stylesheet" href="{{ '/assets/css/main.css' | prepend: site.baseurl }}">
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+{% if page.use_gallery %}
+<!-- Gallery part -->
+<link rel="stylesheet" href="{{ '/assets/css/gallery.css' | relative_url }}">
+<script src="{{ '/assets/js/gallery_video_lazy_load.js' | relative_url }}" defer></script>
+{% endif %}

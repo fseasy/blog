@@ -1,7 +1,7 @@
 # Site settings
 title: 鱼虾写字
-email: readonlyfile@hotmail.com
-# GEM which uses `github-pages` is dependend on github repo. set this var is necessary when repo's `url` don't contain
+email: xuwei@fseasy.top
+# GEM which uses `github-pages` depending on github repo. set this var is necessary when repo's `url` don't contain
 # repository field. (such as, we change the dns name `github.com` => ip port in repo's url)
 repository: fseasy/blog.git
 description: > # this means to ignore newlines until "baseurl:"
@@ -15,13 +15,13 @@ highlighter: none
 kramdown:
   input: GFM
   syntax_highlighter_opts:
-    disable : true
+    disable : true # use prism.js to highlight instead
 
 plugins: 
   - jekyll-paginate
   - jekyll-sitemap
 
-exclude: [_site, md_templates_, deployment_, private_]
+exclude: [_site, md_templates_, deployment_, private_, scripts_]
 paginate: 15
 
 #social info
@@ -38,3 +38,9 @@ defaults:
 sass:
     style: compressed
     sass_dir: assets/css/_sass
+
+
+# Used for `_plugins/symlink_bef.rb`, only for development env.
+local_bef_resources:
+  src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
+  dst: "bef" # relative to the target dir (`_site`)

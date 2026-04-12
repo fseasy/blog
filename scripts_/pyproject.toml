@@ -1,0 +1,20 @@
+[project]
+name = "blog-scripts"
+version = "1.1.0"
+description = "Utils to help blog building"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pillow>=12.2.0",
+    "pyyaml>=6.0.3",
+    "timezonefinder>=8.2.2",
+    "tqdm>=4.67.3",
+    "tzdata>=2026.1",
+]
+
+[tool.ruff]
+indent-width = 2
+
+[[tool.uv.index]]
+url = "https://mirrors.aliyun.com/pypi/simple/"
+default = true

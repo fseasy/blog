@@ -1,0 +1,58 @@
+/* 滚动条容器 */
+.gallery-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding: 1rem 0 1.5rem 0;
+  /* 留白 */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 隐藏滚动条让视觉更干净 (可选) */
+.gallery-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* 每一个卡片 (figure) */
+.gallery-item {
+  flex: 0 0 auto;
+  margin: 0;
+  /* 重置 figure 默认 margin */
+  width: 85%;
+  /* 露出下一张的边缘，提示可滑动 */
+  max-width: 450px;
+  scroll-snap-align: start;
+  /* 文本阅读习惯，对齐左侧更好 */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  /* 媒体和 caption 的间距 */
+}
+
+/* 媒体内容 */
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 280px;
+  /* 统一高度，防止页面上下跳动，高度视你图片比例自行调整 */
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* 加点淡淡的阴影，质感更好 */
+  background: #f8f8f8;
+  /* 加载前的占位色 */
+}
+
+/* Caption 样式 */
+.gallery-caption {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  padding: 0 4px;
+  /* 如果文字过长，最多显示两行并省略 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

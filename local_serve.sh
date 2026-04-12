@@ -1,10 +1,13 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-if [ "$1" = "full" ]; then
-    inc_args=""
-else
-    inc_args="--incremental"
-fi
+set -euo pipefail
+set -x
 
-echo "PLEASE clone blog-extra-file to root and rename to bef"
-bundle exec jekyll serve -w "$inc_args" --host 0.0.0.0
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+inc_args="--incremental"
+[ "${1:-}" = "full" ] && inc_args=""
+
+echo "Starting jekyll..."
+
+bundle exec jekyll serve -w $inc_args --host 0.0.0.0

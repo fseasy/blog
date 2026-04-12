@@ -1,8 +1,8 @@
-# Page
+# Fseasy Blog
 
 [![](https://img.shields.io/badge/blog-servering-green.svg)](https://blog.fseasy.top)
 
-For Web Service. 
+For Fseasy blog service. 
 
 ## 博客核心目标
 
@@ -14,7 +14,13 @@ For Web Service.
 
 ## 部署注意事项
 
-1. 现在依赖 `blog-extra-file` 这个仓库。它存储博客额外的、非关键文件(如非核心图片等)。服务器部署会通过 Nginx 自动设置位置（通过 `alias`），其访问路径为 `/bef/$PATH`. 本地部署 Jekyll server 不能设置路径映射，只能尝试把文件夹放到 _site 下。尝试了很久， jekyll 始终不能将符号文件自动拷贝到 `_site`（ `safe=false` 不行），所以就只能将 blog-extra-file 这个仓库拉到根目录，并改名为 `bef` 了——因为已经为当前的 .gitignore 添加了 `bef`, 所以不会影响当前仓库的 git. 只是这样有可能会让每次构建都拷贝文件，造成写浪费（实际上不确定是否会重复拷贝啦）。
+1. 现在依赖 `blog-extra-file` 这个仓库，存储博客额外的、非关键文件(如非核心图片等)；其对应到 `/bef` 这个路径地址。
+   1. 服务器侧，是通过 Nginx 设置路由来定向到仓库的实际位置（通过 `alias`），其访问路径为 `/bef/$PATH`. 
+   2. 本地部署 Jekyll server 使用 `./local_server.sh` ，为 Jekyll server, 不支持自定义路由，所以只能把 `blog-extra-file` 放到 `_site` 里面，经过一些尝试，最稳妥的方法是用 plugin post-write 方式来做软链接，实现在 `_plugins/symlink_bef.rb`. 其依赖的配置项为 `_config.yml` 中的 `local_bef_resources`.
+      
+      PS：手动软连接、shell 里软链接都行不通—因为本地用的是 `jekyll serve` watch 模式，它会持续监控 `_site`, 多余的文件会被删除掉。或许用一些 trick 可以实现链接的创建（如 `keep_files: ["bef"]` + shell 里 watch ），但显然太 trick.
+
+      PS2: 这个 plugin 进在 development 下生效。相应的，我们在 production 环境下需要设置 `JEKYLL_ENV=production`.
 
 ## 博客撰写注意事项
 
@@ -31,6 +37,8 @@ For Web Service.
    # - force_enable 强制引入 Mathjax 依赖
    # - 其他值，根据内容判断是否要引入 Mathjax 依赖
    mathjax: "disable"|"force_enable"|any-other-or-empty
+   # - 加载 Gallery 相关的 css+js
+   use_gallery: true | false
    ```
 
 2. 添加内部跳转
