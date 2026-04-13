@@ -12,6 +12,7 @@ Used for _includes/extra_fn/gallery.html
 """
 
 import argparse
+import json
 import concurrent.futures
 import re
 import subprocess
@@ -19,31 +20,44 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import NotRequired, TypedDict
 
+from PIL import Image
 import yaml
 from fs_pyutils.lang_basic import import_module_from_path
 from tqdm import tqdm
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
 VIDEO_EXTS = {".mp4", ".mov", ".webm", ".avi", ".mkv"}
-DT_UTC_FORMAT = "%Y%m%d %H%M%S"
+DT_UTC_FORMAT = "%Y-%m-%d %H:%M:%S"
+
+_module = import_module_from_path("fix_gallery_assets_create_time", "./fix-gallery-assets-create-time.py")
+g_media_time_extractor = _module.MediaTimeExtractor()
+g_file_time_fixer = _module.MediaTimeFixer()
 
 
 class GalleryYamlItem(TypedDict):
   relative_path: str
   caption: str
   dt_utc: str
-  poster: NotRequired[str]
-
-
-class GalleryBuildItem(TypedDict):
-  relative_path: str
-  caption: str
-  dt_utc: str
-  _dt_utc: datetime
+  width: int
+  height: int
   poster: NotRequired[str]
 
 
 GalleryData = dict[str, list[GalleryYamlItem]]
+
+
+class FormatTransformTaskInput(TypedDict):
+  input_abspath: Path
+  output_abspath: Path
+  poster_output_abspath: NotRequired[Path]
+  is_video: bool
+  dt_utc: datetime
+
+
+class FormatTransformTaskOutput(TypedDict):
+  input_abspath: Path  # used as the task key
+  width: int
+  height: int
 
 
 def process_media(input_path: Path, output_path: Path, scale_filter: str, is_video: bool):
@@ -130,26 +144,32 @@ def generate_poster(input_video: Path, output_poster: Path, scale_filter: str):
   subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
 
 
-def worker_task(task: dict):
+def do_format_transform(task: FormatTransformTaskInput) -> FormatTransformTaskOutput:
   """Worker function for concurrent execution."""
-  file_path = task["file_path"]
-  out_filepath = task["out_filepath"]
+  file_path = task["input_abspath"]
+  out_filepath = task["output_abspath"]
   is_video = task["is_video"]
   dt_utc = task["dt_utc"]
-  file_time_fixer = task["file_time_fixer"]
   # 将最大分辨率降至 800x800，可大幅降低体积
   scale_filter = "scale=w='min(800,iw)':h='min(800,ih)':force_original_aspect_ratio=decrease"
   # Process main media
   if not out_filepath.exists():
     process_media(file_path, out_filepath, scale_filter, is_video)
-    file_time_fixer.apply_time(out_filepath, dt_utc)
+    g_file_time_fixer.apply_time(out_filepath, dt_utc)
 
   # Process poster for video
   if is_video:
-    poster_filepath = task["poster_filepath"]
+    poster_filepath = task.get("poster_output_abspath")
+    assert poster_filepath, "MUST SET poster-output path when input is video"
     if not poster_filepath.exists():
       generate_poster(file_path, poster_filepath, scale_filter)
-      file_time_fixer.apply_time(poster_filepath, dt_utc)
+      g_file_time_fixer.apply_time(poster_filepath, dt_utc)
+
+  if is_video:
+    w, h = _get_video_size(file_path)
+  else:
+    w, h = _get_image_size(file_path)
+  return {"input_abspath": file_path, "width": w, "height": h}
 
 
 def main(src_dir: Path, dest_dir: Path):
@@ -157,16 +177,13 @@ def main(src_dir: Path, dest_dir: Path):
     print(f"Source dir {src_dir} does not exist.")
     return
 
-  module = import_module_from_path("fix_gallery_assets_create_time", "./fix-gallery-assets-create-time.py")
-  media_time_extractor = module.MediaTimeExtractor()
-  file_time_fixer = module.MediaTimeFixer()
-
   gallery_data: GalleryData = {}
 
   tasks = []
   build_items_dict = {}
 
   print("Scanning files and extracting metadata...")
+  input_abspath2item: dict[Path, GalleryYamlItem] = {}
   for subdir in tqdm(src_dir.iterdir(), unit="dirs"):
     if not subdir.is_dir():
       continue
@@ -175,7 +192,7 @@ def main(src_dir: Path, dest_dir: Path):
     out_subdir = dest_dir / subdir_name
     out_subdir.mkdir(parents=True, exist_ok=True)
 
-    items: list[GalleryBuildItem] = []
+    items: list[GalleryYamlItem] = []
     build_items_dict[subdir_name] = items
 
     for file_path in tqdm(subdir.iterdir(), unit="files", position=1, leave=False):
@@ -183,8 +200,8 @@ def main(src_dir: Path, dest_dir: Path):
       is_video = ext in VIDEO_EXTS
       if not (ext in IMAGE_EXTS or is_video):
         continue
-
-      dt_utc = media_time_extractor.extract(file_path)
+      input_abspath = file_path.resolve()
+      dt_utc = g_media_time_extractor.extract(file_path)
       if not dt_utc:
         print(f"File media time is None, use file create-time. Path={file_path}")
         dt_utc = _get_file_utc_time(file_path)
@@ -194,58 +211,48 @@ def main(src_dir: Path, dest_dir: Path):
 
       norm_stem = _normalize_filename(file_path.stem)
       out_filename = f"{norm_stem}{'.webm' if is_video else '.webp'}"
-      out_filepath = out_subdir / out_filename
+      out_filepath = (out_subdir / out_filename).resolve()
 
-      item_data: GalleryBuildItem = {
+      item_data: GalleryYamlItem = {
         "relative_path": f"{subdir_name}/{out_filename}",
         "caption": caption,
         "dt_utc": dt_utc.astimezone(UTC).strftime(DT_UTC_FORMAT),
-        "_dt_utc": dt_utc,
+        "width": 0,
+        "height": 0,
       }
 
-      task = {
-        "file_path": file_path,
-        "out_filepath": out_filepath,
+      task: FormatTransformTaskInput = {
+        "input_abspath": input_abspath,
+        "output_abspath": out_filepath,
         "is_video": is_video,
         "dt_utc": dt_utc,
-        "file_time_fixer": file_time_fixer,
       }
 
       if is_video:
         poster_filename = f"{norm_stem}_poster.webp"
         poster_filepath = out_subdir / poster_filename
-        task["poster_filepath"] = poster_filepath
+        task["poster_output_abspath"] = poster_filepath.resolve()
         item_data["poster"] = f"{subdir_name}/{poster_filename}"
 
       items.append(item_data)
       tasks.append(task)
+      input_abspath2item[input_abspath] = item_data
 
   # Phase 2: 并发处理 (VP9属于极重度CPU任务)
   print(f"Found {len(tasks)} media files. Starting processing (CPU Extreme Compression)...")
   # 推荐使用 4-5 个 workers。因为 libvpx-vp9 配合 -row-mt 本身就是多线程运作
   # 10 核 CPU 跑 4 个重度视频编码进程正好吃满且不容易引起线程饥饿
   with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-    futures = [executor.submit(worker_task, t) for t in tasks]
+    futures = [executor.submit(do_format_transform, t) for t in tasks]
     for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing"):
-      future.result()
+      out = future.result()
+      input_abspath2item[out["input_abspath"]].update({"width": out["width"], "height": out["height"]})
 
   # Phase 3: Build YAML
   print("Generating YAML...")
   for subdir_name, items in build_items_dict.items():
-    items.sort(key=lambda x: x["_dt_utc"])
-    clean_items: list[GalleryYamlItem] = []
-
-    for item in items:
-      clean_item: GalleryYamlItem = {
-        "relative_path": item["relative_path"],
-        "caption": item["caption"],
-        "dt_utc": item["dt_utc"],
-      }
-      if "poster" in item:
-        clean_item["poster"] = item["poster"]
-      clean_items.append(clean_item)
-
-    gallery_data[subdir_name] = clean_items
+    items.sort(key=lambda x: x["dt_utc"])
+    gallery_data[subdir_name] = items
 
   yaml_path = dest_dir / "gallery_data.yml"
   with open(yaml_path, "w", encoding="utf-8") as f:
@@ -274,6 +281,37 @@ def _get_file_utc_time(file_path: str | Path) -> datetime:
   utc_time = datetime.fromtimestamp(mtime_timestamp, tz=UTC)
 
   return utc_time
+
+
+def _get_video_size(path: Path | str) -> tuple[int, int]:
+  cmd = [
+    "ffprobe",
+    "-v",
+    "error",
+    "-select_streams",
+    "v:0",
+    "-show_entries",
+    "stream=width,height",
+    "-of",
+    "json",
+    str(path),
+  ]
+
+  result = subprocess.run(
+    cmd,
+    capture_output=True,
+    text=True,
+    check=True,
+  )
+
+  data = json.loads(result.stdout)
+  s = data["streams"][0]
+  return s["width"], s["height"]
+
+
+def _get_image_size(path: Path | str) -> tuple[int, int]:
+  with Image.open(path) as img:
+    return img.width, img.height
 
 
 if __name__ == "__main__":
