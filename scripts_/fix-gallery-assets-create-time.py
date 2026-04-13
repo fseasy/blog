@@ -23,12 +23,12 @@ Prompt:
 
 Dependency:
 - PYTHON:
-  uv add timezonefinder tzdata tqdm
+  uv add timezonefinder tzdata tqdm \
+         PyExifTool # (Just a wrapper for `exiftool`, need to install the `exiftool` binary in system level)
 - System:
   exiftool: https://exiftool.org/ (the most powerful tool, without python pkg replacement)
 """
 
-import json
 import logging
 import re
 import subprocess
@@ -37,6 +37,8 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 from tqdm import tqdm
+from exiftool import ExifToolHelper
+import atexit
 
 try:
   from timezonefinder import TimezoneFinder
@@ -48,6 +50,9 @@ except ImportError:
 VIDEO_LOWER_EXTS = {".mp4", ".mov", ".avi", ".webm"}
 IMG_LOWER_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
 SUPPORTED_EXTS = VIDEO_LOWER_EXTS | IMG_LOWER_EXTS
+g_exiftool = ExifToolHelper()
+
+atexit.register(g_exiftool.terminate)  # close it when exit the process
 
 
 class MediaTimeExtractor:
@@ -62,16 +67,31 @@ class MediaTimeExtractor:
     self.pattern_unix = re.compile(r"mmexport(\d{13})")
 
     self.tf = TimezoneFinder() if TimezoneFinder else None
+    self.exiftool = g_exiftool
+
+  def extract(self, fpath: Path) -> datetime | None:
+    # 1. Try Filename extraction
+    dt = self.extract_from_filename(fpath)
+
+    # 2. Fallback to Metadata extraction
+    if not dt:
+      dt = self.extract_from_metadata(fpath)
+
+    # 3. Handle total failure
+    if not dt:
+      return None
+
+    # 4. Resolve to UTC
+    dt_utc = self.resolve_to_utc(dt, fpath)
+    return dt_utc
 
   def _run_exiftool_json(self, filepath: Path, extra_args: list[str]) -> dict[str, Any]:
     """Runs exiftool and returns the parsed JSON output."""
-    cmd = ["exiftool", "-j", "-G"] + extra_args + [str(filepath)]
     try:
-      result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-      data = json.loads(result.stdout)
+      data = self.exiftool.get_metadata(str(filepath), params=extra_args)
       return data[0] if data else {}
-    except (subprocess.CalledProcessError, json.JSONDecodeError):
-      return {}
+    except Exception as e:
+      raise Exception("!! Please install exiftool!") from e
 
   def extract_from_filename(self, filepath: Path) -> datetime | None:
     """Tries to parse the timestamp from the filename."""
@@ -128,6 +148,7 @@ class MediaTimeExtractor:
 
   def resolve_to_utc(self, dt: datetime, filepath: Path) -> datetime:
     """Converts a naive datetime to UTC by checking GPS for timezone, or using system local."""
+
     if dt.tzinfo is not None:
       return dt.astimezone(timezone.utc)
 
@@ -195,21 +216,11 @@ class MediaProcessor:
     if filepath.suffix.lower() not in SUPPORTED_EXTS:
       return
 
-    # 1. Try Filename extraction
-    dt = self.extractor.extract_from_filename(filepath)
-    from_filename = dt is not None
-
-    # 2. Fallback to Metadata extraction
-    if not dt:
-      dt = self.extractor.extract_from_metadata(filepath)
-
-    # 3. Handle total failure
-    if not dt:
+    # 1. extract dt-utc
+    dt_utc = self.extractor.extract(filepath)
+    if not dt_utc:
       self.log_failure(filepath, "Could not parse time from filename or metadata")
       return
-
-    # 4. Resolve to UTC
-    dt_utc = self.extractor.resolve_to_utc(dt, filepath)
 
     # 5. Check for suspicious year
     if self.is_suspicious(dt_utc):
@@ -352,6 +363,12 @@ class MediaProcessor:
 
 if __name__ == "__main__":
   import argparse
+
+  logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(name)s (%(filename)s:%(lineno)d) - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+  )
 
   parser = argparse.ArgumentParser(description="Fix Media Timestamps (EXIF and OS).")
   subparsers = parser.add_subparsers(dest="command", required=True, help="Processing modes")

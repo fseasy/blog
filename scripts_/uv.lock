@@ -7,7 +7,9 @@ name = "blog-scripts"
 version = "1.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "fs-pyutils" },
     { name = "pillow" },
+    { name = "pyexiftool" },
     { name = "pyyaml" },
     { name = "timezonefinder" },
     { name = "tqdm" },
@@ -16,7 +18,9 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
+    { name = "fs-pyutils", specifier = ">=2.0.0" },
     { name = "pillow", specifier = ">=12.2.0" },
+    { name = "pyexiftool", specifier = ">=0.5.6" },
     { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "timezonefinder", specifier = ">=8.2.2" },
     { name = "tqdm", specifier = ">=4.67.3" },
@@ -95,6 +99,15 @@ version = "25.12.19"
 source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
 wheels = [
     { url = "https://mirrors.aliyun.com/pypi/packages/e8/2d/d2a548598be01649e2d46231d151a6c56d10b964d94043a335ae56ea2d92/flatbuffers-25.12.19-py2.py3-none-any.whl", hash = "sha256:7634f50c427838bb021c2d66a3d1168e9d199b0607e6329399f04846d42e20b4" },
+]
+
+[[package]]
+name = "fs-pyutils"
+version = "2.0.0"
+source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
+sdist = { url = "https://mirrors.aliyun.com/pypi/packages/4e/cb/52e48ab21f6b3167aaae58512e238fbd19d7c84c993c69703b05d6bef29d/fs_pyutils-2.0.0.tar.gz", hash = "sha256:dcde1b28885aa7a19376ae09d8f4fda909aed28dd69216f0ea46f260218e0bce" }
+wheels = [
+    { url = "https://mirrors.aliyun.com/pypi/packages/6b/6f/45376827a15240c587c80c1a53cab0f455d63d0e7554a50330050c91e671/fs_pyutils-2.0.0-py3-none-any.whl", hash = "sha256:bab875ca19bfac5278318d8e67bb49a6e1c6f8d5963b2d349b82384aa82b01ba" },
 ]
 
 [[package]]
@@ -263,6 +276,15 @@ source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
 sdist = { url = "https://mirrors.aliyun.com/pypi/packages/1b/7d/92392ff7815c21062bea51aa7b87d45576f649f16458d78b7cf94b9ab2e6/pycparser-3.0.tar.gz", hash = "sha256:600f49d217304a5902ac3c37e1281c9fe94e4d0489de643a9504c5cdfdfc6b29" }
 wheels = [
     { url = "https://mirrors.aliyun.com/pypi/packages/0c/c3/44f3fbbfa403ea2a7c779186dc20772604442dde72947e7d01069cbe98e3/pycparser-3.0-py3-none-any.whl", hash = "sha256:b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992" },
+]
+
+[[package]]
+name = "pyexiftool"
+version = "0.5.6"
+source = { registry = "https://mirrors.aliyun.com/pypi/simple/" }
+sdist = { url = "https://mirrors.aliyun.com/pypi/packages/5e/48/406da6691d15abf3c8d399bce8bc588709a5b54e857fd7c22dad2f90c33c/PyExifTool-0.5.6.tar.gz", hash = "sha256:22a972c1c212d1ad5f61916fded5057333dcc48fb8e42eed12d2ff9665b367ae" }
+wheels = [
+    { url = "https://mirrors.aliyun.com/pypi/packages/fc/b9/175e9a1f8f3f94b22f622f0fcac853ae2c43cb4ac6034f849269c6086dac/PyExifTool-0.5.6-py3-none-any.whl", hash = "sha256:ac7d7836d2bf373f20aa558528f6b2222c4c0d896ed28c951a3ff8e6cec05a87" },
 ]
 
 [[package]]

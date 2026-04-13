@@ -5,7 +5,9 @@ description = "Utils to help blog building"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fs-pyutils>=2.0.0",
     "pillow>=12.2.0",
+    "pyexiftool>=0.5.6",
     "pyyaml>=6.0.3",
     "timezonefinder>=8.2.2",
     "tqdm>=4.67.3",

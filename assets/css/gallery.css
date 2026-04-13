@@ -9,6 +9,23 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.gallery-scroll::-webkit-scrollbar {
+  height: 8px;
+  /* 横向滚动条高度 */
+  display: block;
+}
+
+.gallery-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  /* 轨道颜色 */
+}
+
+.gallery-scroll::-webkit-scrollbar-thumb {
+  background: #888;
+  /* 滑块颜色 */
+  border-radius: 4px;
+}
+
 /* 隐藏滚动条让视觉更干净 (可选) */
 .gallery-scroll::-webkit-scrollbar {
   display: none;

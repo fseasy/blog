@@ -5,22 +5,23 @@ Used for _includes/extra_fn/gallery.html
   - preprocess src images: compress & format to .webp/.webm, generate poster img for video.
   - generate yaml data for `gallery.html`
 - dependency:
-  - pypi: pyyaml, pillow
-  - ffmpeg
+  - pypi: pyyaml, pillow, timezonefinder, tzdata, tqdm, fs-pyutils
+  - system:
+    - ffmpeg
+    - exiftool: https://exiftool.org/
 """
 
 import argparse
-import json
-import os
+import concurrent.futures
 import re
-import shutil
 import subprocess
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import NotRequired, TypedDict
 
 import yaml
-from PIL import ExifTags, Image
+from fs_pyutils.lang_basic import import_module_from_path
+from tqdm import tqdm
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
 VIDEO_EXTS = {".mp4", ".mov", ".webm", ".avi", ".mkv"}
@@ -45,151 +46,35 @@ class GalleryBuildItem(TypedDict):
 GalleryData = dict[str, list[GalleryYamlItem]]
 
 
-EXIF_TAG_TO_ID = {v: k for k, v in ExifTags.TAGS.items()}
-EXIF_DATETIME_TAGS = (
-  "DateTimeOriginal",
-  "DateTimeDigitized",
-  "DateTime",
-)
-VIDEO_DATETIME_KEYS = (
-  "creation_time",
-  "com.apple.quicktime.creationdate",
-  "creationdate",
-)
-
-
-def parse_image_exif_dt_utc(file_path: Path) -> datetime | None:
-  """Extract image datetime from EXIF and normalize it to UTC when possible."""
-  try:
-    with Image.open(file_path) as img:
-      exif = img.getexif()
-      if not exif:
-        return None
-
-      offset = None
-      for offset_tag_name in ("OffsetTimeOriginal", "OffsetTimeDigitized", "OffsetTime"):
-        offset_tag_id = EXIF_TAG_TO_ID.get(offset_tag_name)
-        if offset_tag_id:
-          offset = exif.get(offset_tag_id)
-          if offset:
-            break
-
-      for tag_name in EXIF_DATETIME_TAGS:
-        tag_id = EXIF_TAG_TO_ID.get(tag_name)
-        if not tag_id:
-          continue
-        dt_str = exif.get(tag_id)
-        if not dt_str:
-          continue
-
-        dt = datetime.strptime(dt_str, "%Y:%m:%d %H:%M:%S")
-        if offset:
-          dt = datetime.fromisoformat(f"{dt.strftime('%Y-%m-%d %H:%M:%S')}{offset}")
-          return dt.astimezone(UTC)
-        return dt.replace(tzinfo=UTC)
-  except Exception:
-    return None
-
-  return None
-
-
-def parse_video_exif_dt_utc(file_path: Path) -> datetime | None:
-  """Extract video datetime from ffprobe metadata and normalize it to UTC."""
-  try:
-    cmd = ["ffprobe", "-v", "quiet", "-print_format", "json", "-show_format", "-show_streams", str(file_path)]
-    result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-    info = json.loads(result.stdout)
-  except Exception:
-    return None
-
-  tag_sources = []
-  format_tags = info.get("format", {}).get("tags", {})
-  if format_tags:
-    tag_sources.append(format_tags)
-
-  for stream in info.get("streams", []):
-    stream_tags = stream.get("tags", {})
-    if stream_tags:
-      tag_sources.append(stream_tags)
-
-  for tags in tag_sources:
-    for key in VIDEO_DATETIME_KEYS:
-      dt_raw = tags.get(key)
-      if not dt_raw:
-        continue
-
-      dt_normalized = dt_raw.strip().replace("Z", "+00:00")
-      try:
-        if dt_normalized.endswith(("+00:00", "+08:00")) or re.search(r"[+-]\d{2}:\d{2}$", dt_normalized):
-          return datetime.fromisoformat(dt_normalized).astimezone(UTC)
-        return datetime.fromisoformat(dt_normalized).replace(tzinfo=UTC)
-      except ValueError:
-        try:
-          return datetime.strptime(dt_raw, "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=UTC)
-        except ValueError:
-          try:
-            return datetime.strptime(dt_raw, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
-          except ValueError:
-            continue
-
-  return None
-
-
-def get_dt_utc(file_path: Path, is_video: bool) -> datetime:
-  """Extract UTC datetime from metadata, fallback to file mtime."""
-  dt = parse_video_exif_dt_utc(file_path) if is_video else parse_image_exif_dt_utc(file_path)
-  if dt is not None:
-    return dt.astimezone(UTC)
-  return datetime.fromtimestamp(file_path.stat().st_mtime, tz=UTC)
-
-
-def format_dt_utc(dt_utc: datetime) -> str:
-  return dt_utc.astimezone(UTC).strftime(DT_UTC_FORMAT)
-
-
-def set_file_timestamps(file_path: Path, dt_utc: datetime):
-  """Best-effort sync output file timestamps with extracted UTC time."""
-  ts = dt_utc.astimezone(UTC).timestamp()
-  os.utime(file_path, (ts, ts))
-
-  # macOS Finder exposes birth time; set it too when SetFile is available.
-  setfile_cmd = shutil.which("SetFile")
-  if setfile_cmd:
-    dt_local = dt_utc.astimezone()
-    dt_for_setfile = dt_local.strftime("%m/%d/%Y %H:%M:%S")
-    subprocess.run([setfile_cmd, "-d", dt_for_setfile, "-m", dt_for_setfile, str(file_path)], check=False)
-
-
-def normalize_filename(stem: str) -> str:
-  """Remove spaces, keep alphanumeric, dots, hyphens, underscores and Chinese characters."""
-  name = re.sub(r"\s+", "-", stem)
-  name = re.sub(r"[^\w\-\.\u4e00-\u9fff]", "", name)
-  return name
-
-
-def trim_title(stem: str) -> str:
-  """Remove prefixes like IMG_..., DSC_..."""
-  return re.sub(r"^(IMG|DSC|VID|PANO|video)[_A-Z0-9]+-?", "", stem, flags=re.IGNORECASE)
-
-
 def process_media(input_path: Path, output_path: Path, scale_filter: str, is_video: bool):
-  """Convert and compress media."""
+  """Convert and compress media using extreme CPU compression."""
   if is_video:
     cmd = [
       "ffmpeg",
       "-y",
       "-i",
       str(input_path),
+      # 将降帧率直接放入滤镜链，12fps
       "-vf",
-      scale_filter,
+      f"{scale_filter},fps=15",
       "-c:v",
       "libvpx-vp9",
       "-crf",
-      "35",
+      "38",  # 核心：非常高的恒定质量参数，数值越大体积越小、画质越低
       "-b:v",
-      "0",
+      "0",  # VP9 CRF 模式必须加上 -b:v 0
+      "-cpu-used",
+      "2",  # 核心：0-5，越小压缩效率越高但越慢。1 是极致体积和极慢速度的甜点
+      "-row-mt",
+      "1",  # 核心：开启行级多线程，拯救多核 CPU 编码速度
+      "-g",
+      "75",  # 增大关键帧间隔 (15fps * 5s = 75)，大幅减小体积
+      "-pix_fmt",
+      "yuv420p",
       "-c:a",
-      "libopus",
+      "libopus",  # 音频改用 Opus，低码率王者
+      "-b:a",
+      "64k",  # 64k Opus 音质远好于 64k aac，满足你“音频不能太差”的需求
       str(output_path),
     ]
   else:
@@ -199,14 +84,26 @@ def process_media(input_path: Path, output_path: Path, scale_filter: str, is_vid
       "-i",
       str(input_path),
       "-vf",
-      scale_filter,
+      f"{scale_filter}",
       "-c:v",
       "libwebp",
       "-q:v",
-      "80",
+      "75",  # 质量
+      "-compression_level",
+      "6",  # 核心：这就是你要的 -m 6，在 ffmpeg 中全名为 compression_level
+      "-preset",
+      "photo",
+      "-an",
       str(output_path),
     ]
-  subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+  result = subprocess.run(cmd, capture_output=True, text=True)
+
+  if result.returncode != 0:
+    print(f"\n❌ Error processing: {input_path}")
+    print(f"Command: {' '.join(cmd)}")
+    print(f"Stdout: {result.stdout}")
+    print(f"Stderr: {result.stderr}")
+    raise subprocess.CalledProcessError(result.returncode, cmd, result.stdout, result.stderr)
 
 
 def generate_poster(input_video: Path, output_poster: Path, scale_filter: str):
@@ -225,10 +122,34 @@ def generate_poster(input_video: Path, output_poster: Path, scale_filter: str):
     "-c:v",
     "libwebp",
     "-q:v",
-    "80",
+    "50",
+    "-compression_level",
+    "6",  # 封面同样使用极慢极致压缩
     str(output_poster),
   ]
   subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+
+
+def worker_task(task: dict):
+  """Worker function for concurrent execution."""
+  file_path = task["file_path"]
+  out_filepath = task["out_filepath"]
+  is_video = task["is_video"]
+  dt_utc = task["dt_utc"]
+  file_time_fixer = task["file_time_fixer"]
+  # 将最大分辨率降至 800x800，可大幅降低体积
+  scale_filter = "scale=w='min(800,iw)':h='min(800,ih)':force_original_aspect_ratio=decrease"
+  # Process main media
+  if not out_filepath.exists():
+    process_media(file_path, out_filepath, scale_filter, is_video)
+    file_time_fixer.apply_time(out_filepath, dt_utc)
+
+  # Process poster for video
+  if is_video:
+    poster_filepath = task["poster_filepath"]
+    if not poster_filepath.exists():
+      generate_poster(file_path, poster_filepath, scale_filter)
+      file_time_fixer.apply_time(poster_filepath, dt_utc)
 
 
 def main(src_dir: Path, dest_dir: Path):
@@ -236,66 +157,84 @@ def main(src_dir: Path, dest_dir: Path):
     print(f"Source dir {src_dir} does not exist.")
     return
 
-  # Use min() to strictly prevent upscaling while keeping aspect ratio constraint
-  scale_filter = "scale=w='min(1280,iw)':h='min(720,ih)':force_original_aspect_ratio=decrease"
-  gallery_data: GalleryData = {}
-  latest_dt_utc: datetime | None = None
+  module = import_module_from_path("fix_gallery_assets_create_time", "./fix-gallery-assets-create-time.py")
+  media_time_extractor = module.MediaTimeExtractor()
+  file_time_fixer = module.MediaTimeFixer()
 
-  for subdir in src_dir.iterdir():
+  gallery_data: GalleryData = {}
+
+  tasks = []
+  build_items_dict = {}
+
+  print("Scanning files and extracting metadata...")
+  for subdir in tqdm(src_dir.iterdir(), unit="dirs"):
     if not subdir.is_dir():
       continue
 
     subdir_name = subdir.name
-    print(f"Processing folder: {subdir_name}")
     out_subdir = dest_dir / subdir_name
     out_subdir.mkdir(parents=True, exist_ok=True)
-    items: list[GalleryBuildItem] = []
 
-    for file_path in subdir.iterdir():
+    items: list[GalleryBuildItem] = []
+    build_items_dict[subdir_name] = items
+
+    for file_path in tqdm(subdir.iterdir(), unit="files", position=1, leave=False):
       ext = file_path.suffix.lower()
       is_video = ext in VIDEO_EXTS
       if not (ext in IMAGE_EXTS or is_video):
         continue
 
-      print(f"  -> {file_path.name}")
+      dt_utc = media_time_extractor.extract(file_path)
+      if not dt_utc:
+        print(f"File media time is None, use file create-time. Path={file_path}")
+        dt_utc = _get_file_utc_time(file_path)
 
-      dt_utc = get_dt_utc(file_path, is_video)
-      if latest_dt_utc is None or dt_utc > latest_dt_utc:
-        latest_dt_utc = dt_utc
-      trimmed_stem = trim_title(file_path.stem)
-      caption = f"{trimmed_stem.replace('-', ' ')} {dt_utc.strftime('%Y%m%d %H')}".strip()
+      trimmed_stem = _trim_title(file_path.stem)
+      caption = f"{trimmed_stem.replace('-', ' ')} \ndate: {dt_utc.strftime('%Y-%m-%d')}".strip()
 
-      norm_stem = normalize_filename(trimmed_stem)
+      norm_stem = _normalize_filename(file_path.stem)
       out_filename = f"{norm_stem}{'.webm' if is_video else '.webp'}"
       out_filepath = out_subdir / out_filename
-
-      # Process main media
-      if not out_filepath.exists():
-        process_media(file_path, out_filepath, scale_filter, is_video)
-      set_file_timestamps(out_filepath, dt_utc)
 
       item_data: GalleryBuildItem = {
         "relative_path": f"{subdir_name}/{out_filename}",
         "caption": caption,
-        "dt_utc": format_dt_utc(dt_utc),
+        "dt_utc": dt_utc.astimezone(UTC).strftime(DT_UTC_FORMAT),
         "_dt_utc": dt_utc,
       }
 
-      # Process poster for video
+      task = {
+        "file_path": file_path,
+        "out_filepath": out_filepath,
+        "is_video": is_video,
+        "dt_utc": dt_utc,
+        "file_time_fixer": file_time_fixer,
+      }
+
       if is_video:
         poster_filename = f"{norm_stem}_poster.webp"
         poster_filepath = out_subdir / poster_filename
-        if not poster_filepath.exists():
-          generate_poster(file_path, poster_filepath, scale_filter)
-        set_file_timestamps(poster_filepath, dt_utc)
+        task["poster_filepath"] = poster_filepath
         item_data["poster"] = f"{subdir_name}/{poster_filename}"
 
       items.append(item_data)
+      tasks.append(task)
 
+  # Phase 2: 并发处理 (VP9属于极重度CPU任务)
+  print(f"Found {len(tasks)} media files. Starting processing (CPU Extreme Compression)...")
+  # 推荐使用 4-5 个 workers。因为 libvpx-vp9 配合 -row-mt 本身就是多线程运作
+  # 10 核 CPU 跑 4 个重度视频编码进程正好吃满且不容易引起线程饥饿
+  with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    futures = [executor.submit(worker_task, t) for t in tasks]
+    for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing"):
+      future.result()
+
+  # Phase 3: Build YAML
+  print("Generating YAML...")
+  for subdir_name, items in build_items_dict.items():
     items.sort(key=lambda x: x["_dt_utc"])
-
-    # Clean data for YAML dump
     clean_items: list[GalleryYamlItem] = []
+
     for item in items:
       clean_item: GalleryYamlItem = {
         "relative_path": item["relative_path"],
@@ -311,14 +250,42 @@ def main(src_dir: Path, dest_dir: Path):
   yaml_path = dest_dir / "gallery_data.yml"
   with open(yaml_path, "w", encoding="utf-8") as f:
     yaml.dump(gallery_data, f, allow_unicode=True, sort_keys=False)
-  set_file_timestamps(yaml_path, latest_dt_utc or datetime.now(UTC))
 
   print(f"\n✅ Done! Data saved to: {yaml_path}")
 
 
+def _normalize_filename(stem: str) -> str:
+  name = re.sub(r"\s+", "-", stem)
+  name = re.sub(r"[^\w\-\.\u4e00-\u9fff]", "", name)
+  return name
+
+
+def _trim_title(stem: str) -> str:
+  trimmed = re.sub(r"^(?:(?:IMG|DSC|VID|PANO|videoScreenshot)[_A-Z0-9]+-?)+", "", stem, flags=re.IGNORECASE)
+  return trimmed if trimmed else stem
+
+
+def _get_file_utc_time(file_path: str | Path) -> datetime:
+  path = Path(file_path)
+  stat = path.stat()
+
+  # 获取修改时间（返回的是时间戳，例如 1712880000.0）
+  mtime_timestamp = stat.st_mtime
+  utc_time = datetime.fromtimestamp(mtime_timestamp, tz=UTC)
+
+  return utc_time
+
+
 if __name__ == "__main__":
-  parser = argparse.ArgumentParser()
-  parser.add_argument("--res-dir", type=str, required=True)
-  parser.add_argument("--res-processed-dir", type=str, required=True)
+  import logging
+
+  logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(levelname)s] %(name)s (%(filename)s:%(lineno)d) - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+  )
+  parser = argparse.ArgumentParser(description="Generate Year-in-Review gallery files.")
+  parser.add_argument("--input-dir", "-i", help="path to input resource dir", type=str, required=True)
+  parser.add_argument("--output-dir", "-o", type=str, help="path to processed output dir", required=True)
   args = parser.parse_args()
-  main(Path(args.res_dir), Path(args.res_processed_dir))
+  main(Path(args.input_dir), Path(args.output_dir))

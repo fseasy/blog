@@ -1,0 +1,4 @@
+{% comment %}
+参数: base, relative
+{% endcomment %}
+{{ include.base | append: '/' | append: include.relative | replace: '//', '/' | replace: ':/', '://' }}
