@@ -24,6 +24,7 @@ from PIL import Image
 import yaml
 from fs_pyutils.lang_basic import import_module_from_path
 from tqdm import tqdm
+from tqdm.contrib.concurrent import thread_map
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp", ".heic"}
 VIDEO_EXTS = {".mp4", ".mov", ".webm", ".avi", ".mkv"}
@@ -166,9 +167,9 @@ def do_format_transform(task: FormatTransformTaskInput) -> FormatTransformTaskOu
       g_file_time_fixer.apply_time(poster_filepath, dt_utc)
 
   if is_video:
-    w, h = _get_video_size(file_path)
+    w, h = _get_video_size(out_filepath)
   else:
-    w, h = _get_image_size(file_path)
+    w, h = _get_image_size(out_filepath)
   return {"input_abspath": file_path, "width": w, "height": h}
 
 
@@ -242,11 +243,9 @@ def main(src_dir: Path, dest_dir: Path):
   print(f"Found {len(tasks)} media files. Starting processing (CPU Extreme Compression)...")
   # 推荐使用 4-5 个 workers。因为 libvpx-vp9 配合 -row-mt 本身就是多线程运作
   # 10 核 CPU 跑 4 个重度视频编码进程正好吃满且不容易引起线程饥饿
-  with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-    futures = [executor.submit(do_format_transform, t) for t in tasks]
-    for future in tqdm(concurrent.futures.as_completed(futures), total=len(futures), desc="Processing"):
-      out = future.result()
-      input_abspath2item[out["input_abspath"]].update({"width": out["width"], "height": out["height"]})
+  results = thread_map(do_format_transform, tasks, max_workers=4, desc="Processing")
+  for out in results:
+    input_abspath2item[out["input_abspath"]].update({"width": out["width"], "height": out["height"]})
 
   # Phase 3: Build YAML
   print("Generating YAML...")
@@ -322,6 +321,7 @@ if __name__ == "__main__":
     format="%(asctime)s [%(levelname)s] %(name)s (%(filename)s:%(lineno)d) - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
   )
+  logging.getLogger("PIL").setLevel(logging.WARNING)  # disable PIL DEBUG info
   parser = argparse.ArgumentParser(description="Generate Year-in-Review gallery files.")
   parser.add_argument("--input-dir", "-i", help="path to input resource dir", type=str, required=True)
   parser.add_argument("--output-dir", "-o", type=str, help="path to processed output dir", required=True)
