@@ -2,17 +2,34 @@
 <!-- Gallery part -->
 <link rel="stylesheet" href="{{ '/assets/css/gallery.css' | relative_url }}">
 <script src="{{ '/assets/js/gallery_video_lazy_load.js' | relative_url }}" defer></script>
-<link rel="stylesheet" href="{% link '/assets/third-party/photoswipe/photoswipe.css' %}">
+<link rel="stylesheet" href="{% link /assets/third-party/photoswipe/photoswipe-all-in-one.css %}">
 
 <script type="module">
-  import PhotoSwipeLightbox from "{% link '/assets/third-party/photoswipe/photoswipe-lightbox.esm.min.js' %}";
-  
+  import PhotoSwipeLightbox from "{% link /assets/third-party/photoswipe/photoswipe-lightbox.esm.min.js %}";
+  import PhotoSwipeVideoPlugin from "{% link /assets/third-party/photoswipe/photoswipe-video-plugin.esm.min.js %}";
+  import PhotoSwipeDynamicCaption from '{% link /assets/third-party/photoswipe/photoswipe-dynamic-caption-plugin.esm.min.js %}';
+
   const lightbox = new PhotoSwipeLightbox({
-    gallery: '.gallery-scroll',
+    gallery: '.pswp-gallery',
     children: 'a',
-    pswpModule: () => import("{% link '/assets/third-party/photoswipe/photoswipe.esm.min.js' %}"),
-    preloadFirstSlide: false
+    pswpModule: () => import("{% link /assets/third-party/photoswipe/photoswipe.esm.min.js %}"),
+    mainClass: 'pswp--custom-bg',
+    preloadFirstSlide: false,
+    bgOpacity: 0.8,
+    loop: false,
+    returnFocus: true,
   });
+  const videoPlugin = new PhotoSwipeVideoPlugin(lightbox, {
+    autoplay: false,
+    videoAttributes: { controls: true, playsinline: true, preload: 'auto' },
+  });
+
+  const captionPlugin = new PhotoSwipeDynamicCaption(lightbox, {
+    type: 'auto',
+    captionContent: '.gallery-caption',
+    mobileLayoutBreakpoint: 768,
+  });
+
   lightbox.init();
 
 </script>

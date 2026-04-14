@@ -12,6 +12,9 @@
       ...
 - data_group_id: (必填) 对应数据分组 ID (即前面的 data_group_id)
 - base_dir: (可选) data 中定义的文件路径前的文件夹前缀，例如 "2026/annual", 则最终路径为： base_dir / relative_path | absolute_url
+- display_style: (可选) 
+  - justified (row height equals) [default]
+  - masonry (瀑布流, col width equals) 
 -->{% endcomment %}
 
 {%- assign data_file = include.data -%}
@@ -25,8 +28,8 @@
 {%- endif -%}
 
 {% if gallery_data %}
-<div class="gallery-scroll">
-  {% for item in gallery_data %}
+<div class="pswp-gallery gallery-{{ include.display_style | default: 'justified' }}">
+  {%- for item in gallery_data -%}
     {% comment %} 获取后缀并转为小写 {% endcomment %}
     {%- assign ext = item.relative_path | split: "." | last | downcase -%}
 
@@ -38,25 +41,32 @@
     {%- capture src_full_url -%}
     {%- include helper/path-join.html base=base_url relative=item.relative_path -%}
     {%- endcapture -%}
+    <figure class="gallery-item">
 
-    {% if is_video %}
-      <a href="{{ src_full_url }}" 
-        class="is-video" 
-        data-pswp-type="video" 
-        data-pswp-width="{{ item.width }}" 
-        data-pswp-height="{{ item.height }}"
-        target="_blank"
-      >
-        <img src="{% include helper/path-join.html base=base_url relative=item.poster %}" loading="lazy">
-      </a>
-    {% else %}
-      <a href="{{ src_full_url }}" data-pswp-width="{{ item.width }}" data-pswp-height="{{ item.height }}" 
-         target="_blank"
-      >
-        <img src="{{ src_full_url }}" loading="lazy" decoding="async" 
-             alt="{{ item.caption | default: 'Gallery Image' }}">
-      </a>
-    {% endif %}
+      {% if is_video %}
+        <a href="{{ src_full_url }}" 
+          class="is-video" 
+          data-pswp-type="video" 
+          data-pswp-width="{{ item.width }}" 
+          data-pswp-height="{{ item.height }}"
+          target="_blank"
+        >
+          <img src="{% include helper/path-join.html base=base_url relative=item.poster %}" loading="lazy" 
+               decoding="async" alt="{{ item.caption | default: 'Gallery Image' }}">
+        </a>
+      {% else %}
+        <a href="{{ src_full_url }}" data-pswp-width="{{ item.width }}" data-pswp-height="{{ item.height }}" 
+          target="_blank"
+        >
+          <img src="{{ src_full_url }}" loading="lazy" decoding="async" 
+              alt="{{ item.caption | default: 'Gallery Image' }}">
+        </a>
+      {% endif %}
+      
+      {% if item.caption %}
+        <figcaption class="gallery-caption">{{ item.caption | newline_to_br}}</figcaption>
+      {% endif %}
+    </figure>
 
   {% endfor %}
 </div>

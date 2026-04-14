@@ -1,75 +1,168 @@
-/* 滚动条容器 */
-.gallery-scroll {
-  display: flex;
-  overflow-x: auto;
-  gap: 16px;
-  padding: 1rem 0 1.5rem 0;
-  /* 留白 */
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+/* =======================================================
+   画廊基础组件 (所有布局通用)
+   基础类： pswp-gallery, 对应 photoswipe 的监听
+======================================================= */
+
+/* 每个独立的卡片盒子 */
+.pswp-gallery .gallery-item {
+  position: relative;
+  /* 极其重要：为浮层提供定位基准 */
+  overflow: hidden;
+  border-radius: 8px;
+  /* 圆角 */
+  margin: 0;
+  /* 重置默认 margin */
+  background: #f8f8f8;
+  /* 加载出图前的底色 */
 }
 
-.gallery-scroll::-webkit-scrollbar {
-  height: 8px;
-  /* 横向滚动条高度 */
+.pswp-gallery .gallery-item a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pswp-gallery .gallery-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 保证图片按比例填充不变形 */
+  transition: transform 0.3s ease;
+  /* 鼠标悬停放大的过渡动画 */
+}
+
+/* 鼠标悬停时图片微微放大，增加高级感 */
+.pswp-gallery .gallery-item:hover img {
+  transform: scale(1.03);
+}
+
+/* =======================================================
+   浮层系统：标题 与 视频播放按钮
+======================================================= */
+
+/* --- 顶部文字悬浮层 --- */
+.pswp-gallery .gallery-caption {
+  position: absolute;
+  top: 0;
+  /* 吸附在顶部 */
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  /* 浮在图片(底层)之上 */
+
+  /* 顶部黑色渐变，确保任何图片上白字都能看清 */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+  color: #fff;
+  padding: 12px 12px 30px;
+  font-size: 14px;
+  margin: 0;
+
+  /* 【关键】防止文字遮罩拦截点击，确保能点击打开大图 */
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.pswp-gallery .gallery-item:hover .gallery-caption {
+  opacity: 1;
+}
+
+/* --- 视频播放图标悬浮层 --- */
+.pswp-gallery .is-video {
+  position: relative;
   display: block;
 }
 
-.gallery-scroll::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  /* 轨道颜色 */
-}
+.pswp-gallery .is-video::after {
+  content: '▶';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  /* 层级最高，浮在标题和图片之上 */
 
-.gallery-scroll::-webkit-scrollbar-thumb {
-  background: #888;
-  /* 滑块颜色 */
-  border-radius: 4px;
-}
+  /* 播放按钮样式 */
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  /* 毛玻璃高级效果 */
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
 
-/* 隐藏滚动条让视觉更干净 (可选) */
-.gallery-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-/* 每一个卡片 (figure) */
-.gallery-item {
-  flex: 0 0 auto;
-  margin: 0;
-  /* 重置 figure 默认 margin */
-  width: 85%;
-  /* 露出下一张的边缘，提示可滑动 */
-  max-width: 450px;
-  scroll-snap-align: start;
-  /* 文本阅读习惯，对齐左侧更好 */
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  /* 媒体和 caption 的间距 */
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  padding-left: 4px;
+  /* 视觉修正播放三角居中 */
+
+  pointer-events: none;
+  /* 同样不可拦截点击 */
 }
 
-/* 媒体内容 */
-.gallery-item img,
-.gallery-item video {
-  width: 100%;
-  height: 280px;
-  /* 统一高度，防止页面上下跳动，高度视你图片比例自行调整 */
-  object-fit: cover;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  /* 加点淡淡的阴影，质感更好 */
-  background: #f8f8f8;
-  /* 加载前的占位色 */
+
+/* =======================================================
+   两种排版模式 (在使用时选一个类名加到父容器即可)
+======================================================= */
+
+/* --- 模式 1：瀑布流排版 (Masonry) --- */
+/* 特点：宽度固定，高度错落有致，适合大量竖屏图 */
+.gallery-masonry {
+  column-count: 2;
+  /* 手机默认 2 列 */
+  column-gap: 10px;
+  /* 列间距 */
 }
 
-/* Caption 样式 */
-.gallery-caption {
-  font-size: 0.9rem;
-  color: #666;
-  line-height: 1.5;
-  padding: 0 4px;
-  /* 如果文字过长，最多显示两行并省略 */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.gallery-masonry .gallery-item {
+  break-inside: avoid;
+  /* 防止单张图被切成两半放到两列 */
+  margin-bottom: 10px;
+  /* 上下行间距 */
+}
+
+/* 电脑端自动变为 3 列 */
+@media (min-width: 768px) {
+  .gallery-masonry {
+    column-count: 3;
+    column-gap: 12px;
+  }
+
+  .gallery-masonry .gallery-item {
+    margin-bottom: 12px;
+  }
+}
+
+
+/* --- 模式 2：自适应行高排版 (Justified) --- */
+/* 特点：每一行的高度整齐，宽度自动拉伸填满，适合大量横图/视频 */
+.gallery-justified {
+  display: flex;
+  flex-wrap: wrap;
+  /* 自动换行 */
+  gap: 10px;
+  /* 间距 */
+}
+
+.gallery-justified .gallery-item {
+  flex-grow: 1;
+  /* 自动拉伸填满剩余宽度 */
+  height: 200px;
+  /* 【核心】这里的 200px 是这一行的基准高度，可按喜好修改 */
+}
+
+/* 保护机制：防止最后一行只有 1 张图时被无限拉扯变形 */
+.gallery-justified::after {
+  content: "";
+  flex-grow: 999;
+}
+
+/***** ============
+  custom pswp
+**/
+
+.pswp--custom-bg {
+  --pswp-bg: #7079bf;
 }

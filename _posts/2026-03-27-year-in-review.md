@@ -34,10 +34,11 @@ use_gallery: true
 生活常常是苦、乐相伴。一天里，开心可能顷刻变为悲伤；一年里，快乐与痛苦则是硬币的 2 面难以分隔。先摘取一个日记段落，再分别记下去年里的光与影吧。
 
 
-{% include extra_fn/gallery.html
+{% include extra_fn/render_gallery.html
    data="gallery_2025_year_in_review"
    data_group_id="newfoundland"
    base_dir="bef/posts/2025-year-in-review"
+   display_style="masonry"
 %}
 
 ### 意外，命运的无常
