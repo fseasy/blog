@@ -28,8 +28,7 @@ paginate: 15
 github_username: fseasy
 
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
       type: "posts"
     values:

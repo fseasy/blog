@@ -7,9 +7,6 @@
 {% capture postdata %}
 [
     {% for post in site.posts %}
-        {% if post.private == true %}
-            {% continue %}
-        {% endif %}
         {
                 "title": "{{ post.title | escape }}" ,
                 "url": "{{ post.url | prepend: site.baseurl }}" ,

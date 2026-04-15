@@ -984,18 +984,18 @@ daycare:
   width: 450
   height: 800
   poster: daycare/VID_20250730_232645-story_video_2NxmBqXfiCB3Mgx1ovMkQB8G18_original-daycare-lets-feed-the-baby_poster.webp
-desease:
-- relative_path: desease/IMG_20250324_041333-治疗.webp
+disease:
+- relative_path: disease/IMG_20250324_041333-治疗.webp
   caption: "治疗 \ndate: 2025-03-23"
   dt_utc: '2025-03-23 23:13:33'
   width: 450
   height: 800
-- relative_path: desease/IMG_20250411_153704-治疗-万古霉素.webp
+- relative_path: disease/IMG_20250411_153704-治疗-万古霉素.webp
   caption: "治疗 万古霉素 \ndate: 2025-04-11"
   dt_utc: '2025-04-11 10:37:04'
   width: 450
   height: 800
-- relative_path: desease/IMG_20250521_075908-治疗-第一次维得利珠.webp
+- relative_path: disease/IMG_20250521_075908-治疗-第一次维得利珠.webp
   caption: "治疗 第一次维得利珠 \ndate: 2025-05-21"
   dt_utc: '2025-05-21 02:59:08'
   width: 450
@@ -1704,32 +1704,32 @@ huangcheche-growup:
   width: 450
   height: 800
 - relative_path: huangcheche-growup/IMG_20250426_070249-好好-黄车车-high-park方向的湖边.webp
-  caption: "好好 黄车车 high park方向的湖边 \ndate: 2025-04-26"
+  caption: "high park方向的湖边. 租车去 high park. 结果不知道哪里能停车，又回来到湖边。\ndate: 2025-04-26"
   dt_utc: '2025-04-26 02:02:49'
   width: 800
   height: 450
 - relative_path: huangcheche-growup/IMG_20250426_070557-好好-黄车车-high-park方向的湖边.webp
-  caption: "好好 黄车车 high park方向的湖边 \ndate: 2025-04-26"
+  caption: "high park方向的湖边. 湖边天气还可以，不过风大。这边还挺开阔。\ndate: 2025-04-26"
   dt_utc: '2025-04-26 02:05:57'
   width: 800
   height: 450
 - relative_path: huangcheche-growup/IMG_20250426_082853-high-park-好好-黄车车.webp
-  caption: "high park 好好 黄车车 \ndate: 2025-04-26"
+  caption: "吃完了面包，推车车去了 high park. 花还没开，2 个地方比较有意思，小动物园（见后面的图），遛狗区：可以释放狗链子，让狗在林子里跑。我们走在林子间的公路上，听着风在周围的林子上呜呜的吹。\ndate: 2025-04-26"
   dt_utc: '2025-04-26 03:28:53'
   width: 800
   height: 450
 - relative_path: huangcheche-growup/IMG_20250426_085339-high-park-黄车车-摸小牛.webp
-  caption: "high park 黄车车 摸小牛 \ndate: 2025-04-26"
+  caption: "high park 黄车车 摸小牛。各种颜色的羊驼很好看，小牛牛很乖，看到了很小很小的羊。 \ndate: 2025-04-26"
   dt_utc: '2025-04-26 03:53:39'
   width: 800
   height: 450
 - relative_path: huangcheche-growup/IMG_20250426_090652-high-park-黄车车-看孔雀.webp
-  caption: "high park 黄车车 看孔雀 \ndate: 2025-04-26"
+  caption: "high park 黄车车 看孔雀。第一回看到了孔雀开屏，而且还是 2 只，还有一只愤怒的牛，一直在叫、往外拱，挺吓人的。 \ndate: 2025-04-26"
   dt_utc: '2025-04-26 04:06:52'
   width: 800
   height: 450
 - relative_path: huangcheche-growup/VID_20250427_075827-toronto-island-爸爸-黄车车-妈妈-变狮子.webm
-  caption: "toronto island 爸爸 黄车车 妈妈 变狮子 \ndate: 2025-04-26"
+  caption: "toronto island 变狮子 \ndate: 2025-04-26"
   dt_utc: '2025-04-26 23:58:27'
   width: 450
   height: 800
@@ -1934,7 +1934,7 @@ huangcheche-growup:
   height: 800
   poster: huangcheche-growup/VID_20250606_173219-跟着妈妈揉面粉_poster.webp
 - relative_path: huangcheche-growup/IMG_20250607_115228-toronto-island-爸爸-黄车车.webp
-  caption: "toronto island 爸爸 黄车车 \ndate: 2025-06-07"
+  caption: "toronto island 爸爸 黄车车. \ndate: 2025-06-07"
   dt_utc: '2025-06-07 06:52:28'
   width: 800
   height: 600
@@ -1974,7 +1974,7 @@ huangcheche-growup:
   width: 800
   height: 450
 - relative_path: huangcheche-growup/IMG_20250608_123916-细嗅花朵.webp
-  caption: "细嗅花朵 \ndate: 2025-06-08"
+  caption: "细嗅花朵. 植物园,大大的白牡丹，好漂亮. 期间下起了雨；回去的时候刚进公交站台，雨就大了；车上看着雨顺着玻璃留下来；中途司机说要 short turning? 反正就是让下车了；下来的时候，雨竟然就停了，好神奇啊\ndate: 2025-06-08"
   dt_utc: '2025-06-08 07:39:16'
   width: 600
   height: 800
@@ -2609,22 +2609,22 @@ huangcheche-growup:
   width: 450
   height: 800
   poster: huangcheche-growup/VID_20250917_212847-吃葡萄-问答_poster.webp
+- relative_path: huangcheche-growup/IMG_20250920_072920-摘苹果-黄车车-好好.webp
+  caption: "摘苹果 黄车车 好好. 第一次看到了苹果树：嫁接的和原生的都看到了 \ndate: 2025-09-20"
+  dt_utc: '2025-09-20 02:29:20'
+  width: 800
+  height: 450
+- relative_path: huangcheche-growup/IMG_20250920_073118-摘苹果-黄车车-好好.webp
+  caption: "摘苹果 黄车车 好好; 苹果真红啊 \ndate: 2025-09-20"
+  dt_utc: '2025-09-20 02:31:18'
+  width: 800
+  height: 450
 - relative_path: huangcheche-growup/VID_20250920_044420-在苹果地里吃苹果.webm
   caption: "在苹果地里吃苹果 \ndate: 2025-09-19"
   dt_utc: '2025-09-19 20:44:20'
   width: 450
   height: 800
   poster: huangcheche-growup/VID_20250920_044420-在苹果地里吃苹果_poster.webp
-- relative_path: huangcheche-growup/IMG_20250920_072920-摘苹果-黄车车-好好.webp
-  caption: "摘苹果 黄车车 好好 \ndate: 2025-09-20"
-  dt_utc: '2025-09-20 02:29:20'
-  width: 800
-  height: 450
-- relative_path: huangcheche-growup/IMG_20250920_073118-摘苹果-黄车车-好好.webp
-  caption: "摘苹果 黄车车 好好 \ndate: 2025-09-20"
-  dt_utc: '2025-09-20 02:31:18'
-  width: 800
-  height: 450
 - relative_path: huangcheche-growup/IMG_20250920_091748-草堆游乐园-黄车车.webp
   caption: "草堆游乐园 黄车车 \ndate: 2025-09-20"
   dt_utc: '2025-09-20 04:17:48'
@@ -2636,13 +2636,13 @@ huangcheche-growup:
   width: 450
   height: 800
 - relative_path: huangcheche-growup/VID_20250921_082019-west-beach-浪起在沙滩上跳.webm
-  caption: "west beach 浪起在沙滩上跳 \ndate: 2025-09-21"
+  caption: "port hope west beach 浪起在沙滩上跳. 那边是沙滩+鹅卵石；往灯塔方向赤脚走了一个来回，好痛；实在体会到痛感，才知道鞋子是多么有用啊 \ndate: 2025-09-21"
   dt_utc: '2025-09-21 00:20:19'
   width: 450
   height: 800
   poster: huangcheche-growup/VID_20250921_082019-west-beach-浪起在沙滩上跳_poster.webp
 - relative_path: huangcheche-growup/IMG_20250921_112317-port-hope-west-beach-黄车车.webp
-  caption: "port hope west beach 黄车车 \ndate: 2025-09-21"
+  caption: "port hope west beach 黄车车. 本来只是简单看看的，结果玩了估计有 2 小时 \ndate: 2025-09-21"
   dt_utc: '2025-09-21 06:23:17'
   width: 800
   height: 450
@@ -4009,7 +4009,7 @@ toronto-island:
   width: 800
   height: 600
 - relative_path: toronto-island/IMG_20250607_150456-toronto-island-免费的旧物区.webp
-  caption: "toronto island 免费的旧物区 \ndate: 2025-06-07"
+  caption: "toronto island 免费的旧物区. 在 anginque island 上，可以任意取用。好好看了说：能够感觉到这里人的富足，真好啊；在这个小岛上慢慢的逛，真好啊 \ndate: 2025-06-07"
   dt_utc: '2025-06-07 10:04:56'
   width: 600
   height: 800

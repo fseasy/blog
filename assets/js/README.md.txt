@@ -1,6 +1,6 @@
-#一些逻辑
+# 一些逻辑
 
-### load\_all\_postdata.js 是怎么完成的
+### `load_all_postdata.js` 是怎么完成的
 
 我把所有的postadata数据在`_include/postadata.html`下生成了，不过将其赋值给了模板变量，而不再像以前一样把它直接作为字符串，然后嵌入到文件中。
 
@@ -20,6 +20,6 @@
 
     ==> 使用 `remove: ' '` 后，日期间的空白也被删除了，后面去掉了这个。
 
-# PS
+## PS
 
-Pages里的Jekyll更新后突然解析这里的MD文件了... 都没有加yaml头啊，没办法，改成.txt后缀了。
+Pages 里的 Jekyll 更新后突然解析这里的MD文件了... 都没有加yaml头啊，没办法，改成.txt后缀了。
