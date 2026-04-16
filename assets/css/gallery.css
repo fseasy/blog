@@ -60,7 +60,7 @@
 
   /* 【关键】防止文字遮罩拦截点击，确保能点击打开大图 */
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .pswp-gallery .gallery-item:hover .gallery-caption {
@@ -104,11 +104,48 @@
 
 
 /* =======================================================
-   两种排版模式 (在使用时选一个类名加到父容器即可)
+   三种排版模式 (在使用时选一个类名加到父容器即可)
 ======================================================= */
 
-/* --- 模式 1：瀑布流排版 (Masonry) --- */
-/* 特点：宽度固定，高度错落有致，适合大量竖屏图 */
+/* --- 模式 1：瀑布流排版-横向优先排序 (依赖 Masonry.js) --- */
+.gallery-masonry-row {
+  width: 100%;
+  /* 清除浮动，防止容器高度塌陷 */
+  margin: 0 auto;
+}
+
+.gallery-masonry-row .gallery-item {
+  float: left;
+  width: calc(50% - 5px); /* 手机 2 列 */
+  margin-bottom: 10px;
+  
+  /* 关键：防止 Masonry 计算重叠 */
+  /* 如果有文字描述，这里需要特殊处理，或者只给内部的 img 容器设比例 */
+  aspect-ratio: var(--w) / var(--h); 
+}
+
+/* 如果你的 caption 增加了额外高度，建议将比例给到包裹图片的 a 标签 */
+.gallery-masonry-row .gallery-item a {
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--w) / var(--h);
+  background: #eee; /* 加载前的占位色 */
+}
+
+/* 给 Masonry.js 定位宽高的辅助元素 */
+.gallery-masonry-row .grid-sizer { width: calc(50% - 5px); }
+.gallery-masonry-row .gutter-sizer { width: 10px; }
+
+@media (min-width: 768px) {
+  .gallery-masonry-row .gallery-item,
+  .gallery-masonry-row .grid-sizer {
+    width: calc(33.333% - 8px); /* 电脑 3 列 */
+  }
+  .gallery-masonry-row .gutter-sizer { width: 12px; }
+}
+
+/* --- 模式 2：瀑布流排版 (Masonry) --- */
+/* 特点：宽度固定，基于 CSS，只能实现纵向优先排布；顺序重要的话不是很推荐 */
 .gallery-masonry {
   column-count: 2;
   /* 手机默认 2 列 */
@@ -136,7 +173,7 @@
 }
 
 
-/* --- 模式 2：自适应行高排版 (Justified) --- */
+/* --- 模式 3：自适应行高排版 (Justified) --- */
 /* 特点：每一行的高度整齐，宽度自动拉伸填满，适合大量横图/视频 */
 .gallery-justified {
   display: flex;
@@ -150,7 +187,7 @@
   flex-grow: 1;
   /* 自动拉伸填满剩余宽度 */
   height: 200px;
-  /* 【核心】这里的 200px 是这一行的基准高度，可按喜好修改 */
+  /* 【核心】这里的 200px 是这一行的基准高度 */
 }
 
 /* 保护机制：防止最后一行只有 1 张图时被无限拉扯变形 */

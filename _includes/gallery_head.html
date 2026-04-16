@@ -32,4 +32,26 @@
   lightbox.init();
 
 </script>
+
+{% comment %} Load Masonry.js. TODO opt: only load when we use this masonry.js display {% endcomment %}
+
+<script src="{% link /assets/third-party/masonry.pkgd.min.js %}" defer></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // 检查 Masonry 是否已加载（由于 defer 保证顺序，此处通常已就绪）
+  if (typeof Masonry !== 'undefined') {
+    var grids = document.querySelectorAll('.gallery-masonry-row');
+    grids.forEach(function(grid) {
+      new Masonry(grid, {
+        itemSelector: '.gallery-item',
+        columnWidth: '.grid-sizer',
+        gutter: '.gutter-sizer',
+        percentPosition: true
+      });
+    });
+  }
+});
+</script>
+
 {% endif %}
