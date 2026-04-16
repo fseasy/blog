@@ -1,0 +1,70 @@
+// Font families
+$font-special: 
+    SFProDisplay-Regular //针对微信小程序
+;
+$font-en-formal:
+    'San Francisco', 'Helvetica Neue', Menlo, // apple english
+    consolas, // win english
+    'Ubuntu' // ubuntu english
+;
+$font-en-easy:
+    'San Francisco', 'Helvetica Neue', Menlo, // apple english
+    consolas, // win english
+    'Ubuntu Mono' // ubuntu english
+;
+$font-cn-sans:
+    'PingFang SC', // mac Chinese
+    'Microsoft YaHei', // win Chinese
+    'Noto Sans CJK SC', 'WenQuanYi Micro Hei' // ubuntu Chinese
+;
+
+$font-cn-serif:
+    "Songti SC", //mac
+    "SimSun", //win
+    "AR PL Sungti", "Noto Serif CJK SC" // ubuntu
+;
+
+$font-kai:
+    "STKaiti", Kai, // mac
+    "KaiTi", // win
+    "AR PL UKai CN" // ubuntu
+;  
+
+$font-code: 
+    "Monaco", "Menlo", // apple
+    "consolas", // win
+    "Ubuntu Mono" // ubuntu
+;
+
+// Spacing
+$spacing-unit: 20px;
+
+// Font directory
+$font-dir: "/assets/site/font";
+
+// Breakpoints
+$screen-sm-min: 768px;
+$screen-md-min: 992px; 
+$screen-lg-min: 1200px;
+
+$on-phone: $screen-sm-min; 
+$on-desktop: $screen-md-min;
+$on-large-desktop: $screen-lg-min;
+
+// Font sizes
+$phone-font-size: 15px;
+$desktop-font-size: 18px;
+$base-line-height: 1.65;
+
+// Media query mixins
+@mixin media-query($min_width) {
+    @media screen and (min-width: $min_width) {
+        @content;
+    }
+}
+
+@mixin media-query-range($min_width, $max_width) {
+    @media screen and (min-width: $min_width) and (max-width: $max_width) {
+        @content;
+    }
+}

@@ -1,4 +1,6 @@
-// pagenation in index.html
+@use 'variables' as *;
+
+// pagination in index.html
 
 .pagination {
   width: 100%;
@@ -39,23 +41,22 @@
 }
 
 .contentpanel a {
-  color: $text-dark-color;
-  border-bottom: 1px solid $link-color;
+  color: var(--text-dark-color);
+  border-bottom: 1px solid var(--link-color);
   text-decoration: none; // use border as underline, disable default.
   line-height: 1;
 }
 
 .contentpanel a:hover {
   transition: box-shadow .2s linear;
-  box-shadow: inset 0 -0.4em $link-color;
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift 1.8s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23" + str-slice("" + $link-color, 2) + "' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E");
+  box-shadow: inset 0 -0.4em var(--link-color);
   background-position: 0 100%;
   background-size: auto 0.3em;
   background-repeat: repeat-x;
 }
 
 .contentpanel a:visited {
-  border-bottom: 1px solid $link-visited-color;
+  border-bottom: 1px solid var(--link-visited-color);
 }
 
 // post-list in index.html
@@ -67,7 +68,7 @@ ul.post-list {
 
   >li {
     margin: 0;
-    border-bottom: 1px solid $decorate-color;
+    border-bottom: 1px solid var(--decorate-color);
     padding: 18px 0;
 
     >h3 {
@@ -80,7 +81,7 @@ ul.post-list {
 a.post-link {
   font-size: 1.4rem;
   font-weight: 400;
-  color: $text-dark-color;
+  color: var(--text-dark-color);
   border-bottom: none;
 }
 
@@ -89,7 +90,7 @@ a.post-link:hover {
 }
 
 .post-excerpt {
-  color: $text-dark-grey-color;
+  color: var(--text-dark-grey-color);
   padding: 5px 0;
 }
 
@@ -97,13 +98,13 @@ a.post-link:hover {
 
 .post-meta {
   font-size: 0.8em;
-  color: $text-dark-grey-color;
+  color: var(--text-dark-grey-color);
   padding: 5px 0;
   line-height: 1.6;
 }
 
 .post-meta .tag-bubble {
-  background-color: $header-bg;
+  background-color: var(--header-bg);
   border-radius: 8px;
   padding: 5px;
   margin-left: 5px;
@@ -154,7 +155,7 @@ a.post-link:hover {
 }
 
 #category_panel {
-  background-color: $body-bg;
+  background-color: var(--body-bg);
 
   .list-group-item {
     background-color: transparent;
@@ -165,8 +166,8 @@ a.post-link:hover {
   }
 
   .badge {
-    background-color: $header-bg;
-    color: $header-text-color
+    background-color: var(--header-bg);
+    color: var(--header-text-color)
   }
 }
 

@@ -1,8 +1,10 @@
+@use 'variables' as *;
+
 // Posts
 
 #toc-content {
-    background: darken($body-bg, 2%); // same as blockquote:first-child
-    border-top: 4px solid $header-bg;
+    background: var(--blockquote-bg);
+    border-top: 4px solid var(--header-bg);
     padding-top: 0.5rem;
     padding-bottom: 0.3rem;
     position: relative;
@@ -15,7 +17,7 @@
     bottom: 0.3rem;
     right: 1rem;
     font-size: 2.5rem;
-    color: $header-bg;
+    color: var(--header-bg);
 }
 
 .post-header {
@@ -43,7 +45,7 @@
     h5,
     h6 {
         margin: 1.2rem 0;
-        color: $text-dark-strong-color;
+        color: var(--text-dark-strong-color);
     }
 
     h2 {
@@ -91,8 +93,8 @@
 
     table td,
     th {
-        border-bottom: 1px solid #e5e5e5;
-        border-right: 1px solid #e5e5e5;
+        border-bottom: 1px solid var(--table-border);
+        border-right: 1px solid var(--table-border);
         padding: 5px 5px;
     }
 
@@ -109,8 +111,8 @@
     }
 
     >blockquote:first-child {
-        background-color: darken($body-bg, 2%);
-        border-left: 1em solid $header-bg;
+        background-color: var(--blockquote-bg);
+        border-left: 1em solid var(--header-bg);
         padding:1em 1.5em 1em 1.5em;
         position: relative;
         margin-bottom: 2rem;
@@ -119,7 +121,7 @@
     >blockquote:first-child::before {
         content: open-quote;
         font-family: "webfont", "Open Sans", sans-serif;
-        color: $text-dark-grey-color;
+        color: var(--text-dark-grey-color);
         line-height: .1em;
         position: absolute;
         left: -.5em;
@@ -130,7 +132,7 @@
     >blockquote:first-child::after {
         content: close-quote;
         font-family: "webfont", "Open Sans", sans-serif;
-        color: $text-dark-grey-color;
+        color: var(--text-dark-grey-color);
         line-height: .1em;
         position: absolute;
         right: -.2em;
@@ -150,13 +152,13 @@
     padding: 1rem 1rem 0.5rem 1rem;
     margin-top: 4rem;
     position: relative;
-    background-color: darken($body-bg, 2%);
+    background-color: var(--blockquote-bg);
 }
 
 .footnotes::before {
     content: "Footnotes";
     font-family: "webfont", "Open Sans", sans-serif;
-    color: $header-bg;
+    color: var(--header-bg);
     position: absolute;
     line-height: .1rem;
     top: -0.2rem;
@@ -165,7 +167,7 @@
 }
 
 .footnotes a {
-    color: $text-dark-grey-color;
+    color: var(--text-dark-grey-color);
 }
 
 .footnotes p {
@@ -177,7 +179,7 @@
     text-align: center;
     margin-top: 1.3rem;
     margin-bottom: 1.3rem;
-    color: $text-dark-more-grey-color;
+    color: var(--text-dark-more-grey-color);
 }
 
 .post-image img {
@@ -185,7 +187,7 @@
 }
 
 .post-image .img-float {
-    border-left: solid 1px $text-dark-grey-color;
+    border-left: solid 1px var(--text-dark-grey-color);
 }
 
 .post-image .caption-short {
@@ -204,4 +206,183 @@
 
 .content-sep {
     margin-top: 10px;
+}
+
+/**
+* Special Styles
+*/
+
+/* =========================================
+   Notion-style Callout
+   ========================================= */
+
+.callout {
+  /* Layout */
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  /* Spacing */
+  padding: 1rem 1.25rem;
+  margin: 1rem 0;
+
+  /* Appearance */
+  background: var(--callout-bg, var(--note-bg));
+  /* Default to note-bg */
+  border-radius: 6px;
+  border-width: 1px;
+  border-style: solid;
+
+  /* Text */
+  font-size: 0.95rem;
+  line-height: 1.5;
+
+  /* Icon */
+  &-icon {
+    font-size: 1.25rem;
+    line-height: 1.25rem;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+  }
+
+  /* Content */
+  &-content {
+    >p:first-child {
+      margin-top: 0;
+    }
+
+    >p:last-child {
+      margin-bottom: 0;
+    }
+
+    >ul {
+      padding-inline-start: 1rem;
+    }
+  }
+
+  /* ---------------------------------------
+     Type (Color) Variants
+     --------------------------------------- */
+  &--muted {
+    --callout-bg: var(--muted-bg);
+    border-color: var(--muted-border);
+  }
+
+  &.callout--note {
+    background: var(--note-bg);
+    border-color: var(--note-border);
+  }
+
+  &.callout--tip {
+    background: var(--tip-bg);
+    border-color: var(--tip-border);
+  }
+
+  &.callout--important {
+    background: var(--important-bg);
+    border-color: var(--important-border);
+  }
+
+  &.callout--warning {
+    background: var(--warning-bg);
+    border-color: var(--warning-border);
+  }
+
+  &.callout--caution {
+    background: var(--caution-bg);
+    border-color: var(--caution-border);
+  }
+
+  &.callout--none {
+    background: var(--none-bg);
+    border-color: var(--none-border);
+  }
+
+  &.no-border {
+    border: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: #e5e7eb;
+  }
+
+}
+
+/* ===== Fold / details ===== */
+.fold-styled-wrapper {
+  margin: 1rem 0;
+
+  .fold-styled-icon {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5rem;
+    flex-shrink: 0;
+    max-width: 1.5rem;
+  }
+
+  .callout--note .fold-styled-icon  { color: #007bff; }
+  .callout--tip .fold-styled-icon   { color: #28a745; }
+  .callout--warn .fold-styled-icon  { color: #fd7e14; }
+  .callout--error .fold-styled-icon { color: #dc3545; }
+
+  details.fold-styled-details {
+    flex-grow: 1;
+    /* 占据剩余空间 */
+    min-width: 0;
+    /* CSS Flexbox 的一个防溢出技巧 */
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0; // 全部赋值，因为要覆盖 .markdown 设置
+    margin: 0; // 与 icon 部分对齐，才能保证高度
+    line-height: 1.5rem;
+
+    /* 箭头动画 */
+    .fold-styled-arrow {
+      flex-shrink: 0;
+      /* 防止被挤压 */
+      display: flex;
+      align-items: center;
+      color: inherit;
+      opacity: 0.5;
+      transition: transform 0.2s ease;
+    }
+
+    &[open] .fold-styled-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* --- Summary (标题栏) --- */
+    summary {
+      display: flex;
+      align-items: center;
+      /* 标题居左，箭头居右 */
+      justify-content: space-between;
+      /* overwrite default value by .markdown */
+      margin: 0;
+      padding: 0;
+      /* 点击区域 */
+      cursor: pointer;
+      /* hidden inherent triangle */
+      list-style: none;
+      outline: none;
+      font-weight: 500;
+      line-height: 1.5rem;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &::before {
+        content: none;
+        display: none;
+      }
+    }
+
+    /* --- Content (展开的内容) --- */
+    .fold-styled-content {
+      padding: 1rem 0 0.2rem 0;
+      line-height: 1.4rem;
+    }
+  }
 }

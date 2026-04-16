@@ -1,11 +1,13 @@
+@use 'variables' as *;
+
 // Site footer
 .site-footer {
     padding: ($spacing-unit * 2) 0 ($spacing-unit * 2) 0;
-    background-color: $footer-bg;
+    background-color: var(--footer-bg);
     position: relative;
 }
 
 .text-decoration-none {
     text-decoration: none !important;
-    color: $text-dark-color;
+    color: var(--text-dark-color);
 }

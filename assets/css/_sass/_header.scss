@@ -1,5 +1,7 @@
+@use 'variables' as *;
+
 .site-page-header {
-    background: $header-bg;
+    background: var(--header-bg);
     padding: 45px 0 35px 0;
     margin: 0;
     height: 200px;
@@ -9,7 +11,7 @@
 }
 
 .site-page-footer {
-    background: $header-bg;
+    background: var(--header-bg);
 }
 
 .site-title {
@@ -22,26 +24,26 @@
 .site-title a:visited {
     float: none;
     font-size: 2rem;
-    color: $header-text-color;
+    color: var(--header-text-color);
     text-decoration: none;
     margin: 0;
     padding: 0;
 }
 
 .site-description {
-    color: $header-text-color-dark;
+    color: var(--header-text-color-dark);
     margin-bottom: 20px;
 }
 
 .site-nav {
     background-color: transparent;
     border: none;
-    color: $header-text-color;
+    color: var(--header-text-color);
     min-height: 32px;
 }
 
 .site-nav #site-navbar-collapse .site-nav-list>li>a {
-    color: $header-text-color;
+    color: var(--header-text-color);
     padding: 5px 2px 5px 0; // no left padding, so we can align the title and desc
 }
 
@@ -51,7 +53,7 @@
 
 .site-nav #site-navbar-collapse .site-nav-list>.active>a {
     background-color: transparent !important;
-    color: $header-text-color-dark;
+    color: var(--header-text-color-dark);
 }
 
 @include media-query-range("0px", $on-phone) {
@@ -74,7 +76,7 @@
         border: none;
     }
     .navbar-default .navbar-toggle .icon-bar {
-        background-color: $header-text-color;
+        background-color: var(--header-text-color);
     }
     .navbar-default .navbar-collapse {
         border: none;
@@ -104,10 +106,10 @@
 }
 
 .site-search-box .gsc-search-button-v2 {
-    background-color: $header-text-color;
+    background-color: var(--header-text-color);
     padding: 9.5px 18px;
 }
 
 .site-search-box .gsc-search-button-v2:hover {
-    background-color: $header-text-color-dark;
+    background-color: var(--header-text-color-dark);
 }

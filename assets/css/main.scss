@@ -1,102 +1,96 @@
 --- 
-# Only the main Sass file needs front matter (the dashes are enough) 
 --- 
 @charset "utf-8";
 
-$font-special: 
-    SFProDisplay-Regular //针对微信小程序
-;
-$font-en-formal:
-    'San Francisco', 'Helvetica Neue', Menlo, // apple english
-    consolas, // win english
-    'Ubuntu' // ubuntu english
-;
-$font-en-easy:
-    'San Francisco', 'Helvetica Neue', Menlo, // apple english
-    consolas, // win english
-    'Ubuntu Mono' // ubuntu english
-;
-$font-cn-sans:
-    'PingFang SC', // mac Chinese
-    'Microsoft YaHei', // win Chinese
-    'Noto Sans CJK SC', 'WenQuanYi Micro Hei' // ubuntu Chinese
-;
-
-$font-cn-serif:
-    "Songti SC", //mac
-    "SimSun", //win
-    "AR PL Sungti", "Noto Serif CJK SC" // ubuntu
-;
-
-$font-kai:
-    "STKaiti", Kai, // mac
-    "KaiTi", // win
-    "AR PL UKai CN" // ubuntu
-;  
-
-$font-code: 
-    "Monaco", "Menlo", // apple
-    "consolas", // win
-    "Ubuntu Mono" // ubuntu
-;
-
-$spacing-unit: 20px;
-
-$text-dark-color: #333;
-$text-dark-grey-color: #444;
-$text-dark-more-grey-color: #767676;
-$text-dark-strong-color: #000;
-$text-highlight-color: white;
-$text-highlight-bg-color: #17a2b8;
-$header-text-color: #00537f;
-$header-text-color-dark: darken($header-text-color, 10%);
-$link-color: #b0e4ff; 
-$link-visited-color: #c1f2fe;
-$explicit-link-color: $header-text-color; // use in explicit href, instead of text.
-
-$decorate-color: rgba(#000, .1);
-$brand-color: #3fa7cb;
-
-$body-bg: #fcfeff;
-$header-bg: #e1f5ff;
-$footer-bg: $header-bg;
-
-$font-dir: "/assets/site/font";
-
-// see https://v3.bootcss.com/css/#overview
-$screen-sm-min: 768px;
-$screen-md-min: 992px; 
-$screen-lg-min: 1200px;
-
-$on-phone: $screen-sm-min; 
-$on-desktop: $screen-md-min;
-$on-large-desktop: $screen-lg-min;
-
-$phone-font-size: 15px;
-$desktop-font-size: 18px;
-$base-line-height: 1.65;
-
-@mixin media-query($min_width) {
-    @media screen and (min-width: $min_width) {
-        @content;
-    }
-}
-
-@mixin media-query-range($min_width, $max_width) {
-    @media screen and (min-width: $min_width) and (max-width: $max_width) {
-        @content;
-    }
-}
+// Import variables first (with namespace wildcard to expose them globally)
+@use 'variables' as *;
 
 // Import partials from `sass_dir` (defaults to `_sass`)
-@import "base",
-    "header",
-    "footer",
-    "layout",
-    "post",
-    // for side-nav, TOC style
-    "side_nav",
-    "code",
-    "webfont",
-    "overwrite3rd"
-    ;
+@use 'base';
+@use 'header';
+@use 'footer';
+@use 'layout';
+@use 'post';
+@use 'side_nav';
+@use 'code';
+@use 'webfont';
+@use 'overwrite3rd';
+
+// CSS Variables for light/dark mode support
+:root {
+  // Light mode (default)
+  --text-dark-color: #333;
+  --text-dark-grey-color: #444;
+  --text-dark-more-grey-color: #767676;
+  --text-dark-strong-color: #000;
+  --text-highlight-color: white;
+  --text-highlight-bg-color: #17a2b8;
+  --header-text-color: #00537f;
+  --header-text-color-dark: #003a53;
+  --link-color: #b0e4ff;
+  --link-visited-color: #c1f2fe;
+  --explicit-link-color: #00537f;
+  --decorate-color: rgba(0, 0, 0, 0.1);
+  --brand-color: #3fa7cb;
+  --body-bg: #fcfeff;
+  --header-bg: #e1f5ff;
+  --footer-bg: #e1f5ff;
+  --blockquote-bg: #fafbfd;
+  --code-bg: #fafbfd;
+  --table-border: #e5e5e5;
+
+  /* mainly for Callout */
+  --muted-bg: var(--gray-200);
+  --note-bg: #eef6ff;
+  --tip-bg: #f3faf3;
+  --important-bg: #f5f0ff;
+  --warning-bg: #fff6e5;
+  --caution-bg: #fff0f0;
+  --none-bg: var(--body-background);
+
+  /* Border Colors */
+  --muted-border: #d6d8db;
+  --note-border: #a0c6ff;
+  --tip-border: #c3e8c3;
+  --important-border: #c8a9e1;
+  --warning-border: #f0e2b4;
+  --caution-border: #f3c4c4;
+  --none-border: var(--gray-200);
+
+  /* Dark mode */
+  @media (prefers-color-scheme: dark) {
+    --text-dark-color: #E5E7EB;
+    --text-dark-grey-color: #D1D5DB;
+    --text-dark-more-grey-color: #A0AEC0;
+    --text-dark-strong-color: #F5F5F5;
+    --text-highlight-color: #0F172A;
+    --text-highlight-bg-color: #3B82F6;
+    --header-text-color: #93C5FD;
+    --header-text-color-dark: #60A5FA;
+    --link-color: #87CEEB;
+    --link-visited-color: #B0E0E6;
+    --explicit-link-color: #93C5FD;
+    --decorate-color: rgba(255, 255, 255, 0.1);
+    --brand-color: #64B5F6;
+    --body-bg: #0F172A;
+    --header-bg: #213A5A;
+    --footer-bg: #213A5A;
+    --blockquote-bg: #1A3150;
+    --code-bg: #132038;
+    --table-border: #2D4563;
+
+    --note-bg: #1e2a44;
+    --tip-bg: #1f3323;
+    --important-bg: #2a2340;
+    --warning-bg: #3a2f1a;
+    --caution-bg: #3b1f1f;
+
+    /* Dark mode border colors */
+    --muted-border: #495057;
+    --note-border: #4a74b3;
+    --tip-border: #6fa86f;
+    --important-border: #7f6a97;
+    --warning-border: #c9b28f;
+    --caution-border: #d68f8f;
+  }
+}

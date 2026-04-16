@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 /*
   split TOC style from layout because it is linked to some javascript
     Toc has 2 components:
@@ -28,7 +30,7 @@
 .nav_toc_bar {
   font-size: 1rem;
   white-space: nowrap;
-  color: $text-dark-more-grey-color;
+  color: var(--text-dark-more-grey-color);
 }
 
 .side-nav {
@@ -64,13 +66,13 @@
   display: block;
   padding: 4px 0px;
   font-size: 1rem;
-  color: $text-dark-more-grey-color;
+  color: var(--text-dark-more-grey-color);
 }
 
 .nav-list .nav > li > a:hover,
 .nav-list .nav > li > a:focus {
   padding-left: 0px;
-  color: $text-dark-color;
+  color: var(--text-dark-color);
   background-color: transparent;
 }
 
@@ -79,7 +81,7 @@
 .nav-list .nav > .active:focus > a {
   padding-left: 0px;
   font-weight: bold;
-  color: $text-dark-color;
+  color: var(--text-dark-color);
   background-color: transparent;
 }
 
@@ -117,7 +119,7 @@
 }
 
 #back-to-top a{
-  color: $text-dark-more-grey-color;
+  color: var(--text-dark-more-grey-color);
   padding: 6px;
   display: block;
   margin-left: 1rem;
@@ -125,7 +127,7 @@
 
 #back-to-top a:hover {
   text-decoration: none;
-  color: $text-dark-color;
+  color: var(--text-dark-color);
   transition: color .5s ease-out;
 }
 

@@ -82,6 +82,11 @@ For Fseasy blog service.
 
      参考 [mathjax curly brackets dont show-up using jekyll][curly_braces_jekyll], 关键词 `curly brackets`, `curly braces`
 
+   - `<details>` 里面要想让 Markdown 被正确解析, 可以把 Markdown 内容用 `<div markdown="1">` 包裹一下，就可以正常解析了。
+     
+     原理： `markdown="1"` 是 kramdown（Jekyll 默认的 Markdown 引擎）提供的一个 专用扩展属性，作用非常直接：强制在这个 HTML 标签内部继续解析 Markdown。
+
+
 2. 代码渲染，现在使用 [Prism](https://prismjs.com/). 
   
   - 发现 Prism 渲染的bug：`c++` 不能被正确渲染，`cpp` 可以。后续用 `cpp` 表达。

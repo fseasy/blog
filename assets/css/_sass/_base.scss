@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 // Media-Query base setting
 // - desktop, as default (no max). ORDER is important. 
 // - any meet contion in the later will overwrite the previous. 
@@ -32,8 +34,8 @@ body {
     font-size: 1rem;
     font-family: $font-special, $font-en-formal, $font-cn-sans;
     line-height: $base-line-height;
-    color: $text-dark-color;
-    background-color: $body-bg;
+    color: var(--text-dark-color);
+    background-color: var(--body-bg);
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -75,30 +77,30 @@ p {
 }
 
 .text-highlight {
-    color: $text-highlight-color;
-    background-color: $text-highlight-bg-color;
+    color: var(--text-highlight-color);
+    background-color: var(--text-highlight-bg-color);
     padding-left: 0.3rem;
     padding-right: 0.3rem;
 }
 
 strong {
-    color: $text-dark-strong-color;
+    color: var(--text-dark-strong-color);
 }
 
 a {
-    color: $explicit-link-color;
+    color: var(--explicit-link-color);
 }
 
 a:hover {
-    color: $explicit-link-color;
+    color: var(--explicit-link-color);
 }
 
 
 blockquote {
     font-size: 1rem;
     font-family: $font-en-easy, $font-kai;
-    background-color: darken($body-bg, 1%);
-    border-left: 0.6em solid $header-bg;
+    background-color: var(--blockquote-bg);
+    border-left: 0.6em solid var(--header-bg);
     padding: 0.5rem;
     margin: 1rem 0;
 }

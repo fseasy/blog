@@ -46,7 +46,7 @@
     {%- endif -%}
 
     {%- capture src_full_url -%}
-    {%- include helper/path-join.html base=base_url relative=item.relative_path -%}
+    {%- include utils/path-join.html base=base_url relative=item.relative_path -%}
     {%- endcapture -%}
     {% comment %} 关键：将 width, height 传递给 CSS var 用于提前算好 aspect-ratio {% endcomment %}
     <figure class="gallery-item" style="--w: {{ item.width }}; --h: {{ item.height }};">
@@ -59,7 +59,7 @@
           data-pswp-height="{{ item.height }}"
           target="_blank"
         >
-          <img src="{% include helper/path-join.html base=base_url relative=item.poster %}" 
+          <img src="{% include utils/path-join.html base=base_url relative=item.poster %}" 
             width="{{ item.width }}" height="{{ item.height }}" {% comment %} 关键：设置原生的宽高属性 {% endcomment %}
             loading="lazy" decoding="async" alt="{{ item.caption | default: 'Gallery Image' }}">
         </a>
