@@ -35,9 +35,11 @@
     >:last-child {
         margin-bottom: 0;
     }
+
     >:first-child {
         margin-top: 0;
     }
+
     // no h1 in content
     h2,
     h3,
@@ -70,17 +72,23 @@
         word-break: break-word;
     }
 
-    ol>li,ul>li {
+    ol>li,
+    ul>li {
         margin-top: 0.7rem;
         margin-bottom: 0.7rem;
     }
-    ol,ul {
+
+    ol,
+    ul {
         margin-top: 1rem;
         margin-bottom: 1rem;
     }
-    p+ul, p+ol {
+
+    p+ul,
+    p+ol {
         margin-top: -0.3rem;
     }
+
     li p {
         margin-top: 0.7rem;
         margin-bottom: 0.7rem;
@@ -113,7 +121,7 @@
     >blockquote:first-child {
         background-color: var(--blockquote-bg);
         border-left: 1em solid var(--header-bg);
-        padding:1em 1.5em 1em 1.5em;
+        padding: 1em 1.5em 1em 1.5em;
         position: relative;
         margin-bottom: 2rem;
     }
@@ -145,7 +153,9 @@
     }
 }
 
-.footnote::before { content: " "; }
+.footnote::before {
+    content: " ";
+}
 
 .footnotes {
     font-size: 0.8rem;
@@ -217,172 +227,217 @@
    ========================================= */
 
 .callout {
-  /* Layout */
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
+    /* Layout */
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
 
-  /* Spacing */
-  padding: 1rem 1.25rem;
-  margin: 1rem 0;
+    /* Spacing */
+    padding: 1rem 1.25rem;
+    margin: 1rem 0;
 
-  /* Appearance */
-  background: var(--callout-bg, var(--note-bg));
-  /* Default to note-bg */
-  border-radius: 6px;
-  border-width: 1px;
-  border-style: solid;
+    /* Appearance */
+    background: var(--callout-bg, var(--note-bg));
+    /* Default to note-bg */
+    border-radius: 6px;
+    border-width: 1px;
+    border-style: solid;
 
-  /* Text */
-  font-size: 0.95rem;
-  line-height: 1.5;
+    /* Text */
+    font-size: 0.95rem;
+    line-height: 1.5;
 
-  /* Icon */
-  &-icon {
-    font-size: 1.25rem;
-    line-height: 1.25rem;
-    margin-top: 0.15rem;
-    flex-shrink: 0;
-  }
-
-  /* Content */
-  &-content {
-    >p:first-child {
-      margin-top: 0;
+    /* Icon */
+    &-icon {
+        font-size: 1.25rem;
+        line-height: 1.25rem;
+        margin-top: 0.15rem;
+        flex-shrink: 0;
     }
 
-    >p:last-child {
-      margin-bottom: 0;
+    /* Content */
+    &-content {
+        >p:first-child {
+            margin-top: 0;
+        }
+
+        >p:last-child {
+            margin-bottom: 0;
+        }
+
+        >ul {
+            padding-inline-start: 1rem;
+        }
     }
 
-    >ul {
-      padding-inline-start: 1rem;
-    }
-  }
-
-  /* ---------------------------------------
+    /* ---------------------------------------
      Type (Color) Variants
      --------------------------------------- */
-  &--muted {
-    --callout-bg: var(--muted-bg);
-    border-color: var(--muted-border);
-  }
+    &--muted {
+        --callout-bg: var(--muted-bg);
+        border-color: var(--muted-border);
+    }
 
-  &.callout--note {
-    background: var(--note-bg);
-    border-color: var(--note-border);
-  }
+    &.callout--note {
+        background: var(--note-bg);
+        border-color: var(--note-border);
+    }
 
-  &.callout--tip {
-    background: var(--tip-bg);
-    border-color: var(--tip-border);
-  }
+    &.callout--tip {
+        background: var(--tip-bg);
+        border-color: var(--tip-border);
+    }
 
-  &.callout--important {
-    background: var(--important-bg);
-    border-color: var(--important-border);
-  }
+    &.callout--important {
+        background: var(--important-bg);
+        border-color: var(--important-border);
+    }
 
-  &.callout--warning {
-    background: var(--warning-bg);
-    border-color: var(--warning-border);
-  }
+    &.callout--warning {
+        background: var(--warning-bg);
+        border-color: var(--warning-border);
+    }
 
-  &.callout--caution {
-    background: var(--caution-bg);
-    border-color: var(--caution-border);
-  }
+    &.callout--caution {
+        background: var(--caution-bg);
+        border-color: var(--caution-border);
+    }
 
-  &.callout--none {
-    background: var(--none-bg);
-    border-color: var(--none-border);
-  }
+    &.callout--none {
+        background: var(--none-bg);
+        border-color: var(--none-border);
+    }
 
-  &.no-border {
-    border: none;
-  }
+    &.no-border {
+        border: none;
+    }
 
-  @media (prefers-color-scheme: dark) {
-    color: #e5e7eb;
-  }
+    @media (prefers-color-scheme: dark) {
+        color: #e5e7eb;
+    }
 
 }
 
 /* ===== Fold / details ===== */
 .fold-styled-wrapper {
-  margin: 1rem 0;
+    margin: 1rem 0;
+    width: 100%;
 
-  .fold-styled-icon {
-    margin: 0;
-    padding: 0;
-    line-height: 1.5rem;
-    flex-shrink: 0;
-    max-width: 1.5rem;
-  }
-
-  .callout--note .fold-styled-icon  { color: #007bff; }
-  .callout--tip .fold-styled-icon   { color: #28a745; }
-  .callout--warn .fold-styled-icon  { color: #fd7e14; }
-  .callout--error .fold-styled-icon { color: #dc3545; }
-
-  details.fold-styled-details {
-    flex-grow: 1;
-    /* 占据剩余空间 */
-    min-width: 0;
-    /* CSS Flexbox 的一个防溢出技巧 */
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    padding: 0; // 全部赋值，因为要覆盖 .markdown 设置
-    margin: 0; // 与 icon 部分对齐，才能保证高度
-    line-height: 1.5rem;
-
-    /* 箭头动画 */
-    .fold-styled-arrow {
-      flex-shrink: 0;
-      /* 防止被挤压 */
-      display: flex;
-      align-items: center;
-      color: inherit;
-      opacity: 0.5;
-      transition: transform 0.2s ease;
+    &.callout--note {
+        --callout-color: var(--text-highlight-bg-color);
     }
 
-    &[open] .fold-styled-arrow {
-      transform: rotate(180deg);
+    &.callout--tip {
+        --callout-color: #28a745;
     }
 
-    /* --- Summary (标题栏) --- */
-    summary {
-      display: flex;
-      align-items: center;
-      /* 标题居左，箭头居右 */
-      justify-content: space-between;
-      /* overwrite default value by .markdown */
-      margin: 0;
-      padding: 0;
-      /* 点击区域 */
-      cursor: pointer;
-      /* hidden inherent triangle */
-      list-style: none;
-      outline: none;
-      font-weight: 500;
-      line-height: 1.5rem;
-
-      &::-webkit-details-marker {
-        display: none;
-      }
-
-      &::before {
-        content: none;
-        display: none;
-      }
+    &.callout--warn {
+        --callout-color: #fd7e14;
     }
 
-    /* --- Content (展开的内容) --- */
-    .fold-styled-content {
-      padding: 1rem 0 0.2rem 0;
-      line-height: 1.4rem;
+    &.callout--error {
+        --callout-color: #dc3545;
     }
-  }
+
+    .fold-styled-icon {
+        display: flex;
+        align-items: center;
+        color: var(--callout-color);
+        flex-shrink: 0;
+        /* 这里的宽度决定了图标占用的空间 */
+        width: 1.5rem;
+        height: 1.5rem;
+
+        svg {
+            width: 1rem;
+            /* 图标稍小一点更精致 */
+            height: 1rem;
+            display: block;
+            fill: currentColor;
+            stroke: currentColor;
+        }
+
+        .fold-styled-symbol {
+            fill: currentColor;
+            stroke: none;
+        }
+
+        .fold-styled-arrow-icon {
+            fill: none;
+            stroke: currentColor;
+        }
+    }
+
+    details.fold-styled-details {
+        width: 100%;
+        background: transparent;
+        border: none;
+        padding: 0;
+        margin: 0;
+        line-height: 1.5rem;
+
+        /* --- Summary (标题栏) --- */
+        summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            /* 左右两端对齐 */
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            list-style: none;
+            outline: none;
+            font-weight: 500;
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+
+            /* 左侧容器：图标 + 文字 */
+            .summary-left-part {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                /* 图标和文字的间距 */
+            }
+        }
+
+        /* 箭头动画 */
+        .fold-styled-arrow {
+            display: flex;
+            align-items: center;
+            opacity: 0.5;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        &[open] .fold-styled-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* --- Content (展开的内容) --- */
+        .fold-styled-content {
+            /* 现在内容会从最左边开始，不再有图标造成的缩进 */
+            padding: 0.8rem 0 0.2rem 0;
+            line-height: 1.75;
+            width: 100%;
+            font-size: 0.875rem;
+            font-family: $font-notes;
+            text-align: justify;
+            /* 两端对齐，让中英文混排的边缘更整齐 */
+
+            /* 修正标点符号和溢出 */
+            word-break: break-word;
+            hyphens: auto;
+            /* 英文单词自动断句 */
+        }
+    }
+}
+
+.col-2-container {
+  display: grid;
+  /* 核心代码：定义两列，每列占据剩余空间的 1/2 */
+  grid-template-columns: repeat(2, 1fr);
+  /* 设置列与列、行与行之间的间距 */
+  gap: 1rem;
 }

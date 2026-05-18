@@ -1,26 +1,46 @@
-<p class="post-meta">
-    <span class="glyphicon glyphicon-calendar post-graph"></span>
-    {{ doc.date | date: "%Y/%m/%d" }}
-    {% if doc.content %}
-        <span class="glyphicon glyphicon-time post-graph"></span>
-        {{ doc.content | strip_html | strip_newlines | size }} 字
-    {% endif %}
-    <span class="pull-right cate-tag-group">
-        {% if doc.categories %}
-            <span class="glyphicon glyphicon-th post-graph"></span>
-
-            {% for category in doc.categories %} 
-                <span>{{category}}</span>
-            {% endfor %}
-        {% endif %}
-        <span class="tag-group">
-            {% if doc.tags %}
-                <span class="glyphicon glyphicon-tags post-graph"></span>
-                {% for tag in doc.tags %} 
-                    <span class="tag-bubble">{{tag}}</span>
-                {% endfor %}
-            {% endif %}
+<div class="post-meta">
+    <div class="post-meta__primary">
+        <span class="post-meta__item">
+            <svg class="post-meta__icon" aria-hidden="true" focusable="false">
+                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-date" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-date"></use>
+            </svg>
+            <span>{{ doc.date | date: "%Y/%m/%d" }}</span>
         </span>
+        {% if doc.content %}
+        <span class="post-meta__item">
+            <svg class="post-meta__icon" aria-hidden="true" focusable="false">
+                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-time" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-time"></use>
+            </svg>
+            <span>{{ doc.content | strip_html | strip_newlines | size }} 字</span>
+        </span>
+        {% endif %}
+    </div>
 
-    </span>
-</p>
+    <div class="post-meta__secondary">
+        {% if doc.categories %}
+        <span class="post-meta__group post-meta__group--category">
+            <svg class="post-meta__icon" aria-hidden="true" focusable="false">
+                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-category" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-category"></use>
+            </svg>
+            <span class="post-meta__chips">
+                {% for category in doc.categories %}
+                <span>{{ category }}</span>
+                {% endfor %}
+            </span>
+        </span>
+        {% endif %}
+
+        {% if doc.tags %}
+        <span class="post-meta__group post-meta__group--tags">
+            <svg class="post-meta__icon" aria-hidden="true" focusable="false">
+                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-tag" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-tag"></use>
+            </svg>
+            <span class="post-meta__chips">
+                {% for tag in doc.tags %}
+                <span class="tag-bubble">{{ tag }}</span>
+                {% endfor %}
+            </span>
+        </span>
+        {% endif %}
+    </div>
+</div>

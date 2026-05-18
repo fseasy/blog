@@ -11,3 +11,14 @@
     text-decoration: none !important;
     color: var(--text-dark-color);
 }
+
+.site-icon {
+    display: inline-block;
+    vertical-align: -0.125em;
+    fill: currentColor;
+}
+
+.site-icon--github {
+    width: 16px;
+    height: 18px;
+}

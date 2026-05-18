@@ -9,10 +9,8 @@
 <body>
   {% include page_header.html %}
   <section class="container">
-    <div class="row">
-      <div class="contentpanel col-md-offset-1 col-md-10 col-xs-12 col-sm-12">
-        {{ content }}
-      </div>
+    <div class="contentpanel">
+      {{ content }}
     </div>
     {% if page.index_name == "主页" %}
     <!--load Pagination only when main-index -->
@@ -22,7 +20,6 @@
   {% include page_footer.html %}
 
   {% include extra_fn/link_target_blank_script.html %}
-  {% include third_resource/bootstrap_js.html %}
 </body>
 
 </html>

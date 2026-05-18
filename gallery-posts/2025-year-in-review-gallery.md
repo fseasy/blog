@@ -18,7 +18,6 @@ Highlight: @0204, A frozen wonderland born from a pipe-breaking accident
 
 {% capture body %}
 <div markdown="1">
-
 - 0111-0112
   - 周六上午去了 University of Toronto, 妈妈和小宝在雪地上跑，看着真好啊； 下午去了 Canada Tier, 轮胎店，基本和 Walmart 差不多；买了锅、滑雪板、还有大的 Vasline
   - 周天上午去铁路公园滑雪（把小宝放在滑雪板拖上去，妈妈和小宝滑下来；我也滑了几次），好玩，有点点刺激；下午，我在家炖了鱼头，弄了半天（去腮、刮鳞、对半砍开、去掉鱼鳍），没有出去了（有点烦躁）；最后放了白菜、pasta，妈妈用面粉弄的面面，出来好香啊，妈妈说是吃过的最好吃的鱼头（我没吃，害怕吃坏肚肚）
@@ -34,7 +33,6 @@ Highlight: @0204, A frozen wonderland born from a pipe-breaking accident
 
 </div>
 {% endcapture %}
-
 
 {% include component/fold.html
    type="note"

@@ -28,9 +28,19 @@
 /* COMPONENT 2: side-bar nav.*/
 
 .nav_toc_bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 1rem;
   white-space: nowrap;
   color: var(--text-dark-more-grey-color);
+}
+
+.site-icon--list {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  fill: currentColor;
 }
 
 .side-nav {
@@ -130,4 +140,3 @@
   color: var(--text-dark-color);
   transition: color .5s ease-out;
 }
-

@@ -19,10 +19,10 @@
 // CSS Variables for light/dark mode support
 :root {
   // Light mode (default)
-  --text-dark-color: #333;
+  --text-dark-color: #2F2937;
   --text-dark-grey-color: #444;
   --text-dark-more-grey-color: #767676;
-  --text-dark-strong-color: #000;
+  --text-dark-strong-color: #1F2937;
   --text-highlight-color: white;
   --text-highlight-bg-color: #17a2b8;
   --header-text-color: #00537f;
@@ -31,30 +31,27 @@
   --link-visited-color: #c1f2fe;
   --explicit-link-color: #00537f;
   --decorate-color: rgba(0, 0, 0, 0.1);
-  --brand-color: #3fa7cb;
+  --brand-color: #e1f5ff;
   --body-bg: #fcfeff;
-  --header-bg: #e1f5ff;
-  --footer-bg: #e1f5ff;
-  --blockquote-bg: #fafbfd;
-  --code-bg: #fafbfd;
+  --block-content-bg: #fafbfd;
+  --header-bg: var(--brand-color);
+  --footer-bg: var(--brand-color);
+  --blockquote-bg: var(--block-content-bg);
+  --code-bg: var(--block-content-bg);
   --table-border: #e5e5e5;
 
   /* mainly for Callout */
-  --muted-bg: var(--gray-200);
-  --note-bg: #eef6ff;
+  --note-bg: var(--block-content-bg);
   --tip-bg: #f3faf3;
-  --important-bg: #f5f0ff;
   --warning-bg: #fff6e5;
-  --caution-bg: #fff0f0;
+  --error-bg: #fff0f0;
   --none-bg: var(--body-background);
 
   /* Border Colors */
-  --muted-border: #d6d8db;
   --note-border: #a0c6ff;
   --tip-border: #c3e8c3;
-  --important-border: #c8a9e1;
   --warning-border: #f0e2b4;
-  --caution-border: #f3c4c4;
+  --error-border: #d68f8f;
   --none-border: var(--gray-200);
 
   /* Dark mode */
@@ -81,16 +78,13 @@
 
     --note-bg: #1e2a44;
     --tip-bg: #1f3323;
-    --important-bg: #2a2340;
     --warning-bg: #3a2f1a;
-    --caution-bg: #3b1f1f;
+    --error-bg: #3b1f1f;
 
     /* Dark mode border colors */
-    --muted-border: #495057;
     --note-border: #4a74b3;
     --tip-border: #6fa86f;
-    --important-border: #7f6a97;
     --warning-border: #c9b28f;
-    --caution-border: #d68f8f;
+    --error-border: #d68f8f;
   }
 }

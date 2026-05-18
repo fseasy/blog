@@ -32,42 +32,41 @@ Usage pattern:
 
 {% comment %} --- 自动图标逻辑 --- {% endcomment %}
 {%- if icon == nil or icon == "" -%}
-  {%- capture default_icon -%}
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      {%- case type -%}
-        {%- when "tip" -%}
-          {% comment %} 提示/成功：打勾圆圈 {% endcomment %}
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>
-        {%- when "warn" -%}
-          {% comment %} 警告：三角形感叹号 {% endcomment %}
-          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>
-        {%- when "error" -%}
-          {% comment %} 错误：八角感叹号或 X {% endcomment %}
-          <circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>
-        {%- else -%}
-          {% comment %} 默认 note：信息 i 圆圈 {% endcomment %}
-          <circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>
-      {%- endcase -%}
-    </svg>
-  {%- endcapture -%}
-  {%- assign icon = default_icon -%}
+  {%- case type -%}
+    {%- when "tip" -%}
+      {%- assign icon_symbol = "icon-tip" -%}
+    {%- when "warn" -%}
+      {%- assign icon_symbol = "icon-warn" -%}
+    {%- when "error" -%}
+      {%- assign icon_symbol = "icon-error" -%}
+    {%- else -%}
+      {%- assign icon_symbol = "icon-note" -%}
+  {%- endcase -%}
 {%- endif -%}
 
 <div class="fold-styled-wrapper callout callout--{{ type }} {% unless border %}no-border{% endunless %}">
-
-  {% comment %} 现在的图标部分：无论手动传入还是自动生成都会显示 {% endcomment %}
-  <div class="fold-styled-icon">
-    {{ icon }}
-  </div>
-
   <details class="fold-styled-details" {% if open %}open{% endif %}>
     <summary>
-      <span class="fold-styled-summary">
-        {{ summary }}
-      </span>
+      {% comment %} 左侧：图标 + 标题 {% endcomment %}
+      <div class="summary-left-part">
+        <div class="fold-styled-icon">
+          {%- if icon != nil and icon != "" -%}
+            {{ icon }}
+          {%- else -%}
+            <svg class="fold-styled-symbol" aria-hidden="true" focusable="false">
+              <use href="{{ '/assets/site/icons.svg' | relative_url }}#{{ icon_symbol }}" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#{{ icon_symbol }}"></use>
+            </svg>
+          {%- endif -%}
+        </div>
+        <span class="fold-styled-summary">
+          {{ summary }}
+        </span>
+      </div>
+
+      {% comment %} 右侧：箭头 {% endcomment %}
       <span class="fold-styled-arrow">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="6 9 12 15 18 9"></polyline>
+        <svg class="fold-styled-arrow-icon" aria-hidden="true" focusable="false">
+          <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-chevron-down" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-chevron-down"></use>
         </svg>
       </span>
     </summary>
@@ -75,6 +74,7 @@ Usage pattern:
     <div class="fold-styled-content">
       {{ content }}
     </div>
+
   </details>
 
 </div>
