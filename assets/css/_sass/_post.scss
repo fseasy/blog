@@ -10,6 +10,67 @@
     position: relative;
 }
 
+#toc-content .toc-columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2rem;
+    align-items: start;
+    padding: 0 1rem 0.3rem;
+}
+
+#toc-content .toc-column {
+    min-width: 0;
+}
+
+#toc-content .toc-column ul {
+    margin-bottom: 0;
+}
+
+#toc-content .toc-column ul > li {
+    margin: 0.15rem 0;
+}
+
+
+#toc-content .toc-column ul > li > a {
+    display: block;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
+    line-height: 1.5;
+    border-bottom: none;
+    box-shadow: none;
+}
+
+#toc-content .toc-column ul ul {
+    padding-top: 0.2rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
+}
+
+#toc-content .toc-column ul ul > li > a {
+    display: block;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+    line-height: 1.45;
+    border-bottom: none;
+    box-shadow: none;
+}
+
+#toc-content .toc-column ul > li > a:hover,
+#toc-content .toc-column ul > li > a:focus,
+#toc-content .toc-column ul ul > li > a:hover,
+#toc-content .toc-column ul ul > li > a:focus {
+    border-bottom: none;
+    box-shadow: none;
+}
+
+@include media-query-range(0px, $on-phone) {
+    #toc-content .toc-columns {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding: 0 0.75rem 0.3rem;
+    }
+}
+
 #toc-content::before {
     content: "目录";
     display: block;
@@ -52,14 +113,17 @@
 
     h2 {
         font-size: 1.3rem;
+        margin-top: 2.6rem;
     }
 
     h3 {
         font-size: 1.2rem;
+        margin-top: 2.4rem;
     }
 
     h4 {
         font-size: 1.1rem;
+        margin-top: 1.8rem;
     }
 
     h5,
@@ -320,7 +384,7 @@
 
 /* ===== Fold / details ===== */
 .fold-styled-wrapper {
-    margin: 1rem 0;
+    margin: 1.6rem 0;
     width: 100%;
 
     &.callout--note {
@@ -360,11 +424,6 @@
         .fold-styled-symbol {
             fill: currentColor;
             stroke: none;
-        }
-
-        .fold-styled-arrow-icon {
-            fill: none;
-            stroke: currentColor;
         }
     }
 
@@ -409,6 +468,13 @@
             opacity: 0.5;
             transition: transform 0.2s ease;
             flex-shrink: 0;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .fold-styled-arrow-icon {
+            fill: none;
+            stroke: currentColor;
         }
 
         &[open] .fold-styled-arrow {

@@ -56,4 +56,8 @@
     <rect x="4" y="15" width="4" height="4" rx="1" fill="currentColor"/>
     <rect x="10" y="15" width="10" height="4" rx="1" fill="currentColor"/>
   </symbol>
+
+  <symbol id="icon-chevron-up" viewBox="0 0 24 24">
+      <polyline points="18 15 12 9 6 15" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></polyline>
+  </symbol>
 </svg>

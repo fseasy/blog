@@ -112,6 +112,13 @@
   width: 100%;
   /* 清除浮动，防止容器高度塌陷 */
   margin: 0 auto;
+  min-height: 1px;
+}
+
+.gallery-masonry-row::after {
+  content: "";
+  display: block;
+  clear: both;
 }
 
 .gallery-masonry-row .gallery-item {

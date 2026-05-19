@@ -1,0 +1,134 @@
+@use 'variables' as *;
+
+/*
+  split TOC style from layout because it is linked to some javascript
+    Toc has 2 components:
+    1. in content top
+    2. in side-bar (side-nav)
+  Here define the side-nav
+*/
+
+.page-side-rail {
+  position: fixed;
+  top: 1rem;
+  right: 4px;
+  bottom: 60px; /* 强制高度填满视口 */
+  
+  display: flex; /* 开启 Flex 布局 */ 
+  flex-direction: column; /* 垂直排列 */
+  
+  width: clamp(10px, 15vw, 15rem);
+  z-index: 3;
+  overflow: hidden; /* 外部容器不再负责滚动，由内部列表负责 */
+  scrollbar-width: thin;
+}
+
+
+@include media-query-range(0px, $on-phone) {
+  .page-side-rail {
+    display: none !important;
+  }
+}
+
+.nav-toc-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;    /* 稍微拉开一点间距，减少拥挤感 */
+  font-size: 0.875rem;
+  color: var(--text-dark-color);
+  font-weight: 500; /* 给文字一点分量，让它与图标对抗 */
+  opacity: 0.8;
+}
+
+.site-icon--list {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex: 0 0 auto;
+  fill: currentColor;
+  margin-left: -2px;
+}
+
+/* First level of nav */
+.nav-list {
+  flex: 1; /* 关键点：这一行自动占据剩余所有高度 */
+  overflow-y: auto; /* 关键点：列表太长时，只让列表滚动 */
+  overflow-x: hidden;
+  margin-bottom: 0; /* 移除之前的间距 */
+}
+
+
+.nav-list .nav {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+}
+
+.nav-list .nav a {
+  display: flex;
+  align-items: flex-start;
+  padding: 2px 0;
+  font-size: 0.875rem;
+  color: var(--text-dark-more-grey-color);
+  text-decoration: none; /* 移除下划线 */
+  white-space: normal;       /* 允许换行 */
+  overflow-wrap: break-word; /* 优先单词间断行 */
+  word-wrap: break-word;     /* 兼容旧浏览器 */
+  word-break: normal;
+  text-align:left;
+}
+
+/* 一级标题样式 */
+.nav-list > .nav > li > a {
+  font-weight: 500;
+}
+
+/* 二级标题样式 */
+.nav-list .nav .nav > li > a {
+  font-size: 0.75rem;
+  padding-left: .25rem; /* 二级缩进 */
+}
+
+/* 激活态：统一高亮风格 */
+.nav-list .nav > .active > a {
+  color: var(--text-dark-color);
+  font-weight: 700;
+}
+
+/* 隐藏子菜单，当父级 active 时显示 */
+.nav-list .nav .nav {
+  display: none;
+}
+.nav-list .nav > .active > .nav {
+  display: block;
+}
+
+/* Back to top (hidden on mobile) */
+#back-to-top {
+  padding: 2rem 0 0 0;
+  flex-shrink: 0; /* 关键点：无论列表多长，这个按钮高度绝不压缩 */
+}
+
+#back-to-top a{
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: var(--text-dark-more-grey-color);
+  font-size: 0.875rem;
+}
+
+#back-to-top a:hover {
+  color: var(--text-dark-color);
+  transition: color .5s ease-out;
+  font-weight: 500;
+}
+
+.site-icon--back-to-top {
+  width: 1rem;
+  height: 1rem;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

@@ -97,9 +97,9 @@
                 }
                 tocTopUl.remove();
                 tocContent.append(
-                    $("<div/>", {"class": "row"}).append([
-                        $("<div/>", {"class": "col-xs-12 col-md-5 col-md-offset-1"}).append(col1Ul),
-                        $("<div/>", {"class": "col-xs-12 col-md-5 col-md-offset-0"}).append(col2Ul)
+                    $("<div/>", {"class": "toc-columns"}).append([
+                        $("<div/>", {"class": "toc-column toc-column--left"}).append(col1Ul),
+                        $("<div/>", {"class": "toc-column toc-column--right"}).append(col2Ul)
                     ])
                 );
             }
@@ -110,25 +110,6 @@
                 sideNavTocContainer = $("#side-nav-toc-container");
             // content-toc always show.
             contentTocContainer.show();
-            
-            const SIDE_NAV_TOC_ENABLE_MIN_WIDTH = 1300,
-                SIDE_NAV_TOC_SHOW_UP_OFFSET = contentTocContainer.offset().top 
-                                              + contentTocContainer.outerHeight();
-            var showNavToc = function() {
-                if ($(window).width() >= SIDE_NAV_TOC_ENABLE_MIN_WIDTH
-                    && $(window).scrollTop() >= SIDE_NAV_TOC_SHOW_UP_OFFSET) {
-                    sideNavTocContainer.show();
-                } else {
-                    sideNavTocContainer.hide();
-                }
-            };
-            $(window).resize(function(){
-                // add a delay => when resize finished, we adjust the toc show.
-                waitForFinalEvent(showNavToc, 500, "ShowTocResize");
-            });
-            $(window).scroll(function() {
-                waitForFinalEvent(showNavToc, 100, "ShowTocScroll");
-            });
         }
 
         if (buildTocIfNecessary()) {

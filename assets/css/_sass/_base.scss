@@ -29,6 +29,7 @@ html {
     margin: 0;
     padding: 0;
     border: none;
+    box-sizing: border-box;
 }
 
 body {
@@ -40,9 +41,6 @@ body {
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    word-break: break-all;
-    // for scroll-spy of bootstrap. https://getbootstrap.com/docs/3.3/javascript/#scrollspy
-    position: relative; 
 }
 
 ol {
