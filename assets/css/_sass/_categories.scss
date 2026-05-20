@@ -1,0 +1,120 @@
+@use 'variables' as *;
+
+// Categories page styles
+
+.col-layout-container {
+  display: flex;
+  gap: 20px;
+
+  @include media-query-range(0px, $on-phone) {
+    flex-direction: column;
+  }
+}
+
+
+.col-layout-sidebar {
+  /* 相当于 col-md-3，固定宽度 */
+  flex: 0 0 25%;
+
+  @include media-query-range(0px, $on-phone) {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+.col-layout-content {
+  flex: 1;
+  /* 自动占据剩余空间，相当于 col-md-9 */
+}
+
+.panel {
+  background-color: var(--body-bg);
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.list-group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid var(--decorate-color);
+  color: var(--text-dark-color);
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.list-group-item:hover {
+  background-color: var(--blockquote-bg);
+}
+
+.list-group-item.active {
+  border-right: 2px solid var(--header-text-color);
+  margin-right: -1px;
+  background-color: var(--blockquote-bg);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  padding: 0.15rem 0.4rem;
+  font-size: 0.75rem;
+  font-weight: 400;
+  background-color: var(--header-bg);
+  color: var(--header-text-color);
+  border-radius: 999px;
+}
+
+.pagination-container {
+  margin: 10px 0;
+  padding: 14px 0;
+}
+
+// Mobile overrides
+@include media-query-range(0px, $on-phone) {
+  #category_panel .list-group {
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  #category_panel .list-group-item {
+    display: inline-flex;
+    flex: 0 0 auto;
+    padding: 0.3rem 0.6rem;
+    background-color: var(--blockquote-bg);
+    border: 1px solid var(--decorate-color);
+    border-radius: 999px;
+    font-size: 0.8rem;
+  }
+
+  #category_panel .list-group-item.active {
+    background-color: var(--header-bg);
+    color: var(--header-text-color);
+    border-color: transparent;
+  }
+
+  #category_panel .badge {
+    font-size: 0.6rem;
+    min-width: 0.9rem;
+    padding: 0.02rem 0.2rem;
+    margin-left: 0.3rem;
+  }
+
+  #listcontent {
+    padding-left: 0;
+  }
+}

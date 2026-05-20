@@ -10,11 +10,14 @@
 @use 'header';
 @use 'footer';
 @use 'layout';
+@use 'categories';
+@use 'tags';
 @use 'post';
 @use 'side_rail';
 @use 'code';
 @use 'webfont';
 @use 'overwrite3rd';
+@use 'components';
 
 // CSS Variables for light/dark mode support
 :root {
@@ -86,5 +89,6 @@
     --tip-border: #6fa86f;
     --warning-border: #c9b28f;
     --error-border: #d68f8f;
+
   }
 }

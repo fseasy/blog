@@ -59,15 +59,7 @@ title: 标签
         };
 
         Render.prototype.getClass = function(_posts) {
-            // bootstrap classes
-            var classes = [
-                "label-default", "label-primary", "label-success", 
-                "label-info", "label-warning", "label-danger"
-            ];
-            var className = getRandomItem(classes);
-            // bootstrap label usage: label lable-xxx
-            className = ["label", className].join(" ");
-            return className;
+            return "tag-item";
         };
         
         Render.prototype.getFontStyle = function(posts) {
@@ -140,7 +132,7 @@ title: 标签
             var tagDom = document.createElement('SPAN');
             tagDom.innerHTML = tag;
             tagDom.setAttribute("class", className);
-            var inlineStyle = ["display: inline-block", fontStyle, margin].join(";")
+            var inlineStyle = [fontStyle, margin].join(";")
             tagDom.setAttribute('style', inlineStyle);
             tagDom.setAttribute('title', tips);
             return tagDom;

@@ -1,0 +1,84 @@
+<!-- Waline comments -->
+<style>
+  .pageview-wrapper {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    color: var(--text-dark-more-grey-color);
+    font-size: 0.9em;
+  }
+  .eye-icon {
+    vertical-align: middle;
+    opacity: 0.5;
+  }
+</style>
+
+<div id="waline-thread"></div>
+<div class="text-center" id="comment-btn-wrapper">
+  <span class="pageview-wrapper" style="position: fixed; bottom: 20px; right: 20px; z-index: 100;">
+    <svg class="eye-icon" viewBox="0 0 24 24" width="14" height="14">
+      <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-eye"></use>
+    </svg>
+    <span class="waline-pageview-count" data-path=""></span>
+  </span>
+  <button type="button" class="btn-md" id="comment-btn">点击评论</button>
+  <div class="loading-dots hidden">
+    <span></span><span></span><span></span>
+  </div>
+  <button type="button" id="close-comment-btn" class="btn-md hidden">关闭评论</button>
+</div>
+
+<script>
+  (() => {
+    const WALINE_CSS = 'https://unpkg.com/@waline/client@v3/dist/waline.css';
+    const WALINE_JS = 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+    const WALINE_SERVER_URL = '{{ site.waline.serverURL }}';
+
+    // Set pageview path dynamically
+    const pagePath = window.location.pathname;
+    document.querySelector('.waline-pageview-count').dataset.path = pagePath;
+
+    const btn = document.getElementById("comment-btn");
+    const loadingDots = document.querySelector(".loading-dots");
+    const closeBtn = document.getElementById("close-comment-btn");
+    const thread = document.getElementById("waline-thread");
+    let walineLoaded = false;
+
+    btn.addEventListener("click", () => {
+      if (walineLoaded) {
+        thread.style.display = '';
+        btn.classList.add("hidden");
+        closeBtn.classList.remove("hidden");
+        return;
+      }
+
+      btn.classList.add("hidden");
+      loadingDots.classList.remove("hidden");
+
+      // Load Waline CSS (idempotent, safe to re-append)
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = WALINE_CSS;
+      document.head.appendChild(link);
+
+      // Load and init Waline JS via dynamic import
+      import(WALINE_JS).then(({ init }) => {
+        init({
+          el: '#waline-thread',
+          serverURL: WALINE_SERVER_URL,
+          pageview: true,
+          dark: 'html[data-user-color-scheme="dark"]'
+        });
+        walineLoaded = true;
+        loadingDots.classList.add("hidden");
+        closeBtn.classList.remove("hidden");
+      });
+    });
+
+    closeBtn.addEventListener("click", () => {
+      thread.style.display = 'none';
+      closeBtn.classList.add("hidden");
+      btn.classList.remove("hidden");
+    });
+  })();
+</script>

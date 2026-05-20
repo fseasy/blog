@@ -1,12 +1,10 @@
 __pycache__
-.python-version
 _site
 bef
 .sass-cache
 pages.sublime-project
 pages.sublime-workspace
 .jekyll-metadata
-.vscode
 .jekyll-cache
 Gemfile
 Gemfile.lock

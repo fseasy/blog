@@ -9,6 +9,7 @@ description: > # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "https://blog.fseasy.top" # the base hostname & protocol for your site
 
+
 # Build settings
 markdown: kramdown
 highlighter: none
@@ -21,7 +22,7 @@ plugins:
   - jekyll-paginate
   - jekyll-sitemap
 
-exclude: [_site, md_templates_, deployment_, private_, scripts_]
+exclude: [_site, md_templates_, deployment_, private_, scripts_, .claude]
 paginate: 15
 
 #social info
@@ -42,3 +43,7 @@ sass:
 local_bef_resources:
   src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
   dst: "bef" # relative to the target dir (`_site`)
+
+# Waline comments
+waline:
+  serverURL: "https://waline.fseasy.top"

@@ -23,11 +23,7 @@
 
       <div class="media-func">
         {% include extra_fn/share_js_tag.html %}
-        {% comment %}
-        // disable disqus, use isso.
-        // {% include extra_fn/disqus_tag.html %}
-        {% endcomment %}
-        {% include extra_fn/isso_tag.html %}
+        {% include extra_fn/waline-comment.html %}
       </div>
     </div>
   </section>
@@ -44,10 +40,6 @@
   {% include extra_fn/prism.html %}
   {% include extra_fn/link_target_blank_script.html %}
   {% include extra_fn/dynamic_style_setter.html %}
-  {% comment %}
-  // now use self-host comments
-  // {% include extra_fn/disqus_script.html %}
-  {% endcomment %}
 </body>
 
 </html>

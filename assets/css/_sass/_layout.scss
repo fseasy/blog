@@ -107,7 +107,7 @@
 }
 
 .post-page {
-  > .contentpanel {
+  >.contentpanel {
     min-width: 0;
     width: 100%;
     max-width: 100%;
@@ -127,7 +127,7 @@
 
 @include media-query-range(0px, $on-phone) {
   .post-page {
-    > .contentpanel {
+    >.contentpanel {
       width: 100%;
       max-width: 100%;
     }
@@ -272,7 +272,7 @@ a.post-link:hover {
   align-items: center;
 }
 
-.post-meta__chips > span:not(.tag-bubble) {
+.post-meta__chips>span:not(.tag-bubble) {
   display: inline-flex;
   align-items: center;
 }
@@ -301,7 +301,7 @@ a.post-link:hover {
     min-width: 0;
   }
 
-  .post-meta__group--category .post-meta__chips > span {
+  .post-meta__group--category .post-meta__chips>span {
     flex: 0 0 auto;
   }
 
@@ -336,6 +336,7 @@ a.post-link:hover {
     background-color: transparent;
     border: none;
   }
+
   ul.list-group {
     margin-left: 0;
   }
