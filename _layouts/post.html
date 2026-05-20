@@ -12,7 +12,7 @@
     <div class="contentpanel">
       <h1 class="post-title">{{ page.title }}</h1>
       {% assign doc=page %}
-      {% include post_meta.html %}
+      {% include post_meta.html pageview=true %}
       <!-- TOC -->
       {% include extra_fn/toc_content_top_tag.html %}
       <!-- post-content -->
@@ -40,6 +40,8 @@
   {% include extra_fn/prism.html %}
   {% include extra_fn/link_target_blank_script.html %}
   {% include extra_fn/dynamic_style_setter.html %}
+  {% include extra_fn/waline-pageview-load.html %}
+
 </body>
 
 </html>

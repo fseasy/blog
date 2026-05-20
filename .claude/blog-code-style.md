@@ -14,7 +14,7 @@ metadata:
   - 如果现有变量不够用，再新增，并确保 dark mode 下有对应值
 - **通用组件样式** 放到 `assets/css/_sass/_components.scss`，按需添加 `@use` 引用
 - **仅在一个文件内使用的样式** 可以 inline 在 HTML `<style>` 中，但颜色仍用 CSS 变量
-- 按钮样式用 `.btn-md`（已在 `_components.scss` 中定义），不要重复定义
+- 按钮样式用 `.btn-ghost`（已在 `_components.scss` 中定义），不要重复定义
 
 ## SVG 图标
 

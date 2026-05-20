@@ -1,0 +1,20 @@
+  <script>
+    (function() {
+
+      if (window.__walinePageviewLoaded) return;
+      window.__walinePageviewLoaded = true;
+      
+      const PAGEVIEW_JS_PATH = 'https://unpkg.com/@waline/client@v3/dist/pageview.js';
+      const CONTAINER_CLS = "pageview-cnt-container";
+
+      import(PAGEVIEW_JS_PATH).then(({ pageviewCount }) => {
+        pageviewCount({
+          serverURL: '{{ site.waline.serverURL }}',
+          path: window.location.pathname,
+          update: true, // Need update here
+        });
+      }).then(() => {
+        document.querySelector(`.${CONTAINER_CLS}`)?.classList.remove('hidden');
+      });
+    })();
+  </script>

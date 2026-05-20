@@ -14,6 +14,17 @@
             <span>{{ doc.content | strip_html | strip_newlines | size }} 字</span>
         </span>
         {% endif %}
+        {% if include.pageview %}
+        <span class="post-meta__item pageview-cnt-container hidden">
+            <svg class="post-meta__icon" aria-hidden="true" focusable="false">
+                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-eye"></use>
+            </svg>
+            <span>
+                <span class="waline-pageview-count" data-path="{{ doc.url | relative_url }}">...</span>
+                次
+            </span>
+        </span>
+        {% endif %}
     </div>
 
     <div class="post-meta__secondary">

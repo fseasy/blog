@@ -35,6 +35,7 @@
   --explicit-link-color: #00537f;
   --decorate-color: rgba(0, 0, 0, 0.1);
   --brand-color: #e1f5ff;
+
   --body-bg: #fcfeff;
   --block-content-bg: #fafbfd;
   --header-bg: var(--brand-color);
@@ -42,6 +43,15 @@
   --blockquote-bg: var(--block-content-bg);
   --code-bg: var(--block-content-bg);
   --table-border: #e5e5e5;
+
+  // Optimized colors
+  --btn-primary-bg: #1e88e5;
+  --btn-primary-hover: #1565c0;
+  --btn-primary-text: #ffffff;
+  --ghost-btn-color: #1e88e5;       /* 浅色模式：深蓝文字和边框 */
+  --ghost-btn-hover-bg: #e1f5ff;    /* 浅色模式：Hover后填充你原有的极浅蓝 */
+  --ghost-btn-hover-text: #1e88e5;  /* 浅色模式：Hover后文字颜色保持 */
+  // END
 
   /* mainly for Callout */
   --note-bg: var(--block-content-bg);
@@ -78,6 +88,15 @@
     --blockquote-bg: #1A3150;
     --code-bg: #132038;
     --table-border: #2D4563;
+
+    // Optimized colors
+    --btn-primary-bg: #64b5f6;
+    --btn-primary-hover: #90caf9;
+    --btn-primary-text: #0d47a1; /* 深色字，保证暗流中的清晰度 */
+    --ghost-btn-color: #64b5f6;      /* 深色模式：天空蓝文字和边框 */
+    --ghost-btn-hover-bg: #64b5f6;   /* 深色模式：Hover后直接填充天空蓝 */
+    --ghost-btn-hover-text: #0d47a1; /* 深色模式：Hover后文字变深，保证清晰度 */
+    // END
 
     --note-bg: #1e2a44;
     --tip-bg: #1f3323;

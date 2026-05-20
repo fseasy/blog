@@ -4,6 +4,7 @@
   40% { transform: scale(1); }
 }
 
+// Usage (needs 3 spans):   <div class="loading-dots"> <span></span><span></span><span></span> </div>
 .loading-dots {
   display: inline-flex;
   gap: 4px;
@@ -21,19 +22,19 @@
   }
 }
 
-.btn-md {
-  background: none;
-  border: 1px solid var(--brand-color);
-  border-radius: 4px;
-  padding: 4px 12px;
+.btn-ghost {
+  background-color: transparent;
+  color: var(--ghost-btn-color);
+  border: 1px solid var(--ghost-btn-color);
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
-  color: var(--text-dark-grey-color);
-  font-size: 0.9em;
-  transition: background 0.15s;
-
-  &:hover {
-    background: var(--brand-color);
-  }
+  font-size: 0.875rem;
+  
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-
+.btn-ghost:hover {
+  background-color: var(--ghost-btn-hover-bg);
+  color: var(--ghost-btn-hover-text);
+}
