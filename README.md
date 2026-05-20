@@ -14,6 +14,18 @@ For Fseasy blog service.
 
 ## 部署注意事项
 
+### Asset Digest（CSS/JS Cache Busting）
+
+`_plugins/asset_digest.rb` 在 production 构建时自动为所有 CSS/JS 文件加上 MD5 content hash：
+
+- **命名格式**：`main.css` → `main---<md5>.css`
+- **生效条件**：`JEKYLL_ENV=production`（CI 已配置，本地 development 不生效）
+- **HTML 引用**：plugin 会同步 rewrite 所有 HTML 里的 link/script tag
+- **Old variant 清理**：每次 build 会自动删除同一文件的旧 hash 版本，防止 `_site` 越来越脏
+- **增量构建**：兼容（不会破坏增量构建）
+
+### blog-extra-file 依赖
+
 1. 现在依赖 `blog-extra-file` 这个仓库，存储博客额外的、非关键文件(如非核心图片等)；其对应到 `/bef` 这个路径地址。
    1. 服务器侧，是通过 Nginx 设置路由来定向到仓库的实际位置（通过 `alias`），其访问路径为 `/bef/$PATH`. 
    2. 本地部署 Jekyll server 使用 `./local_server.sh` ，为 Jekyll server, 不支持自定义路由，所以只能把 `blog-extra-file` 放到 `_site` 里面，经过一些尝试，最稳妥的方法是用 plugin post-write 方式来做软链接，实现在 `_plugins/symlink_bef.rb`. 其依赖的配置项为 `_config.yml` 中的 `local_bef_resources`.
