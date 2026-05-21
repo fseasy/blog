@@ -11,7 +11,7 @@
         poster: NotRequired[str]
       ...
 - data_group_id: (必填) 对应数据分组 ID (即前面的 data_group_id)
-- base_dir: (可选) data 中定义的文件路径前的文件夹前缀，例如 "2026/annual", 则最终路径为： base_dir / relative_path | absolute_url
+- path_prefix: (可选) data 中定义的文件路径前的文件夹前缀，例如 "posts/2025-year-in-review/work", 则最终路径为： path_prefix 与 relative_path 的拼接
 - display_style: (可选) 
   - justified (row height equals. 按图片顺序横向优先排布) [default]
   - masonry (瀑布流, col width equals; 基于 css，图片顺序会纵向优先排布，即 col-first) 
@@ -21,11 +21,11 @@
 {%- assign data_file = include.data -%}
 {%- assign gallery_data = site.data[data_file][include.data_group_id] -%}
 
-{% comment %} 构建 Base URL {% endcomment %}
-{%- if include.base_dir -%}
-{%- assign base_url = include.base_dir | absolute_url -%}
+{% comment %} 构建文件路径前缀 {% endcomment %}
+{%- if include.path_prefix -%}
+{%- assign path_prefix = include.path_prefix -%}
 {%- else -%}
-{%- assign base_url = "/" | absolute_url -%}
+{%- assign path_prefix = "" -%}
 {%- endif -%}
 
 {% if gallery_data %}
@@ -45,31 +45,36 @@
     {%- assign is_video = true -%}
     {%- endif -%}
 
-    {%- capture src_full_url -%}
-    {%- include utils/path-join.html base=base_url relative=item.relative_path -%}
+    {%- capture full_path -%}
+    {%- include utils/path-join.html base=path_prefix relative=item.relative_path -%}
     {%- endcapture -%}
+    {%- capture bef_src -%}{%- include bef.html path=full_path -%}{%- endcapture -%}
     {% comment %} 关键：将 width, height 传递给 CSS var 用于提前算好 aspect-ratio {% endcomment %}
     <figure class="gallery-item" style="--w: {{ item.width }}; --h: {{ item.height }};">
 
       {% if is_video %}
-        <a href="{{ src_full_url }}" 
-          class="is-video" 
-          data-pswp-type="video" 
-          data-pswp-width="{{ item.width }}" 
+        {%- capture poster_path -%}
+        {%- include utils/path-join.html base=path_prefix relative=item.poster -%}
+        {%- endcapture -%}
+        {%- capture bef_poster -%}{%- include bef.html path=poster_path -%}{%- endcapture -%}
+        <a href="{{ bef_src }}"
+          class="is-video"
+          data-pswp-type="video"
+          data-pswp-width="{{ item.width }}"
           data-pswp-height="{{ item.height }}"
           target="_blank"
         >
-          <img src="{% include utils/path-join.html base=base_url relative=item.poster %}" 
+          <img src="{{ bef_poster }}"
             width="{{ item.width }}" height="{{ item.height }}" {% comment %} 关键：设置原生的宽高属性 {% endcomment %}
             loading="lazy" decoding="async" alt="{{ item.caption | default: 'Gallery Image' }}">
         </a>
       {% else %}
-        <a href="{{ src_full_url }}" data-pswp-width="{{ item.width }}" data-pswp-height="{{ item.height }}" 
+        <a href="{{ bef_src }}" data-pswp-width="{{ item.width }}" data-pswp-height="{{ item.height }}"
           target="_blank"
         >
-          <img src="{{ src_full_url }}" 
+          <img src="{{ bef_src }}"
               width="{{ item.width }}" height="{{ item.height }}" {% comment %} 设置原生的宽高属性 {% endcomment %}
-              loading="lazy" decoding="async" 
+              loading="lazy" decoding="async"
               alt="{{ item.caption | default: 'Gallery Image' }}">
         </a>
       {% endif %}

@@ -1,17 +1,17 @@
 {% if page.use_gallery %}
 <!-- Gallery part -->
-<link rel="stylesheet" href="{% link /assets/css/gallery.css %}">
-<link rel="stylesheet" href="{% link /assets/third-party/photoswipe/photoswipe-all-in-one.css %}">
+<link rel="stylesheet" href="{{ '/assets/css/gallery.css' | asset_digest | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/third-party/photoswipe/photoswipe-all-in-one.css' | asset_digest | relative_url }}">
 
 <script type="module">
-  import PhotoSwipeLightbox from "{% link /assets/third-party/photoswipe/photoswipe-lightbox.esm.min.js %}";
-  import PhotoSwipeVideoPlugin from "{% link /assets/third-party/photoswipe/photoswipe-video-plugin.esm.min.js %}";
-  import PhotoSwipeDynamicCaption from '{% link /assets/third-party/photoswipe/photoswipe-dynamic-caption-plugin.esm.min.js %}';
+  import PhotoSwipeLightbox from "{{ '/assets/third-party/photoswipe/photoswipe-lightbox.esm.min.js' | asset_digest | relative_url }}";
+  import PhotoSwipeVideoPlugin from "{{ '/assets/third-party/photoswipe/photoswipe-video-plugin.esm.min.js' | asset_digest | relative_url }}";
+  import PhotoSwipeDynamicCaption from "{{ '/assets/third-party/photoswipe/photoswipe-dynamic-caption-plugin.esm.min.js' | asset_digest | relative_url }}";
 
   const lightbox = new PhotoSwipeLightbox({
     gallery: '.pswp-gallery',
     children: 'a',
-    pswpModule: () => import("{% link /assets/third-party/photoswipe/photoswipe.esm.min.js %}"),
+    pswpModule: () => import("{{ '/assets/third-party/photoswipe/photoswipe.esm.min.js' | asset_digest | relative_url }}"),
     mainClass: 'pswp--custom-bg',
     preloadFirstSlide: false,
     bgOpacity: 0.8,
@@ -35,7 +35,7 @@
 
 {% comment %} Load Masonry.js. TODO opt: only load when we use this masonry.js display {% endcomment %}
 
-<script src="{% link /assets/third-party/masonry.pkgd.min.js %}" defer></script>
+<script src="{{ '/assets/third-party/masonry.pkgd.min.js' | asset_digest | relative_url }}" defer></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {

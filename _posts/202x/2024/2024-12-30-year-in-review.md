@@ -218,7 +218,7 @@ Youtube 听到 Canada 冬天 homeless 好像有冻死？听不太懂，盯着屏
 我带着小宝每天拿着塑料蒲扇指瓜瓜，看她“钓鱼”，跑趟趟。我和妈妈在小县城外的宽阔马路上练车，去县医院补开小宝前不久打狂犬疫苗的病历。
 
 <div class="post-image">
-    <img src="/bef/posts/2024-12-year-in-review/fishing.webp" alt="钓鱼">
+    <img src="{% include bef.html path='posts/2024-12-year-in-review/fishing.webp' %}" alt="钓鱼">
     <p class="caption-short">妈妈奶奶陪着小宝“钓鱼”。四川炎热的 9 月，多年未见的久旱，电扇吹着风，几分惬意——约莫有 6 年多没有体会过四川的 9 月了？</p>
 </div>
 
@@ -227,7 +227,7 @@ Youtube 听到 Canada 冬天 homeless 好像有冻死？听不太懂，盯着屏
 然后是去机场，小宝舅舅和外婆送的，没有听到停车场，小宝舅舅被让先直接回家了，外婆等我们吃饭、托运妥当，自己坐地铁回家。去多伦多的旅途，重庆到香港再到多伦多。
 
 <div class="post-image">
-    <img src="/bef/posts/2024-12-year-in-review/gazing_through_the_airport_glass.webp" 
+    <img src="{% include bef.html path='posts/2024-12-year-in-review/gazing_through_the_airport_glass.webp' %}" 
          alt="透过机场的玻璃好奇的打量">
     <p class="caption-short">透过机场的玻璃好奇的打量。小宝刚会走路，却俨然一副大人模样了</p>
 </div>
@@ -247,7 +247,7 @@ Youtube 听到 Canada 冬天 homeless 好像有冻死？听不太懂，盯着屏
   内心兵荒马乱。
 
   <div class="post-image">
-      <img src="/bef/posts/2024-12-year-in-review/found_the_missing_shoes.webp" 
+      <img src="{% include bef.html path='posts/2024-12-year-in-review/found_the_missing_shoes.webp' %}" 
           alt="鞋子最后找到了，妈妈拍的照片">
       <p class="caption-short">鞋子最后找到了（妈妈拍的照片）。看看它安静躺在阳光下的样子啊，生活本没有那么多烦躁。平静一点</p>
   </div>
@@ -287,7 +287,7 @@ Youtube 听到 Canada 冬天 homeless 好像有冻死？听不太懂，盯着屏
   尝试涂 vasline, 上个周末去 shoppers 问 pharmacy，也没有啥有意义的结论，说还是让医生看看
 
   <div class="post-image">
-      <img src="/bef/posts/2024-12-year-in-review/white-scar.webp" 
+      <img src="{% include bef.html path='posts/2024-12-year-in-review/white-scar.webp' %}" 
           alt="指甲划伤后留下的白色瘢痕；上面是结痂刚掉不就；下面是差不多 2 个月后，更白更显眼了">
       <p class="caption-short">指甲划伤后留下的白色瘢痕；上面是结痂刚掉不就；下面是差不多 2 个月后，更白更明显了。手机拍出来淡一点，实际看更加明显呢</p>
   </div>
@@ -314,7 +314,7 @@ Youtube 听到 Canada 冬天 homeless 好像有冻死？听不太懂，盯着屏
 - 12.23 妈妈昨晚花了好久的时间（8 点半-9 点半，11 点-12 点半）扎好了彩灯
   
   <div class="post-image">
-      <img src="/bef/posts/2024-12-year-in-review/colorful_lights.webp" 
+      <img src="{% include bef.html path='posts/2024-12-year-in-review/colorful_lights.webp' %}" 
           alt="妈妈扎好的彩灯，真漂亮！">
       <p class="caption-short">真漂亮的彩灯啊！这个时刻是多么幸福啊，可是……</p>
   </div>
@@ -334,7 +334,7 @@ Youtube 听到 Canada 冬天 homeless 好像有冻死？听不太懂，盯着屏
   晚上妈妈做了 gingerman 饼干，虽然是仙人掌形状。非常酥脆好吃。黄油，糖和努力持续的搅拌，有了这种神奇的魔力。
   
   <div class="post-image">
-    <img src="/bef/posts/2024-12-year-in-review/gingerman_four-leaf-clover_concat.webp" 
+    <img src="{% include bef.html path='posts/2024-12-year-in-review/gingerman_four-leaf-clover_concat.webp' %}" 
         alt="上色后的两个特殊形状的 Gingerman 饼干——正宗姜黄人和妈妈的四叶草🍀">
     <p class="caption-short">两个特殊形状的 Gingerman 饼干——正宗姜黄人和妈妈的四叶草🍀. 妈妈专门又融化了糖来上色！漂亮得都舍不得吃掉。</p>
   </div>

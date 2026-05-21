@@ -2,14 +2,14 @@
     <div class="post-meta__primary">
         <span class="post-meta__item">
             <svg class="post-meta__icon" aria-hidden="true" focusable="false">
-                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-date" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-date"></use>
+                <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-date" xlink:href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-date"></use>
             </svg>
             <span>{{ doc.date | date: "%Y/%m/%d" }}</span>
         </span>
         {% if doc.content %}
         <span class="post-meta__item">
             <svg class="post-meta__icon" aria-hidden="true" focusable="false">
-                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-time" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-time"></use>
+                <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-time" xlink:href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-time"></use>
             </svg>
             <span>{{ doc.content | strip_html | strip_newlines | size }} 字</span>
         </span>
@@ -17,7 +17,7 @@
         {% if include.pageview %}
         <span class="post-meta__item pageview-cnt-container hidden">
             <svg class="post-meta__icon" aria-hidden="true" focusable="false">
-                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-eye"></use>
+                <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-eye"></use>
             </svg>
             <span>
                 <span class="waline-pageview-count" data-path="{{ doc.url | relative_url }}">...</span>
@@ -31,7 +31,7 @@
         {% if doc.categories %}
         <span class="post-meta__group post-meta__group--category">
             <svg class="post-meta__icon" aria-hidden="true" focusable="false">
-                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-category" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-category"></use>
+                <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-category" xlink:href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-category"></use>
             </svg>
             <span class="post-meta__chips">
                 {% for category in doc.categories %}
@@ -44,7 +44,7 @@
         {% if doc.tags %}
         <span class="post-meta__group post-meta__group--tags">
             <svg class="post-meta__icon" aria-hidden="true" focusable="false">
-                <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-tag" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-tag"></use>
+                <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-tag" xlink:href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-tag"></use>
             </svg>
             <span class="post-meta__chips">
                 {% for tag in doc.tags %}

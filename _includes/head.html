@@ -42,5 +42,5 @@
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 <link rel="shortcut icon" href="{{ '/favicon.ico' | absolute_url }}">
 <!-- stylesheet -->
-<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | asset_digest | relative_url }}">
 {%- include gallery_head.html -%}

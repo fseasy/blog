@@ -4,7 +4,7 @@
 require 'fileutils'
 
 Jekyll::Hooks.register :site, :post_write do |site|
-  config = site.config['local_bef_resources']
+  config = site.config.dig('bef_process', 'local')
   
   # 只有配置存在且是开发环境才执行
   if config && Jekyll.env == "development"

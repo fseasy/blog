@@ -39,10 +39,13 @@ sass:
     style: compressed
     sass_dir: assets/css/_sass
 
-# Used for `_plugins/symlink_bef.rb`, only for development env.
-local_bef_resources:
-  src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
-  dst: "bef" # relative to the target dir (`_site`)
+# Used for `_plugins/symlink_bef.rb` and `_includes/bef.html`
+bef_process:
+  local:
+    src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
+    dst: "bef" # relative to the target dir (`_site`)
+  production:
+    host: "https://bef.fseasy.top"
 
 # Waline comments
 waline:

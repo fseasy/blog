@@ -14,25 +14,44 @@ For Fseasy blog service.
 
 ## 部署注意事项
 
-### Asset Digest（CSS/JS Cache Busting）
+### Asset Digest（Cache Busting）
 
-`_plugins/asset_digest.rb` 在 production 构建时自动为所有 CSS/JS 文件加上 MD5 content hash：
+`_plugins/asset_digest.rb` 通过 `asset_digest` Liquid filter 为 asset 文件生成基于内容的 hash query param：
 
-- **命名格式**：`main.css` → `main---<md5>.css`
-- **生效条件**：`JEKYLL_ENV=production`（CI 已配置，本地 development 不生效）
-- **HTML 引用**：plugin 会同步 rewrite 所有 HTML 里的 link/script tag
-- **Old variant 清理**：每次 build 会自动删除同一文件的旧 hash 版本，防止 `_site` 越来越脏
-- **增量构建**：兼容（不会破坏增量构建）
+- **用法**：`{{ '/assets/css/main.css' | asset_digest | relative_url }}`
+- **输出示例**：`/assets/css/main.css?6b2c5569`
+- **CSS with SASS source**：hash = SHA256(main.scss + `sass_dir` 下所有 .scss/.sass 文件)，确保任意 SASS 修改都触发新 hash
+- **Third-party CSS / 其他文件**：hash = SHA256(文件内容)
+- **缓存**：结果缓存在 `site.data['asset_digest']`，同一 build 内不重复计算
 
 ### blog-extra-file 依赖
 
-1. 现在依赖 `blog-extra-file` 这个仓库，存储博客额外的、非关键文件(如非核心图片等)；其对应到 `/bef` 这个路径地址。
-   1. 服务器侧，是通过 Nginx 设置路由来定向到仓库的实际位置（通过 `alias`），其访问路径为 `/bef/$PATH`. 
-   2. 本地部署 Jekyll server 使用 `./local_server.sh` ，为 Jekyll server, 不支持自定义路由，所以只能把 `blog-extra-file` 放到 `_site` 里面，经过一些尝试，最稳妥的方法是用 plugin post-write 方式来做软链接，实现在 `_plugins/symlink_bef.rb`. 其依赖的配置项为 `_config.yml` 中的 `local_bef_resources`.
-      
-      PS：手动软连接、shell 里软链接都行不通—因为本地用的是 `jekyll serve` watch 模式，它会持续监控 `_site`, 多余的文件会被删除掉。或许用一些 trick 可以实现链接的创建（如 `keep_files: ["bef"]` + shell 里 watch ），但显然太 trick.
+1. 依赖 `blog-extra-file` 仓库，存储博客额外文件(如非核心图片等)；对应 `/bef` 路径地址。
+2. 本地开发：`_plugins/symlink_bef.rb` 在 post_write 时创建软链接到 `_site/bef`，依赖 `_config.yml` 中的 `bef_process.local` 配置。
+3. 生产环境(GitHub Pages)：使用 `_includes/bef.html` include 文件，访问时替换 `/bef/` 为 `bef_process.production.host`。
 
-      PS2: 这个 plugin 进在 development 下生效。相应的，我们在 production 环境下需要设置 `JEKYLL_ENV=production`.
+   **用法**：
+   ```html
+   <!-- 旧写法 -->
+   <img src="/bef/posts/xxx/image.webp">
+
+   <!-- 新写法 -->
+   <img src="{% include bef.html path='posts/xxx/image.webp' %}">
+   ```
+
+   **配置** `_config.yml`:
+   ```yaml
+   bef_process:
+     local:
+       src: "../blog-extra-file"
+       dst: "bef"
+     production:
+       host: "https://bef.fseasy.top"
+   ```
+
+   **迁移脚本**：`scripts/migrate_bef_links.sh` 可批量迁移旧链接（交互式，逐文件确认）
+
+   PS：本地 soft link 在 `jekyll serve` watch 模式下会被删除，plugin post_write 方式可规避此问题。
 
 ## 博客撰写注意事项
 

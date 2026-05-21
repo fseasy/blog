@@ -20,7 +20,7 @@ tags: 多伦多 流水账
 走路去公司，风还有点大，但天气不算冷。晴朗蔚蓝的天空，能见度极高，我想这大概是典型的北方气候吧。同事介绍沿途的景点，一个广场，一个旧的市政厅。据说都是著名打卡点，不过人不算多。旧市政厅的确非常漂亮，石头主体，雕花，钟楼，门前有一点郁金香；古典，威严，非常棒的建筑。过了市政厅，周边街道在施工，看到了同事多次提及、国内也多有耳闻的 homeless，就躺在人行道上睡觉，无拘无束，那么自然，却又格格不入。
 
 <div class="post-image">
-    <img src="/bef/posts/2024-05-toronto/old_city_hall.webp" alt="Old City Hall">
+    <img src="{% include bef.html path='posts/2024-05-toronto/old_city_hall.webp' %}" alt="Old City Hall">
     <p class="caption-short">旧市政厅-随手仰拍</p>
 </div>
 

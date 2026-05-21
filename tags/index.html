@@ -7,7 +7,7 @@ title: 标签
 <div id="tags_table">
 </div>
 
-<script src="{{ '/assets/js/postdata.js' | prepend: site.baseurl }}" type="text/javascript"></script>
+<script src="{{ '/assets/js/postdata.js' | asset_digest | relative_url }}" type="text/javascript"></script>
 <script>
 
     // copy from https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript 

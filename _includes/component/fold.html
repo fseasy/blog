@@ -54,7 +54,7 @@ Usage pattern:
             {{ icon }}
           {%- else -%}
             <svg class="fold-styled-symbol" aria-hidden="true" focusable="false">
-              <use href="{{ '/assets/site/icons.svg' | relative_url }}#{{ icon_symbol }}" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#{{ icon_symbol }}"></use>
+              <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#{{ icon_symbol }}" xlink:href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#{{ icon_symbol }}"></use>
             </svg>
           {%- endif -%}
         </div>
@@ -66,7 +66,7 @@ Usage pattern:
       {% comment %} 右侧：箭头 {% endcomment %}
       <span class="fold-styled-arrow">
         <svg class="fold-styled-arrow-icon" aria-hidden="true" focusable="false">
-          <use href="{{ '/assets/site/icons.svg' | relative_url }}#icon-chevron-down" xlink:href="{{ '/assets/site/icons.svg' | relative_url }}#icon-chevron-down"></use>
+          <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-chevron-down" xlink:href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#icon-chevron-down"></use>
         </svg>
       </span>
     </summary>

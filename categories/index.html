@@ -12,7 +12,7 @@ title: 分类
     </div>
 </div>
 
-<script src="{{ '/assets/js/postdata.js' | prepend: site.baseurl }}"></script>
+<script src="{{ '/assets/js/postdata.js' | asset_digest | relative_url }}"></script>
 
 <script>
     const categoryNs = window.categoryNs || {};

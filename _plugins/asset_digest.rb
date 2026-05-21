@@ -1,74 +1,100 @@
-Jekyll::Hooks.register :site, :post_write do |site|
-  # Only run in production; skip in development to keep things fast and simple
-  return unless Jekyll.env == 'production'
+# frozen_string_literal: true
 
-  assets_dir = File.join(site.dest, 'assets')
-  return unless File.directory?(assets_dir)
+# Jekyll Asset Digest Filter
+#
+# Appends a content-based SHA256 hash as a query param to asset paths for cache busting.
+#
+# Usage:
+#   {{ "/assets/css/main.css" | asset_digest | relative_url }}
+#   => /assets/css/main.css?6b2c5569
+#
+# Behavior by file type:
+#   - CSS with corresponding .scss source:
+#       hash = SHA256(main.scss + all .scss/.sass files in sass_load_paths)
+#       This ensures any SASS dependency change invalidates the cache.
+#   - CSS without .scss source (e.g., third-party):
+#       hash = SHA256(file content)
+#   - All other assets (JS, images, fonts, etc.):
+#       hash = SHA256(file content)
+#
+# Results are cached in site.data['asset_digest'] to avoid recomputation within a build.
+#
+# Example in templates:
+#   <link rel="stylesheet" href="{{ '/assets/css/main.css' | asset_digest | relative_url }}">
+#   <script src="{{ '/assets/js/app.js' | asset_digest | relative_url }}"></script>
 
-  css_files = Dir.glob(File.join(assets_dir, '**', '*.css')).reject { |p| p.end_with?('.map') }
-  js_files = Dir.glob(File.join(assets_dir, '**', '*.js'))
+require "digest"
 
-  # Build rename map: original_path => hashed_path
-  rename_map = {}
-  (css_files + js_files).each do |path|
-    rename_map[path] = compute_hashed_path(path)
-  end
+module Jekyll
+  module AssetDigestFilter
+    def asset_digest(filename)
+      site = @context.registers[:site]
 
-  # Clean up old hashed variants before renaming.
-  # Use triple-dash separator so the pattern basename---*.<ext> is unambiguous.
-  rename_map.each do |orig_path, new_path|
-    dir = File.dirname(orig_path)
-    base = File.basename(orig_path, '.*')
-    ext = File.extname(orig_path)
+      # Return cached result if available
+      return site.data["asset_digest"][filename] if site.data.dig("asset_digest", filename)
 
-    Dir.glob(File.join(dir, "#{base}---*#{ext}")).each do |old_hashed|
-      # Skip if this is already the correct (new) path
-      next if old_hashed == new_path
-      FileUtils.rm(old_hashed)
-      puts "  [Asset Digest] Removed old variant: #{File.basename(old_hashed)}"
+      result = compute_asset_digest(site, filename)
+      site.data["asset_digest"] ||= {}
+      site.data["asset_digest"][filename] = result
+      result
     end
-  end
 
-  # Rename files
-  rename_map.each do |old_path, new_path|
-    if old_path != new_path && File.exist?(old_path)
-      FileUtils.mv(old_path, new_path)
-      puts "  [Asset Digest] #{File.basename(old_path)} -> #{File.basename(new_path)}"
-    end
-  end
+    private
 
-  # Rewrite HTML references
-  Dir.glob(File.join(site.dest, '**', '*.html')).each do |html_path|
-    html = File.read(html_path)
-    modified = false
+    def compute_asset_digest(site, filename)
+      source_path = site.in_source_dir(filename)
 
-    rename_map.each do |old_path, new_path|
-      old_basename = File.basename(old_path)
-      new_basename = File.basename(new_path)
-      next if old_basename == new_basename
-
-      pattern = /(["'])([^"']*\/)#{Regexp.escape(old_basename)}(["'])/
-
-      if html.match?(pattern)
-        html = html.gsub(pattern) do |_match|
-          quote = $1
-          prefix = $2
-          trail = $3
-          "#{quote}#{prefix}#{new_basename}#{trail}"
-        end
-        modified = true
+      if filename.end_with?(".css")
+        compute_css_digest(site, filename, source_path)
+      else
+        compute_file_digest(source_path, filename)
       end
     end
 
-    File.write(html_path, html) if modified
+    def compute_css_digest(site, filename, source_path)
+      scss_file = source_path.sub(/\.css$/, ".scss")
+
+      if File.exist?(scss_file)
+        compute_sass_digest(site, filename, scss_file)
+      elsif File.exist?(source_path)
+        # Third-party CSS: compute hash directly from CSS file
+        compute_file_digest(source_path, filename)
+      else
+        Jekyll.logger.warn "AssetDigest:", "#{filename}: no source found (tried #{scss_file} and #{source_path})"
+        filename
+      end
+    end
+
+    def compute_sass_digest(site, filename, scss_file)
+      scss_converter = site.find_converter_instance(Jekyll::Converters::Scss)
+      if scss_converter.nil?
+        Jekyll.logger.warn "AssetDigest:", "Scss converter not found"
+        return filename
+      end
+
+      files = [scss_file]
+      scss_converter.sass_load_paths.each do |path|
+        Dir.glob("#{path}/**/*.scss").each { |f| files << f }
+        Dir.glob("#{path}/**/*.sass").each { |f| files << f }
+      end
+
+      "#{filename}?#{digest(files)}"
+    end
+
+    def compute_file_digest(source_path, filename)
+      unless File.exist?(source_path)
+        Jekyll.logger.warn "AssetDigest:", "#{filename}: file not found at #{source_path}"
+        return filename
+      end
+
+      "#{filename}?#{digest([source_path])}"
+    end
+
+    def digest(files)
+      combined = files.sort.map { |f| File.read(f) }.join
+      Digest::SHA256.hexdigest(combined)[0, 8]
+    end
   end
 end
 
-def compute_hashed_path(path)
-  dir = File.dirname(path)
-  basename = File.basename(path, '.*')
-  ext = File.extname(path)
-  content = File.read(path)
-  hash = Digest::MD5.hexdigest(content)[0..7]
-  File.join(dir, "#{basename}---#{hash}#{ext}")
-end
+Liquid::Template.register_filter(Jekyll::AssetDigestFilter)
