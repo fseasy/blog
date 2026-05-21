@@ -163,7 +163,7 @@ title: 分类
 
             _buildPaginationDOM(category, page, pageNum) {
                 const wrapper = document.createElement('div');
-                wrapper.className = 'pagination-container';
+                wrapper.className = 'pagination';
 
                 const createIndicator = (cls, texts, hrefs) => {
                     const div = document.createElement('span');
@@ -185,7 +185,7 @@ title: 分类
                 const preHref = page > 1 ? URICtrl.genURIComponent(category, page - 1) : null;
                 const nextHref = page < pageNum ? URICtrl.genURIComponent(category, page + 1) : null;
 
-                wrapper.appendChild(createIndicator('pre', ['上一页'], [preHref]));
+                wrapper.appendChild(createIndicator('pre', [preHref ? '上一页' : ''], [preHref]));
 
                 const numTexts = [], numHrefs = [];
                 for (let i = 1; i <= pageNum; i++) {
@@ -194,7 +194,7 @@ title: 分类
                 }
                 wrapper.appendChild(createIndicator('num', numTexts, numHrefs));
 
-                wrapper.appendChild(createIndicator('nxt', ['下一页'], [nextHref]));
+                wrapper.appendChild(createIndicator('nxt', [nextHref ? '下一页': ''], [nextHref]));
 
                 return wrapper;
             }

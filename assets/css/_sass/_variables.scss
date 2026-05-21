@@ -73,3 +73,22 @@ $base-line-height: 1.65;
     @content;
   }
 }
+
+// Effects 
+
+@mixin link-gradient($fade-start: 70%) {
+  background: linear-gradient(150deg, var(--link-hover) $fade-start, transparent) bottom no-repeat;
+  background-size: 100% 0.3rem;
+}
+
+@mixin link-grow-gradient($fade-start: 70%) {
+  text-decoration: none;
+  @include link-gradient($fade-start);
+  background-size: 100% 0%;
+  transition: background-size 0.25s ease;
+  
+  &:hover,
+  &:active {
+    background-size: 100% 0.3rem;
+  }
+}

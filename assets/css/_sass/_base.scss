@@ -36,8 +36,8 @@ body {
     font-size: 1rem;
     font-family: $font-special, $font-en-formal, $font-cn-sans;
     line-height: $base-line-height;
-    color: var(--text-dark-color);
-    background-color: var(--body-bg);
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
     -webkit-text-size-adjust: 100%;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -82,22 +82,27 @@ p {
 }
 
 .text-highlight {
-    color: var(--text-highlight-color);
-    background-color: var(--text-highlight-bg-color);
+    color: var(--highlight-text);
+    background-color: var(--highlight-bg);
     padding-left: 0.3rem;
     padding-right: 0.3rem;
 }
 
 strong {
-    color: var(--text-dark-strong-color);
+    color: var(--text-emphasis);
 }
 
 a {
-    color: var(--explicit-link-color);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+a:visited {
+    color: var(--text-secondary);
 }
 
 a:hover {
-    color: var(--explicit-link-color);
+    color: var(--link-hover);
 }
 
 
@@ -127,6 +132,11 @@ sub, sup {
 
 .hidden {
   display: none !important;
+}
+
+.margin-v-2rem {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 /**

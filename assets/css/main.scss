@@ -22,92 +22,125 @@
 // CSS Variables for light/dark mode support
 :root {
   // Light mode (default)
-  --text-dark-color: #2F2937;
-  --text-dark-grey-color: #444;
-  --text-dark-more-grey-color: #767676;
-  --text-dark-strong-color: #1F2937;
-  --text-highlight-color: white;
-  --text-highlight-bg-color: #17a2b8;
-  --header-text-color: #00537f;
-  --header-text-color-dark: #003a53;
-  --link-color: #b0e4ff;
-  --link-visited-color: #c1f2fe;
-  --explicit-link-color: #00537f;
-  --decorate-color: rgba(0, 0, 0, 0.1);
-  --brand-color: #e1f5ff;
+  // === Text Colors ===
+  --text-primary: #2F2937;
+  --text-secondary: #595959;
+  --text-tertiary: #767676;
+  --text-emphasis: #1a1a1a;
 
-  --body-bg: #fcfeff;
-  --block-content-bg: #fafbfd;
-  --header-bg: var(--brand-color);
-  --footer-bg: var(--brand-color);
-  --blockquote-bg: var(--block-content-bg);
-  --code-bg: var(--block-content-bg);
-  --table-border: #e5e5e5;
+  // === Link Colors ===
+  --link: #c87820;           // 链接下划线（低饱和暖橙）
+  --link-hover: #e09030;    // hover（稍亮，活泼但不廉价）
 
-  // Optimized colors
+  // === Highlight ===
+  --highlight-text: white;
+  --highlight-bg: #17a2b8;
+
+  // === Header ===
+  --header-text: #00537f;
+  --header-text-dark: #003a53;
+  --header-bg: #e8f4ff;       // 清新浅蓝
+
+  // === Backgrounds ===
+  --bg-primary: #fcfeff;
+  --bg-secondary: #fafbfd;
+  --bg-brand: #e8f4ff;
+  --footer-bg: var(--header-bg);
+  --blockquote-bg: var(--bg-secondary);
+  --code-bg: var(--bg-secondary);
+
+  // === Borders ===
+  --border: #e5e5e5;
+  --decorate: rgba(0, 0, 0, 0.1);
+
+  // === Buttons ===
   --btn-primary-bg: #1e88e5;
   --btn-primary-hover: #1565c0;
   --btn-primary-text: #ffffff;
-  --ghost-btn-color: #1e88e5;       /* 浅色模式：深蓝文字和边框 */
-  --ghost-btn-hover-bg: #e1f5ff;    /* 浅色模式：Hover后填充你原有的极浅蓝 */
-  --ghost-btn-hover-text: #1e88e5;  /* 浅色模式：Hover后文字颜色保持 */
-  // END
+  --ghost-btn-color: #1e88e5;
+  --ghost-btn-hover-bg: #e1f5ff;
+  --ghost-btn-hover-text: #1e88e5;
 
-  /* mainly for Callout */
-  --note-bg: var(--block-content-bg);
-  --tip-bg: #f3faf3;
-  --warning-bg: #fff6e5;
-  --error-bg: #fff0f0;
-  --none-bg: var(--body-background);
+  // === Tag Bubble Background ===
+  --tag-bg: #fef6e8;        // 标签气泡背景（淡橙）
 
-  /* Border Colors */
+  // === Callout Colors ===
+  --note-bg: #f0f4ff;
   --note-border: #a0c6ff;
+  --tip-bg: #f3faf3;
   --tip-border: #c3e8c3;
+  --warning-bg: #fff6e5;
   --warning-border: #f0e2b4;
+  --error-bg: #fff0f0;
   --error-border: #d68f8f;
-  --none-border: var(--gray-200);
+  --important-bg: #fff5f5;
+  --important-border: #ff9999;
+  --caution-bg: #fff8e5;
+  --caution-border: #f0d280;
+  --muted-bg: #f5f5f5;
+  --muted-border: #d0d0d0;
+  --none-bg: var(--bg-secondary);
+  --none-border: var(--border);
 
   /* Dark mode */
   @media (prefers-color-scheme: dark) {
-    --text-dark-color: #E5E7EB;
-    --text-dark-grey-color: #D1D5DB;
-    --text-dark-more-grey-color: #A0AEC0;
-    --text-dark-strong-color: #F5F5F5;
-    --text-highlight-color: #0F172A;
-    --text-highlight-bg-color: #3B82F6;
-    --header-text-color: #93C5FD;
-    --header-text-color-dark: #60A5FA;
-    --link-color: #87CEEB;
-    --link-visited-color: #B0E0E6;
-    --explicit-link-color: #93C5FD;
-    --decorate-color: rgba(255, 255, 255, 0.1);
-    --brand-color: #64B5F6;
-    --body-bg: #0F172A;
+    // === Text Colors ===
+    --text-primary: #E5E7EB;
+    --text-secondary: #A0AEC0;
+    --text-tertiary: #6B7A90;
+    --text-emphasis: #F5F5F5;
+
+    // === Link Colors ===
+    --link: #e09030;
+    --link-hover: #f5a623;
+    --link-visited: #b06a10;
+
+    // === Highlight ===
+    --highlight-text: #0F172A;
+    --highlight-bg: #3B82F6;
+
+    // === Header ===
+    --header-text: #93C5FD;
+    --header-text-dark: #60A5FA;
     --header-bg: #213A5A;
-    --footer-bg: #213A5A;
+
+    // === Backgrounds ===
+    --bg-primary: #0F172A;
+    --bg-secondary: #1A3150;
+    --bg-brand: #213A5A;
+    --footer-bg: var(--header-bg);
     --blockquote-bg: #1A3150;
     --code-bg: #132038;
-    --table-border: #2D4563;
 
-    // Optimized colors
+    // === Borders ===
+    --border: #2D4563;
+    --decorate: rgba(255, 255, 255, 0.1);
+
+    // === Buttons ===
     --btn-primary-bg: #64b5f6;
     --btn-primary-hover: #90caf9;
-    --btn-primary-text: #0d47a1; /* 深色字，保证暗流中的清晰度 */
-    --ghost-btn-color: #64b5f6;      /* 深色模式：天空蓝文字和边框 */
-    --ghost-btn-hover-bg: #64b5f6;   /* 深色模式：Hover后直接填充天空蓝 */
-    --ghost-btn-hover-text: #0d47a1; /* 深色模式：Hover后文字变深，保证清晰度 */
-    // END
+    --btn-primary-text: #0d47a1;
+    --ghost-btn-color: #64b5f6;
+    --ghost-btn-hover-bg: #64b5f6;
+    --ghost-btn-hover-text: #0d47a1;
 
+    // === Tag Bubble Background ===
+    --tag-bg: #2a2418;
+
+    // === Callout Colors ===
     --note-bg: #1e2a44;
-    --tip-bg: #1f3323;
-    --warning-bg: #3a2f1a;
-    --error-bg: #3b1f1f;
-
-    /* Dark mode border colors */
     --note-border: #4a74b3;
+    --tip-bg: #1f3323;
     --tip-border: #6fa86f;
+    --warning-bg: #3a2f1a;
     --warning-border: #c9b28f;
+    --error-bg: #3b1f1f;
     --error-border: #d68f8f;
-
+    --important-bg: #3b1f1f;
+    --important-border: #ff9999;
+    --caution-bg: #3a3214;
+    --caution-border: #c9a832;
+    --muted-bg: #1e1e1e;
+    --muted-border: #4a4a4a;
   }
 }

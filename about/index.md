@@ -1,10 +1,13 @@
 ---
-layout: index
+layout: index-post-content
 title: 关于
 index_name: 关于
 ---
 
-### 关于博客
+<article class="post-content" markdown="1">
+
+
+## 关于博客
 
 大概从 15 年开始记录博客于此。只是随性记些东西，后来又试图写技术文章，积累技术影响力。
 然而纯写技术文章力有不逮，也不愿意删掉、移走自己写的那些东西，也就断了念想。
@@ -25,15 +28,17 @@ index_name: 关于
 - [无处不在的小土](https://gaoyichao.com/), 搜 SLAM 时找到的。古文很有意思，另外要学习他的 5 年规划
 - [张振虎的博客](https://www.zhangzhenhu.com/glm/source/index.html) 数学知识，专注写作
 
-### 关于我
+## 关于我
 
 我是徐伟，现在喜欢在网络上称自己叫鱼虾 (fishshrimp). 起因是喜欢 《雨下一整晚》 这首歌，
 而它谐音 “鱼虾一整碗”，自己觉得很好玩；且我期望自己能活泼一些，故取名鱼虾。
 
-### Notes
+## Notes
 
 - 水蒸整蛋 30+ 分钟出来的口感，比煮出来的好吃至少 100 倍！ @2023.4.29
 
-### 历史版本
+## 历史版本
 
 [关于我](./me1.html)
+
+</article>

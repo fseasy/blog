@@ -11,7 +11,6 @@
   }
 }
 
-
 .col-layout-sidebar {
   /* 相当于 col-md-3，固定宽度 */
   flex: 0 0 25%;
@@ -28,7 +27,7 @@
 }
 
 .panel {
-  background-color: var(--body-bg);
+  background-color: var(--bg-primary);
   border: none;
   border-radius: 0;
   box-shadow: none;
@@ -40,28 +39,31 @@
   padding: 0;
 }
 
-.list-group-item {
+a.list-group-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem;
+  padding: 0.7rem 0.75rem;
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid var(--decorate-color);
-  color: var(--text-dark-color);
+  color: var(--text-primary);
   text-decoration: none;
   transition: background-color 0.15s ease;
   white-space: nowrap;
+  border-bottom: none;
 }
 
-.list-group-item:hover {
+
+a.list-group-item:hover {
   background-color: var(--blockquote-bg);
+  color: var(--link-hover);
+  background-size: 100% 0.1rem;
 }
 
-.list-group-item.active {
-  border-right: 2px solid var(--header-text-color);
-  margin-right: -1px;
-  background-color: var(--blockquote-bg);
+a.list-group-item.active {
+  color: var(--link-hover);
+  @include link-gradient;
+  background-size: 100% 0.1rem;
 }
 
 .badge {
@@ -72,14 +74,18 @@
   padding: 0.15rem 0.4rem;
   font-size: 0.75rem;
   font-weight: 400;
-  background-color: var(--header-bg);
-  color: var(--header-text-color);
+  background-color: var(--tag-bg);
+  color: var(--text-secondary);
   border-radius: 999px;
 }
 
 .pagination-container {
   margin: 10px 0;
   padding: 14px 0;
+}
+
+#listcontent {
+  padding-left: 20px
 }
 
 // Mobile overrides
@@ -96,14 +102,14 @@
     flex: 0 0 auto;
     padding: 0.3rem 0.6rem;
     background-color: var(--blockquote-bg);
-    border: 1px solid var(--decorate-color);
+    border: 1px solid var(--decorate);
     border-radius: 999px;
     font-size: 0.8rem;
   }
 
   #category_panel .list-group-item.active {
     background-color: var(--header-bg);
-    color: var(--header-text-color);
+    color: var(--header-text);
     border-color: transparent;
   }
 
@@ -118,3 +124,4 @@
     padding-left: 0;
   }
 }
+

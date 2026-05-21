@@ -51,34 +51,26 @@
     height: auto;
     padding: 0.25rem 0.15rem;
     border-radius: 0;
-    color: var(--text-dark-color);
+    color: var(--text-primary);
     text-decoration: none;
     line-height: 1.2;
   }
 
-  a {
-    opacity: 0.82;
-
-    transition:
-      opacity 0.18s ease,
-      transform 0.18s ease;
-
-    &:hover {
-      opacity: 1;
-
-      transform: translateY(-1px);
-    }
-  }
-
-  em {
+  .num em {
     font-style: normal;
-    color: var(--header-text-color);
+    color: var(--link-hover);
     font-weight: 700;
   }
 
-  span {
-    opacity: 0.4;
+  .num a, .pre a, .nxt a {
+    // clear other property
+    border-bottom: none;
   }
+  .num a:hover, .pre a:hover, .nxt a:hover {
+    box-shadow: none;
+    color: var(--link-hover);
+  }
+
 }
 
 @include media-query-range(0px, $on-phone) {
@@ -116,8 +108,7 @@
   }
 
   .media-func {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 40px 0;
   }
 
   .content-sep {
@@ -134,26 +125,6 @@
   }
 }
 
-
-.contentpanel a {
-  color: var(--text-dark-color);
-  border-bottom: 1px solid var(--link-color);
-  text-decoration: none; // use border as underline, disable default.
-  line-height: 1;
-}
-
-.contentpanel a:hover {
-  transition: box-shadow .2s linear;
-  box-shadow: inset 0 -0.4em var(--link-color);
-  background-position: 0 100%;
-  background-size: auto 0.3em;
-  background-repeat: repeat-x;
-}
-
-.contentpanel a:visited {
-  border-bottom: 1px solid var(--link-visited-color);
-}
-
 // post-list in index.html
 
 ul.post-list {
@@ -163,7 +134,7 @@ ul.post-list {
 
   >li {
     margin: 0;
-    border-bottom: 1px solid var(--decorate-color);
+    border-bottom: 1px solid var(--decorate);
     padding: 18px 0;
 
     >h3 {
@@ -174,18 +145,16 @@ ul.post-list {
 }
 
 a.post-link {
+  @include link-grow-gradient;
   font-size: 1.4rem;
   font-weight: 400;
-  color: var(--text-dark-color);
+  color: var(--text-primary);
   border-bottom: none;
 }
 
-a.post-link:hover {
-  background-image: none;
-}
 
 .post-excerpt {
-  color: var(--text-dark-grey-color);
+  color: var(--text-secondary);
   padding: 5px 0;
 }
 
@@ -198,7 +167,7 @@ a.post-link:hover {
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
   font-size: 0.8em;
-  color: var(--text-dark-grey-color);
+  color: var(--text-secondary);
   padding: 6px 0 4px;
   line-height: 1.5;
 }
@@ -235,7 +204,7 @@ a.post-link:hover {
   width: 14px;
   height: 14px;
   flex: 0 0 auto;
-  color: var(--header-text-color);
+  color: var(--header-text);
   opacity: 0.7;
   display: block;
 }
@@ -249,7 +218,7 @@ a.post-link:hover {
 }
 
 .post-meta__group--category {
-  opacity: 0.72;
+  opacity: 0.9;
 }
 
 .post-meta__group--category .post-meta__icon {
@@ -264,7 +233,8 @@ a.post-link:hover {
 }
 
 .post-meta__group--tags .tag-bubble {
-  background-color: var(--header-bg);
+  background-color: var(--tag-bg);
+  color: var(--text-secondary);
   border-radius: 999px;
   padding: 0.18rem 0.55rem;
   margin: 0;
@@ -327,26 +297,4 @@ a.post-link:hover {
 .clear-padding-horizontal {
   padding-left: 0;
   padding-right: 0;
-}
-
-#category_panel {
-  background-color: var(--body-bg);
-
-  .list-group-item {
-    background-color: transparent;
-    border: none;
-  }
-
-  ul.list-group {
-    margin-left: 0;
-  }
-
-  .badge {
-    background-color: var(--header-bg);
-    color: var(--header-text-color)
-  }
-}
-
-#listcontent {
-  padding-left: 20px
 }

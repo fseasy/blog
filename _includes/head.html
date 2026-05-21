@@ -41,6 +41,11 @@
 {% endif %}
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 <link rel="shortcut icon" href="{{ '/favicon.ico' | absolute_url }}">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+
 <!-- stylesheet -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | asset_digest | relative_url }}">
 {%- include gallery_head.html -%}

@@ -35,9 +35,10 @@
   align-items: center;
   gap: 0.5rem;    /* 稍微拉开一点间距，减少拥挤感 */
   font-size: 0.875rem;
-  color: var(--text-dark-color);
+  color: var(--text-primary);
   font-weight: 500; /* 给文字一点分量，让它与图标对抗 */
   opacity: 0.8;
+  user-select: none;
 }
 
 .site-icon--list {
@@ -65,34 +66,36 @@
 }
 
 .nav-list .nav a {
-  display: flex;
+  display: inline-flex;
   align-items: flex-start;
   padding: 2px 0;
   font-size: 0.875rem;
-  color: var(--text-dark-more-grey-color);
   text-decoration: none; /* 移除下划线 */
   white-space: normal;       /* 允许换行 */
   overflow-wrap: break-word; /* 优先单词间断行 */
   word-wrap: break-word;     /* 兼容旧浏览器 */
   word-break: normal;
   text-align:left;
+  @include link-grow-gradient;
+  opacity: 0.8;
 }
 
 /* 一级标题样式 */
 .nav-list > .nav > li > a {
   font-weight: 500;
+  color: var(--text-primary);
 }
 
 /* 二级标题样式 */
 .nav-list .nav .nav > li > a {
   font-size: 0.75rem;
   padding-left: .25rem; /* 二级缩进 */
+  color: var(--text-secondary);
 }
 
 /* 激活态：统一高亮风格 */
 .nav-list .nav > .active > a {
-  color: var(--text-dark-color);
-  font-weight: 700;
+  background-size: 100% 1px;
 }
 
 /* 隐藏子菜单，当父级 active 时显示 */
@@ -113,12 +116,12 @@
   display: inline-flex;
   align-items: center;
   text-decoration: none;
-  color: var(--text-dark-more-grey-color);
+  color: var(--text-primary);
   font-size: 0.875rem;
 }
 
 #back-to-top a:hover {
-  color: var(--text-dark-color);
+  color: var(--link-hover);
   transition: color .5s ease-out;
   font-weight: 500;
 }

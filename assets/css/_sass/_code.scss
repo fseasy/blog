@@ -23,10 +23,10 @@ pre, code {
 code {
     padding: 2px 4px;
     border-radius: 3px;
-    color: var(--text-dark-color);
+    color: var(--text-primary);
 }
 
 blockquote code {
-    color: var(--text-dark-color);
+    color: var(--text-primary);
     background-color: var(--code-bg) !important;
 }
