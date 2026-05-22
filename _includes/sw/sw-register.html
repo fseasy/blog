@@ -1,0 +1,13 @@
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw-bef.js', { scope: '/' })
+      .then(function(reg) {
+        console.log('Service Worker registered for bef resources');
+      })
+      .catch(function(err) {
+        console.error('Service Worker registration failed:', err);
+      });
+  });
+}
+</script>

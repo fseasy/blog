@@ -1,5 +1,5 @@
-{%- if jekyll.environment == "production" and site.bef_process.production.host -%}
-{% include utils/path-join.html base=site.bef_process.production.host relative=include.path %}
+{%- if jekyll.environment == "production" or site.bef_process.force_gen_production_link -%}
+{% include utils/path-join.html base=site.bef_process.production_gen_link  relative=include.path %}
 {%- else -%}
 {% include utils/path-join.html base="/bef" relative=include.path %}
 {%- endif -%}

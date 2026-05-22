@@ -39,16 +39,33 @@ sass:
     style: compressed
     sass_dir: assets/css/_sass
 
-# Used for `_plugins/symlink_bef.rb` and `_includes/bef.html`
+# Used for Blog-extra-files, related to 
+# - `_plugins/symlink_bef.rb`: local deploy symlink
+# - `_includes/bef.html`: decide how to generate the bef link
+# - sw-bef.js: decide which production service to use.
 bef_process:
+  force_gen_production_link: true  # set true to use production host (for SW testing)
   local:
     src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
     dst: "bef" # relative to the target dir (`_site`)
-  production:
-    host: "https://bef.fseasy.top" # cloudflare CDN. too slow in evening
-    # host: "https://bef-vercel.fseasy.top" # worse, totally unavailable for too-many images
-  # Internal backup (IstoreOS) - replace with actual address after port mapping
-  internal: "http://192.168.x.x:8080"
+  # Always generating this link in production HTML. then the sw-bef.js will 
+  # hack this link to the actual services.
+  production_gen_link: "https://bef.fseasy.top"
+  production_service_alternative:
+    cf_cdn:
+      host: "https://bef.fseasy.top" # cloudflare CDN. too slow in evening
+      connect_timeout_ms: 1500
+    vercel:
+      host: "https://bef-vercel.fseasy.top" # worse, totally unavailable for too-many images
+      connect_timeout_ms: 1500
+    self_host:
+      host: "https://bef-cd.fseasy.top"
+      port: 19981
+      connect_timeout_ms: 500
+  production_service_try_order: 
+    - self_host
+    - cf_cdn
+    - vercel
 
 # Waline comments
 waline:

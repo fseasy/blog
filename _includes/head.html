@@ -48,4 +48,7 @@
 
 <!-- stylesheet -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | asset_digest | relative_url }}">
+
+{% if page.use_gallery %}
 {%- include gallery_head.html -%}
+{% endif %}
