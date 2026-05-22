@@ -45,8 +45,10 @@ bef_process:
     src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
     dst: "bef" # relative to the target dir (`_site`)
   production:
-    # host: "https://bef.fseasy.top" # cloudflare CDN. too slow in evening
-    host: "https://bef-vercel.fseasy.top"
+    host: "https://bef.fseasy.top" # cloudflare CDN. too slow in evening
+    # host: "https://bef-vercel.fseasy.top" # worse, totally unavailable for too-many images
+  # Internal backup (IstoreOS) - replace with actual address after port mapping
+  internal: "http://192.168.x.x:8080"
 
 # Waline comments
 waline:
