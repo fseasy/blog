@@ -45,7 +45,8 @@ bef_process:
     src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
     dst: "bef" # relative to the target dir (`_site`)
   production:
-    host: "https://bef.fseasy.top"
+    # host: "https://bef.fseasy.top" # cloudflare CDN. too slow in evening
+    host: "https://bef-vercel.fseasy.top"
 
 # Waline comments
 waline:
