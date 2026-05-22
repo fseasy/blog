@@ -137,12 +137,12 @@
       const result = await fetchFrom(originalUrl, svc.baseUrl, svc.name, svc.timeoutMs);
 
       if (result.ok) {
-        console.log(`[SW-bef] ${svc.name} succeeded for ${new URL(originalUrl).pathname}`);
+        // console.log(`[SW-bef] ${svc.name} succeeded for ${new URL(originalUrl).pathname}`);
         return withLongCache(result.response);
       }
 
       if (result.status === 404) {
-        console.log(`[SW-bef] ${svc.name} returned 404, trying next`);
+        console.trace(`[SW-bef] ${svc.name} returned 404, trying next`);
         continue;
       }
 

@@ -1,0 +1,25 @@
+<script>
+(function() {
+    {% if page.toc %}
+    {% assign toc_build_cmd = page.toc %}
+    {% else %}
+    {% assign toc_build_cmd = post.toc %}
+    {% endif %}
+    var tocCmd = "{{ toc_build_cmd }}";
+    if (tocCmd === "disable") {
+        return;
+    }
+    // Pre-check: count h1-h3 headers to avoid loading toc.js unnecessarily
+    // (auto-detect mode requires at least 4 headers to build TOC)
+    var headerCount = document.querySelectorAll('h1, h2, h3').length;
+    if (tocCmd !== "force_enable" && headerCount < 4) {
+        return;
+    }
+    var script = document.createElement('script');
+    script.src = "{{ '/assets/js/toc.js' | asset_digest | relative_url }}";
+    script.onload = function() {
+        initToc(tocCmd);
+    };
+    document.body.appendChild(script);
+})();
+</script>

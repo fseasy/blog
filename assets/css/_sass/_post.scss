@@ -8,6 +8,7 @@
     padding-top: 0.5rem;
     padding-bottom: 0.3rem;
     position: relative;
+    z-index: 5;
 }
 
 #toc-content .toc-columns {
@@ -40,6 +41,7 @@
 #toc-content .toc-column ul > li > a {
     margin: 0.45rem 0;
     color: var(--text-primary);
+    font-size: 0.85rem;
 }
 
 #toc-content .toc-column ul ul {
@@ -51,6 +53,7 @@
 #toc-content .toc-column ul ul > li > a {
     margin: 0.3rem 0;
     color: var(--text-secondary);
+    font-size: 0.75rem;
 }
 
 @include media-query-range(0px, $on-phone) {
@@ -69,6 +72,7 @@
     right: 1rem;
     font-size: 2.5rem;
     color: var(--header-bg);
+    z-index: -1;
 }
 
 .post-header {

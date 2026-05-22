@@ -41,8 +41,8 @@ Python scripts are managed by `uv` (see `scripts_/pyproject.toml`). Uses `ruff` 
 
 - **Two layouts**: `index.html` (listing pages: home, categories, tags, about) and `post.html` (individual blog posts with TOC, comments, sharing, MathJax, Prism.js, side-nav)
 - **`_includes/`** - shared HTML partials: `head.html` (meta/SEO), `page_header.html` (nav bar with 文章/分类/标签/About + Google search), `page_footer.html`, `post_meta.html` (date, Chinese word count, categories, tags), `pagination.html`
-- **`_includes/extra_fn/`** - feature modules loaded conditionally by layouts: TOC generation (`toc_js.html`, `toc_content_top_tag.html`), MathJax, Prism.js code highlighting, share buttons, Isso comments (replaces deprecated Disqus), side navigation, gallery rendering, `link_target_blank_script.html` (external links in new tab), `dynamic_style_setter.html` (runtime CSS adjustments)
-- **`_includes/extra_fn/dependency_3rd/`** - vendored third-party JS (jQuery, toc.js, utils.js)
+- **`_includes/extra_fn/`** - feature modules loaded conditionally by layouts: TOC (`content_toc.html`, `side_nav.html`, `load_toc_js.html`), MathJax, Prism.js code highlighting, share buttons, Isso comments (replaces deprecated Disqus), gallery rendering, `link_target_blank_script.html` (external links in new tab), `dynamic_style_setter.html` (runtime CSS adjustments)
+- **`assets/js/`** - `toc.js` — 合并了 TOC 生成、双栏布局、侧边栏交互逻辑，按需加载
 - **`_includes/component/`** - reusable UI components (e.g., `fold.html` — collapsible callout/details with note/tip/warn/error variants)
 - **`_includes/utils/`** - utility includes (e.g., `path-join.html`)
 

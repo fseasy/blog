@@ -14,7 +14,7 @@
       {% assign doc=page %}
       {% include post_meta.html pageview=true %}
       <!-- TOC -->
-      {% include extra_fn/toc_content_top_tag.html %}
+      {% include extra_fn/content_toc.html %}
       <!-- post-content -->
       <article class="post-content">
         {{content}}
@@ -33,8 +33,7 @@
   </div>
   {% include page_footer.html %}
 
-  {% include extra_fn/side_nav.js.html %}
-  {% include extra_fn/toc_js.html %}
+  {% include extra_fn/load_toc_js.html %}
   {% include extra_fn/share_js_script.html %}
   {% include extra_fn/mathjax_script.html %}
   {% include extra_fn/prism.html %}
