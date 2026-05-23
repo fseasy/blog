@@ -1,4 +1,4 @@
-# Fseasy Blog
+# FSEASY Personal Blog
 
 [![](https://img.shields.io/badge/blog-servering-green.svg)](https://blog.fseasy.top)
 
@@ -96,6 +96,78 @@ For Fseasy blog service.
 
    `.text-highlight`: 高亮样式
 
+
+5. Gallery 图集系统
+
+   **数据生成**：
+   ```sh
+   cd scripts_ && source .venv/bin/activate
+   python gen-year-in-review-gallery-yaml.py -i <原始图片目录> -o <输出目录>
+   ```
+   - 脚本会压缩图片/视频为 webp/webm（最大 800x800），生成 YAML 数据文件
+   - 支持从文件名（`IMG_20250130_185031.jpg`）或 EXIF metadata 提取拍摄时间
+   - 输出：`gallery_data.yml` + 处理后的媒体文件
+
+   **YAML 数据结构**：
+   ```yaml
+   group_id:
+     - relative_path: "group/image.webp"   # 相对路径
+       caption: "描述文字"                  # 可选
+       dt_utc: "2025-01-30 18:50:31"      # UTC 时间
+       width: 800                           # 宽度
+       height: 600                          # 高度
+       poster: "group/video_poster.webp"   # 视频封面，仅视频有
+   ```
+
+   **在 Post 中使用**：
+   ```html
+   {% include extra_fn/render_gallery.html
+      data="gallery_2025_year_in_review"
+      data_group_id="albert"
+      path_prefix="posts/2025-year-in-review"
+      display_style="justified"
+   %}
+   ```
+   - `data`: `_data/` 下的 YAML 文件名（不含扩展名）
+   - `data_group_id`: YAML 中的分组 key
+   - `path_prefix`: 路径前缀
+   - `display_style`: `justified`（行高相同）| `masonry`（瀑布流，列宽相同）| `masonry-row`（瀑布流，基于 masonry.js）
+
+   **相关文件**：
+   - `scripts_/gen-year-in-review-gallery-yaml.py` - 生成脚本
+   - `scripts_/fix-gallery-assets-create-time.py` - 修复媒体文件 EXIF 时间戳
+   - `_data/gallery_*.yml` - Gallery 元数据
+   - `_includes/extra_fn/render_gallery.html` - 渲染组件
+   - 依赖：`ffmpeg`（压缩）, `exiftool`（时间提取）
+
+6. 可折叠内容 (fold.html)
+
+   使用 `{% capture body %}` + `{% include component/fold.html %}` 模式：
+
+   ```html
+   {% capture body %}
+   <div markdown="1">
+   Content here (supports **markdown**)
+   </div>
+   {% endcapture %}
+
+   {% include component/fold.html
+      type="note"
+      summary="Section Title"
+      open=false
+      content=body
+   %}
+   ```
+
+   **参数**：
+   - `type`: `note` | `tip` | `warn` | `error`
+   - `open`: `true` (默认展开) | `false` (默认折叠)
+   - `summary`: 折叠块的标题
+
+   **VSCode**：运行 `>j-fold` 命令可折叠/展开整个 capture 块。
+
+
+
 ## 其他
 
 1. 小技巧：
@@ -114,9 +186,8 @@ For Fseasy blog service.
      参考 [mathjax curly brackets dont show-up using jekyll][curly_braces_jekyll], 关键词 `curly brackets`, `curly braces`
 
    - `<details>` 里面要想让 Markdown 被正确解析, 可以把 Markdown 内容用 `<div markdown="1">` 包裹一下，就可以正常解析了。
-     
-     原理： `markdown="1"` 是 kramdown（Jekyll 默认的 Markdown 引擎）提供的一个 专用扩展属性，作用非常直接：强制在这个 HTML 标签内部继续解析 Markdown。
 
+     原理： `markdown="1"` 是 kramdown（Jekyll 默认的 Markdown 引擎）提供的一个 专用扩展属性，作用非常直接：强制在这个 HTML 标签内部继续解析 Markdown。
 
 2. 代码渲染，现在使用 [Prism](https://prismjs.com/). 
   

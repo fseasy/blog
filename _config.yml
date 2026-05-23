@@ -44,7 +44,7 @@ sass:
 # - `_includes/bef.html`: decide how to generate the bef link
 # - sw-bef.js: decide which production service to use.
 bef_process:
-  force_gen_production_link: true  # set true to use production host (for SW testing)
+  force_gen_production_link: false  # set true to use production host (for SW testing)
   local:
     src: "../blog-extra-file" # relative to the `source` dir (root of the repo dir)
     dst: "bef" # relative to the target dir (`_site`)

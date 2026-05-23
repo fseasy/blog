@@ -85,5 +85,4 @@ GitHub Actions workflow (`.github/workflows/github-deploy.yml`): on push to mast
 - **Code highlighting**: Kramdown's built-in highlighter is disabled (`highlighter: none`); Prism.js is used instead. Use `cpp` not `c++` for language tags (Prism bug). Prism and MathJax are conditionally loaded per page based on content detection + front matter flags.
 - **MathJax in Markdown**: Use `\lbrace`/`\rbrace` for curly braces (not `\{\}`), and `\mbox{-}` or `\text{-}` for hyphens in math mode.
 - **Markdown inside HTML**: Wrap content in `<div markdown="1">` to force kramdown parsing within HTML tags (e.g., inside `<details>`). This is a kramdown-specific extension attribute.
-- **Blockquote line breaks**: Add 2 trailing spaces at end of a line in a blockquote to create a line break.
 - **Internal jump links**: Use `<span id="anchor_name"></span>` + `[link](#anchor_name)` pattern.

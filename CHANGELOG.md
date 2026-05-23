@@ -1,5 +1,26 @@
 # 更新
 
+## 2026.05.23
+
+这里结束了大概为期一个月的 year-in-review 撰写+博客样式更新。
+
+- 增加 gallery 支持； 相应的，增加了 service-worker 来支持 bef 的大资源加载问题（配合家里部署的一个服务）
+- 增加 dark mode
+- 修改了下配色+一些交互样式(+fold，链接样式修改)，增加了橙色调，和 logo 对应
+- logo 拿 ChatGPT 优化了下，没扣干净的部分弄好了点，但线条有些损失；同时碗变成实心的了（可接受）…
+- 去掉了 google-gce, 改为直接跳转到 google search.
+- toc.js 全部合并到一起了，修复了分 2 栏的错误
+- 移除了 JQuery 依赖
+- 调整了 posts 的文件夹结构，现在分成了 3 层
+- 新增了 asset_digest 插件来支持应对 cache bust
+- 评论改为 waline, 应该可以管很久了吧。回头看这个搞了挺多次的
+- 废掉了 vps 的部署，现在还是部署到 github pages, 简单又稳定
+- 增加了 CLAUDE.md, 用的一个便宜的 minimax 2.7 model 做了这些样式的优化，配合 DeepSeek chat. 
+
+感谢 Github，感谢 AI 的进步吧.
+
+博客荒废了好久，这次维护下感觉舒服了点。
+
 ## 2023.02.25
 
 修改侧边 Nav 的思路，区分 Toc 与 Nav.
@@ -65,7 +86,7 @@
 
 ## 2020.06.20 - 2020.09.13
 
-本来打算增加一个目录的，结果发现mathpage layout里的东西都过时了（还在使用jiathis, duoshuo...），
+本来打算增加一个目录的，结果发现 mathpage layout里的东西都过时了（还在使用 jiathis, duoshuo...），
 瞬间觉得之前写得还是挺烂的……
 
 **预期功能：**
