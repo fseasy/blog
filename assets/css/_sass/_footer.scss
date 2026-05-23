@@ -4,6 +4,9 @@
 .site-footer {
     padding: ($spacing-unit * 2) 0;
     background-color: var(--footer-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .text-decoration-none {

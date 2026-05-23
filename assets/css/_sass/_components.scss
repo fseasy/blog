@@ -23,18 +23,19 @@
 }
 
 .btn-ghost {
-  background-color: transparent;
-  color: var(--ghost-btn-color);
-  border: 1px solid var(--ghost-btn-color);
-  padding: 6px 12px;
-  border-radius: 6px;
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+  border: 1px solid var(--btn-secondary-border);
+  padding: 0.5rem 1rem;
+  border-radius: .5rem;
   cursor: pointer;
-  font-size: 0.875rem;
-  
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  font-size: 0.75rem;
+  user-select: none;
+  touch-action: manipulation;
+  transition-duration: .5s;
 }
 
 .btn-ghost:hover {
-  background-color: var(--ghost-btn-hover-bg);
-  color: var(--ghost-btn-hover-text);
+  border-color: var(--btn-secondary-hover-border);
+  color: var(--btn-secondary-hover-border);
 }

@@ -29,8 +29,8 @@
   --text-emphasis: #1a1a1a;
 
   // === Link Colors ===
-  --link: #c87820;           // 链接下划线（低饱和暖橙）
-  --link-hover: #e09030;    // hover（稍亮，活泼但不廉价）
+  --link: #ec522b;           // 链接下划线（低饱和暖橙）
+  --link-hover: #f08050	;   // hover（同色相，更亮活泼）
 
   // === Highlight ===
   --highlight-text: white;
@@ -54,23 +54,25 @@
   --decorate: rgba(0, 0, 0, 0.1);
 
   // === Buttons ===
-  --btn-primary-bg: #1e88e5;
-  --btn-primary-hover: #1565c0;
-  --btn-primary-text: #ffffff;
-  --ghost-btn-color: #1e88e5;
-  --ghost-btn-hover-bg: #e1f5ff;
-  --ghost-btn-hover-text: #1e88e5;
+  --btn-primary-bg: var(--link);
+  --btn-primary-hover: var(--link-hover);
+  --btn-primary-text: var(--text-emphasis);
+
+  --btn-secondary-bg: transparent;
+  --btn-secondary-border: var(--text-tertiary);
+  --btn-secondary-text: var(--text-secondary);
+  --btn-secondary-hover-border: var(--btn-primary-hover);
 
   // === Tag Bubble Background ===
-  --tag-bg: #fef6e8;        // 标签气泡背景（淡橙）
+  --tag-bg: #fef0e8;        // 标签气泡背景（暖橙底）
 
   // === Callout Colors ===
   --note-bg: #f0f4ff;
   --note-border: #a0c6ff;
   --tip-bg: #f3faf3;
   --tip-border: #c3e8c3;
-  --warning-bg: #fff6e5;
-  --warning-border: #f0e2b4;
+  --warning-bg: #fff4e8;
+  --warning-border: #f0d8a8;
   --error-bg: #fff0f0;
   --error-border: #d68f8f;
   --important-bg: #fff5f5;
@@ -91,9 +93,9 @@
     --text-emphasis: #F5F5F5;
 
     // === Link Colors ===
-    --link: #e09030;
-    --link-hover: #f5a623;
-    --link-visited: #b06a10;
+    --link: #f06830;
+    --link-hover: 	#c06030;
+    --link-visited: #c05020;
 
     // === Highlight ===
     --highlight-text: #0F172A;
@@ -117,15 +119,9 @@
     --decorate: rgba(255, 255, 255, 0.1);
 
     // === Buttons ===
-    --btn-primary-bg: #64b5f6;
-    --btn-primary-hover: #90caf9;
-    --btn-primary-text: #0d47a1;
-    --ghost-btn-color: #64b5f6;
-    --ghost-btn-hover-bg: #64b5f6;
-    --ghost-btn-hover-text: #0d47a1;
-
+    // reuse
     // === Tag Bubble Background ===
-    --tag-bg: #2a2418;
+    --tag-bg: #2a1f18;
 
     // === Callout Colors ===
     --note-bg: #1e2a44;

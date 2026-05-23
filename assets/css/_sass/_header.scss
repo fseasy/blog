@@ -49,27 +49,18 @@
 .site-title a:hover,
 .site-title a:visited {
     color: var(--header-text);
-
     text-decoration: none;
-
     font-size: 3rem;
-
     font-weight: 700;
-
     letter-spacing: 0.3rem;
 }
 
 .site-description {
     margin-top: 14px;
-
     margin-bottom: 0;
-
     color: var(--header-text-dark);
-
-    font-size: 1.02rem;
-
+    font-size: 1rem;
     line-height: 1.7;
-
     opacity: 0.78;
 }
 
