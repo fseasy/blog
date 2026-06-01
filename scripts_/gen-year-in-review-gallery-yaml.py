@@ -13,7 +13,6 @@ Used for _includes/extra_fn/gallery.html
 
 import argparse
 import json
-import concurrent.futures
 import re
 import subprocess
 from datetime import UTC, datetime
