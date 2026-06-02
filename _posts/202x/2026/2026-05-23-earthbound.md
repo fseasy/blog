@@ -1,7 +1,7 @@
 ---
 layout: post
 title: EarthBound (Mother 2) 游玩记录
-date: 2025-05-23
+date: 2026-05-23
 categories: WLR  
 tags: EarthBound Mother-2 有意思的游戏
 excerpt: 之前不经意关注到了 lunamos，感觉很有能力和智慧的一个人。从他这里了解到的这个游戏，最近开始在玩，记录下。

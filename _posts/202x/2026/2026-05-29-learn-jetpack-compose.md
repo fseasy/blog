@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Jetpack Compose 学习
-date: 2025-05-29
+date: 2026-05-29
 categories: 技术
 tags: JetPack-Compose Android
 excerpt: 让 Minimax 整了个 codebase，结果发现发送消息后消息没有刷新出来。是时候真正的开始学习 JetPack Compose 然后手工改了。
