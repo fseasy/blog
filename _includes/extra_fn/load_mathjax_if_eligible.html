@@ -1,0 +1,6 @@
+{% if page.mathjax != "disable" %}
+<script>
+window.__MATHJAX_LOAD_MODE__ = {% if page.mathjax == "force_enable" %}"force_enable"{% else %}"auto"{% endif %};
+</script>
+<script defer src="{{ '/assets/js/mathjax-loader.js' | asset_digest | relative_url }}"></script>
+{% endif %}

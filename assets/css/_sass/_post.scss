@@ -88,11 +88,7 @@
 
 .post-content {
     >:last-child {
-        margin-bottom: 0;
-    }
-
-    >:first-child {
-        margin-top: 0;
+        margin-bottom: 1rem;
     }
 
     // no h1 in content
@@ -188,6 +184,7 @@
         border-left: 1em solid var(--header-bg);
         padding: 1em 1.5em 1em 1.5em;
         position: relative;
+        margin-top: 0;
         margin-bottom: 2rem;
     }
 

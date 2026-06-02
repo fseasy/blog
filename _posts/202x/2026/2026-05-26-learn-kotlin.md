@@ -4,8 +4,9 @@ title: Kotlin 学习
 date: 2026-05-26
 categories: 技术
 tags: Kotlin
-excerpt: 开始做 ImTrace Android，要用 Kotlin，快速入门下，感觉有些东西挺有意思的。
 ---
+
+> 开始做 ImLog Android，要用 Kotlin，快速入门下，感觉有些东西挺有意思的。
 
 ## 变量声明：var 与 val
 

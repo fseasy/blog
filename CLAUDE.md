@@ -65,6 +65,7 @@ Sass with CSS variables for light/dark mode. Entry point: `assets/css/main.scss`
 Posts support these optional front matter fields:
 - `toc`: `"disable"` | `"force_enable"` | unset (auto-detect by heading count ≥ 4)
 - `mathjax`: `"disable"` | `"force_enable"` | unset (auto-detect by content)
+- `prism`: `"disable"` | unset (auto-detect by code block presence)
 - `use_gallery`: `true` | `false` — loads PhotoSwipe CSS+JS
 
 ### Gallery System

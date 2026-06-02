@@ -277,35 +277,65 @@ function initSideNavInteraction() {
 
     const ACTIVE_OFFSET = 120;
     const SIDE_RAIL_GAP = 24;
+    const SIDE_RAIL_WIDTH_RATIO = 0.15;
+    const SIDE_RAIL_MIN_WIDTH = 10;
+    const SIDE_RAIL_MAX_WIDTH = 240;
+    // 用两个阈值做滞回，避免接近临界宽度时反复显示/隐藏。
+    const SIDE_RAIL_SHOW_BUFFER = 8;
+    const SIDE_RAIL_HIDE_BUFFER = 4;
+    let isSideRailVisible = false;
 
     const getShowOffset = () => {
         if (!contentTocContainer) return 0;
         return contentTocContainer.getBoundingClientRect().top + window.scrollY + contentTocContainer.offsetHeight;
     };
 
-    const hasSpaceForSideNav = () => {
+    const getSideRailWidth = () =>
+        Math.min(Math.max(window.innerWidth * SIDE_RAIL_WIDTH_RATIO, SIDE_RAIL_MIN_WIDTH), SIDE_RAIL_MAX_WIDTH);
+
+    const getAvailableSideRailSpace = () => {
         const postPage = document.querySelector(".post-page");
-        if (!postPage) return false;
+        if (!postPage) return 0;
+
         const rightEdge = postPage.getBoundingClientRect().right;
-        const availableSpace = window.innerWidth - rightEdge;
-        return availableSpace >= (pageSideRail.offsetWidth + SIDE_RAIL_GAP);
+        return window.innerWidth - rightEdge;
+    };
+
+    const getSideRailSpaceThreshold = (isVisible) => {
+        const baseWidth = getSideRailWidth() + SIDE_RAIL_GAP;
+        return isVisible
+            ? baseWidth + SIDE_RAIL_HIDE_BUFFER
+            : baseWidth + SIDE_RAIL_SHOW_BUFFER;
+    };
+
+    const shouldShowSideNav = () => {
+        const availableSpace = getAvailableSideRailSpace();
+        const showOffsetReached = window.scrollY >= getShowOffset();
+        const spaceThreshold = getSideRailSpaceThreshold(isSideRailVisible);
+
+        return availableSpace >= spaceThreshold && showOffsetReached;
+    };
+
+    const setSideRailVisibility = (visible) => {
+        if (isSideRailVisible === visible) return;
+
+        pageSideRail.style.display = visible ? "flex" : "none";
+        isSideRailVisible = visible;
     };
 
     const updateTocVisibility = () => {
         const links = tocList ? tocList.querySelectorAll("a[href^='#']") : [];
         if (links.length === 0) {
-            pageSideRail.style.display = "none";
+            setSideRailVisibility(false);
             return;
         }
 
-        const shouldShow = hasSpaceForSideNav() && (window.scrollY >= getShowOffset());
-
-        if (!shouldShow) {
-            pageSideRail.style.display = "none";
+        if (!shouldShowSideNav()) {
+            setSideRailVisibility(false);
             return;
         }
 
-        pageSideRail.style.display = "flex";
+        setSideRailVisibility(true);
 
         const scrollPosition = window.scrollY;
         let currentLink = null;

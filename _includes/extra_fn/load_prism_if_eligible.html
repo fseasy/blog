@@ -1,0 +1,13 @@
+{% if page.prism != "disable" %}
+<script>
+window.__PRISM_LOADER_CONFIG__ = {
+  prismJsPath: "{{ '/assets/third-party/prism/prism.js' | asset_digest | relative_url }}",
+  prismCssPath: "{{ '/assets/third-party/prism/prism.css' | asset_digest | relative_url }}",
+  prismComponentsPath: "{{ '/assets/third-party/prism/components/' | relative_url }}"
+};
+</script>
+<script
+  defer
+  src="{{ '/assets/js/prism-loader.js' | asset_digest | relative_url }}">
+</script>
+{% endif %}
