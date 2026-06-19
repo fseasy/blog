@@ -204,3 +204,73 @@ data object 对 toString 等方法有优化，推荐用；
 data class 表示是数据类，预定义好了 hash 等方法，类似 Python 里的 dataclass.
 
 而基于 sealed class 下面可以有各种不同类型的子类，这就比普通 Enum 强太多了。
+
+写到下面这个实际的 case，才一下子理解到 Sealed class + When 的优雅：
+
+```Kotlin
+data class AppInitData(
+    val userId: UserId,
+    val storageUriSelected: Boolean,
+    val firstTopicCreated: Boolean,
+    val WelcomeShown: Boolean,
+)
+// 基于不同阶段，可以把后续阶段依赖的参数放进去；when 可以保证字段是符合预期的
+private fun determineInitStep(initData: AppInitData?): AppInitStep = when {
+    initData == null -> AppInitStep.SignInUp
+    !initData.storageUriSelected -> AppInitStep.SelectMediaStorageUri(initData.userId)
+    !initData.WelcomeShown -> AppInitStep.Welcome(
+        userId = initData.userId, needCreateFirstTopic = !initData.firstTopicCreated
+    )
+
+    else -> AppInitStep.Finished
+}
+// 使用的时候，配合 when 也好做区分
+when (val step = uiState.initStep) {
+    AppInitStep.Loading -> Splash()
+    AppInitStep.SignInUp -> SignInUpNavigation()
+    is AppInitStep.SelectMediaStorageUri -> SharedStorageSelectScreen(
+        currentUserId = step.userId,
+    )
+    ...
+}
+
+```
+
+如果不用这个，在外部结构里塞一个 `UserId?` 的类型，when 就爱莫能助，只能写 `!!` 这种吓人代码了。
+
+实际遇到了，才明白它是真的优雅。
+
+## 子类返回类型会自动 Import 进来
+
+在继承关系中，子类不需要显式 import 父类中使用的类型。
+
+背景：
+
+```
+@HiltWorker
+class MediaFileProcessWorker @AssistedInject constructor(
+    @Assisted context: Context,
+    @Assisted workerParams: WorkerParameters,
+    private val fileManager: FileManager,
+    private val messageRepository: MessageRepository,
+) : CoroutineWorker(context, workerParams) {
+
+  override suspend fun doWork(): Result {}
+}
+```
+
+这里的 `Result` 并非 kotlin.Result, 而是 `androidx.work.ListenableWorker.Result` — 但它并没有通过 import 引入。
+在我单独一个文件里，我没有 import , 则时用默认的 kotlin.Result. 还挺容易出错的…
+
+## 经典问题：函数传参，为啥不能用 `obj.fun` 
+
+在 Kotlin 中，不带括号的 `obj.fun` 代表去获取一个属性—变量。而 fun 是函数，不是变量！
+
+要引用函数，要用 `::`，也就是 `obj::fun`.
+
+所以，一般 2 种传参方式：
+
+1. lambda 包裹一层 【更推荐！扩展性好，容易理解；在 Jetpack Compose 1.5.3 之前版本里性能更稳定—自动 remember】
+2. `::` 引用
+
+`.` 去引用函数，在 Kotlin 里是语法错误！

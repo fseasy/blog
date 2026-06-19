@@ -29,13 +29,25 @@ tags: JetPack-Compose Android
 
 ## Compose 推荐的架构设计
 
+如果直接写一个 Screen，常常要把 ViewModel 作为参数传进来，而它一般依赖 hiltViewModel() 注入, 让 Preview 构造复杂。
+
+最佳实践：状态提升（State Hoisting）与 屏幕组件拆分
+
+为了获得最好的预览体验和代码可测试性，业界标准的做法是采用 “Container - Content” 拆分模式。
+
 Compose 推荐的架构是将组件分为两层：
 
-1. 顶层：Smart Component（智能/有状态组件）
-通常以 Screen 或 Page 结尾。这一层专门用来接收 ViewModel，负责订阅数据源、处理生命周期、分发业务事件。它不需要高频复用，整个页面只有一个。
+1. 顶层：Container / Smart Component（智能/有状态组件）
+  通常以 Screen 或 Page 结尾。
+  这一层专门用来接收 ViewModel，负责订阅数据源、处理生命周期、分发业务事件,处理副作用，。它不需要高频复用，整个页面只有一个。
+  不包含任何 UI 逻辑
 
-2. 底层：Dumb Component（呆萌/无状态组件）
-比如 MessageBubble、AudioPlayerBubble、Avatar。这一层绝对不碰 ViewModel。它们只接受最基础的、Immutable 的数据类型（如 String、Boolean、MessageUiModel）以及点击事件的 Lambda 回调。
+2. 底层：Stateless Content / Dumb Component（呆萌/无状态组件）
+  比如 MessageBubble、AudioPlayerBubble、Avatar。这一层绝对不碰 ViewModel。
+  它们只接受最基础的、Immutable 的数据类型（如 String、Boolean、MessageUiModel）以及点击事件的 Lambda 回调。
+  完全可以预览！
+
+
 
 ```Kotlin
 // 1. 顶层页面：负责提线
@@ -68,6 +80,7 @@ fun MessageBubble(
 ```
 
 PS：如果组件依赖的参数多，可以把组件依赖的不可变参数列表放到一个 immutable 的 dataclass 里，命名为 xxxUiModel. 区别与 ViewModel, 这个就是给组件渲染用的直接参数，不可变。这个 UiModel 可以放到和这个组件一个文件里。
+
 
 ## 异步任务
 
@@ -118,3 +131,51 @@ Data 数据  -> Domain.Model 的转换，可以在 Data 层定义 mapper, 或者
 1. 用户注销：这个时候直接往服务器发送阻塞请求，待服务器处理完后，本地直接删除数据（数据库+Preference)
 2. 服务器通知 xxx 资源已被删除：本地硬删除
 3. 本地删除了某个东西：先软删除，同步给服务器；服务器完成同步后，本地再硬删除
+
+## Flow 与 StateFlow
+
+1. 在 ViewModel 层，有必要将 Flow （冷流）转为 StateFlow （热流）
+   1. 避免重复的磁盘 I/O 操作（共享数据源）；否则每次 collect 都会触发上游执行
+   2. 应用配置变更（如屏幕旋转）：屏幕旋转时 UI 会重组，时用 StateFlow 配合 started = SharingStarted.WhileSubscribed(5000) 可以避免重新加载数据
+   3. UI 层需要状态而非事件：StateFlow 保证任何时候下游能都拿到值
+   4. 支持同步获取最新值：可以通过 StateFlow.value 来同步获取值，而不需通过 Flow.first/collect 去异步收集
+2. 什么时候没必要？
+   1. 此 Flow 会被进一步组合：如果这个 Flow 不是单独暴露给 UI，而只是作为一个大的 UiState 的一部分（通过 combine 合并多个 Flow），那么可以在整体的 UiState 层面做 stateIn
+   2. 单次消费：只是读一次 .first, 不需要监听变化
+3. Repository 应提供 Flow，ViewModel 负责转为 StateFlow
+   1. StateFlow 表示 UI 状态管理，它依赖 AndroidX 的生命周期（scope 参数！一般是 viewModelScope），而 Repository 不应该和特定的 ViewModel 绑定
+   2. StateFlow 需要提供初值，而初值和 UI/特定业务 相关联的，在 Repository 层不应该绑定
+
+
+## Modifier 是上层传进来还是自己内部控制？
+
+通常需要作为参数“传来传去”（传递），但需要结合“内部编写”一起使用。
+
+在 Compose 的设计规范中，推荐的做法是：
+- 让外部（调用者）决定组件的大小和位置，
+- 让内部（组件自身）决定其具体的内容和业务样式。
+
+## suspend, withContext(Dispatches.IO), viewModelScope.launch
+
+suspend 是一个面向协程的承诺：
+1. 这个函数只能在协程环境里跑
+2. 内部有挂起的点（协程调度退出当前函数、去跑别的协程的点）
+
+withContext 是说切换“线程“ — 这和协程是正交的。
+
+viewModelScope.launch 是在 viewModelScope 启动一个协程—所谓的启动，就是立刻创建一个 job，
+job 里包含了大括号里的代码，然后把这个 job 提交给协程调度器后立刻就返回了！它是异步、非阻塞的。
+
+所以 viewModel 里才频繁用这个 launch：因为它只是提交了任务，任务执行在另外的地方，从而不会阻塞 UI.
+
+## Clean Architecture
+
+清洁架构，要求 UI (presentation) 依赖 domain 层；data 也依赖 domain 层；
+然后 domain 层只依赖 JVM 系统的东西。
+
+写起来要多一些转换，但又觉得有一点道理—强迫你去拆分、归类。
+
+特别是开始入门写 UseCase 后，感觉有点茅塞顿开的感觉：业务逻辑写到 UseCase, 依赖的基础操作写到 Repository (domain 层), UI 优先使用 UseCase. 一切都顺畅起来，不用再纠结哪个放哪里了。
+
+当然抽象都是有代价了，前面起到的“类型转换“就是最直接的问题，比如 Android 的 Uri 就需要转成 String.
+有洁癖的人有点纠结，但还是架构优先，稍微费一丢丢 CPU，还行吧。
