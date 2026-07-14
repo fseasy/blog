@@ -106,6 +106,19 @@ tags:
 
 **南京至广州行程**记录：
 
+
+<div class="post-image">
+    <img src="{% include bef.html path='posts/2026/six-records-of-a-floating-life/route-nanjing-to-guangzhou.jpeg' %}" alt="南京到广州路线 - mapdraw 截图">
+    <p class="caption-short">南京到广州路线 - mapdraw 截图</p>
+</div>
+
+[mapdraw-link][_mapdraw_to_guangzhou] 
+
+[geo json data]({% include bef.html path='posts/2026/six-records-of-a-floating-life/route-nanjing-to-guangzhou-Map_Export_20260714235022.geojson' %})
+
+[_mapdraw_to_guangzhou]: https://www.mapdraw.net/#map=7/27.800210/117.784424&data=H4sIAAAAAAAAE22UW0_bZhzGv4uvoyiOExNz9dqOlwMpgQAr59iO7TiO88ZnO05saVNR6VboFYWJMqS1XSdtraBV1ZauzZfBKbnqV5gCBLUjd-_N8_s__8PzdhEHmUZjiIRMr3URC5lGWkgMqSHTayhKxBM4mk6kYhgaTxJ4Akc3YghEppFoZ__87J_o_c_Dvw8G795ED8_O3z-Jjo6Ge_eRIPZ_TCaOTSVRInmJyUwRqTHl1YPo86eLX54MPjwe7vUHp8fRo6cT9Hg8ncpk0kQsScQJLIGj3wOiV_3B0edotx-dPIpePotOTycw0vHMVBpPT8WSmTiewVAMu2YMTo8vnvejnf3BwcPBx70vu78OD36aAEjFMRzHkqlYMh3HCAwniO8AF2-fjvw_e3H-6beRlZ396NWDyeNIxTEMJ1KZSxKWSBLpcTvPXkRnn6PXL7_-uz34Y-vy8WAiIJnBscQlAE2iidTNWj70R3vY2R8e3pugw-KJqRSRiSWxeCKRmEplvpOdfzqMTk-__LkVHe9GD88m6pNpPJ1BRwAUTaUS39SN3v0-PHo8ePtuuP_XjVS7kiLVgAuznGvbS2aQ9VoyjVzrtp5f7f2WwhSkMMuxUF_S6hs9TyQlrgw7NGvQ0J4Tg6LcXLA6MpCDkmYuWnrOEWc1VQewNQ-lOoDmWihSukR55qbvl_j2-jofbLbZHOyuhO0l6K86nAjYkIH14rWVwev-9Qlun9y-o7GthhzY2a6iSEu8ekfmAA8XZN0ETrCg1u6yXrnaYizvR2jPqfayEDKOPS-6lNTbkJ2CFN6tuRTLrbD1fOgV1GaeVbNCreiwJaVKjgcyrhxtn9w-xrELzuZg1hXr_JLAVbRaSand0XJGa9Fd9uFyu15UtLLmLRmtfChUgVDdHPUP4byzLEt3hJDRrPV11Z6zXEbQ59Qwr7lZVin4YUFVi70G8D3K8oqqMuu283wnp3AA8iW3Svt2yddozyh47rzD53oarbmzjaAk-2VNKXtGVg9zfLckQsA3c5BbrlV8tqCwFcGlHGculBZCvwjZnNetAq5dBz67YVZn1e6sHxYsr8hpxV5v0WvMhApVEwt8L-sblOAyQhU4Om2otMGTnEnztWxLpTSOCruMCElozltdMhApX81KOiM1qYZMCxoJxRlP-cFdloKcrFCGXPL4vC-WQ7nCwhlBWHNEoDbzssZ4fP569Bdvn0Zbb0bbv4xutNu_Nfemyfp0U2A7i1CZYfms0Z4N7JzVWJFalWvKl_7Hi_79myBf4b5N45jl8rJHBy3oLYbCmhQ6pGXIQFC6QOB5EJh5VbKAqqyycEa3GZlVgWBwQGh2gMpWVJsUOgKQVA30zAXH0UGPKyudmZay6jiVWiPnBWRXnENu_urh4b1o--Qq4Lec6GazSeu9mr6ocHS3RRqb1R4jsqQtM-0OZYrADUhRohUVmCrdsIBpgXqddgo1gQzCgssWZJ3RNdCWxqm-qjNq_fJbQIKN4D-YnJvjZQYAAA "南京到广州"
+
+
 由东坝（南京市高淳区东坝镇）出芜湖（安徽芜湖）口入长江。
 
 江中夜泊，见捕鱼者用大孔小网捕鲳鱼。
@@ -116,22 +129,27 @@ tags:
 
 阁下换高尾昂首船（「三板子」），由赣关（赣州税关）到南安（赣州大余县）登陆（应该是沿着赣江而下）。恰逢 30 岁生日，吃面。
 
-*注：高尾昂首船，可能是一种船底较平、适合在内河航行的船。"高尾昂首"可见其船头和船尾都高高翘起，船型比较修长。*
+{% capture body %}
+<div markdown="1">
+可能是一种船底较平、适合在内河航行的船。"高尾昂首"可见其船头和船尾都高高翘起，船型比较修长。
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="高尾昂首船"
+   open=false
+   content=body
+%}
 
 过大庾岭（梅岭），山巅有寺「举头日近」，山头分二，两边峭壁；山顶有梅将军祠（书里说是「庾将军祠」，纪念汉时庾胜将军戍守梅岭有功；但似乎二者皆有：梅将军祠位于“府治东山麓”，即大庾县城东边的山脚，纪念的是秦末汉初的梅鋗；庾将军祠位于“水南玉池坊”，大庾县城南的水边区域，靠近章江，纪念庾胜；没去过，不可考）。岭上梅花，并无一树…  （这段应该就是梅关古道？）
 
-*注：大庾岭是一个更广大的山脉，而梅岭只是这座山脉中最著名、最核心的一段；大庾岭是“大范围”：作为“五岭”之一的大庾岭，是一座绵延两百多公里的庞大山脉，横亘在江西与广东两省的交界处；梅岭是“核心段”：梅岭是位于大庾岭山脉腹地的一段，也是地势相对险要的“要塞段”，正处于江西大余县与广东南雄市之间的交通咽喉位置；正因为梅岭是翻越大庾岭最关键、历史最悠久的一段，所以在很多语境下，“梅岭”直接就被用作“大庾岭”的别名。两者都被认为是“五岭”之一，是沟通中原和岭南的门户*
-
-过岭口，山川风物与吴地顿殊；
-
-*注：“吴地”指的是长江下游以南、以江浙为核心的地区，而广东在古代属于“南越”或“百越”之地，两者在文化源流上是完全不同的两个系统。二者以南岭（五岭）为天然分界线——岭北是吴、楚文化区，岭南（广东）在古代是独立发展的南越文化区。*
 
 {% capture body %}
 <div markdown="1">
+大庾岭是一个更广大的山脉，而梅岭只是这座山脉中最著名、最核心的一段；大庾岭是“大范围”：作为“五岭”之一的大庾岭，是一座绵延两百多公里的庞大山脉，横亘在江西与广东两省的交界处；梅岭是“核心段”：梅岭是位于大庾岭山脉腹地的一段，也是地势相对险要的“要塞段”，正处于江西大余县与广东南雄市之间的交通咽喉位置；正因为梅岭是翻越大庾岭最关键、历史最悠久的一段，所以在很多语境下，“梅岭”直接就被用作“大庾岭”的别名。两者都被认为是“五岭”之一，是沟通中原和岭南的门户。
 
-南岭是横亘在广东、广西与湖南、江西之间的五座山岭的总称，它既是地理分界线，也是历史上中原与岭南的文化屏障。
-
-具体要点如下：
+五岭，或称南岭，是横亘在广东、广西与湖南、江西之间的五座山岭的总称，它既是地理分界线，也是历史上中原与岭南的文化屏障。
 
 - 具体范围：由西到东分别是越城岭、都庞岭、萌渚岭、骑田岭、大庾岭，绵延约1400公里。
 - 地理意义：它是长江流域（北）与珠江流域（南）的分水岭，也是中国中亚热带与南亚热带的气候分界线。
@@ -143,33 +161,61 @@ tags:
 
 {% include component/fold.html
    type="note"
-   summary="关于「南岭」的补充(DeepSeek)"
+   summary="大庾岭 & 五岭/南岭"
+   open=false
+   content=body
+%}
+
+过岭口，山川风物与吴地顿殊；
+
+{% capture body %}
+<div markdown="1">
+“吴地”指的是长江下游以南、以江浙为核心的地区，而广东在古代属于“南越”或“百越”之地，两者在文化源流上是完全不同的两个系统。二者以南岭（五岭）为天然分界线——岭北是吴、楚文化区，岭南（广东）在古代是独立发展的南越文化区。
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="吴地"
    open=false
    content=body
 %}
 
 到南雄（广东南雄），雇老龙船，过佛山镇（今广东佛山禅城区）。
 
-*注 1：老龙船，在广东地区是常见的内河客货船名称，是当时北江航道上一种常见的交通工具。*
+{% capture body %}
+<div markdown="1">
+在广东地区是常见的内河客货船名称，是当时北江航道上一种常见的交通工具。
+</div>
+{% endcapture %}
 
-*注 2：从南雄到广州，之所以要先到佛山（地图看到了南边又往北边走），是因为走的是北江这条黄金水道。北江从北向南流，但它并没有直接汇入广州市区，而是先流经了佛山的北缘。水路的自然走向是这样的：*
+{% include component/fold.html
+   type="note"
+   summary="老龙船"
+   open=false
+   content=body
+%}
 
-- *顺流而下：从南雄出发，上船后顺着浈江向南，到韶关后汇入北江干流，一路南下。*
-- *必经之地：北江先流经韶关、清远，到达佛山三水区的思贤滘一带，与西江交汇。*
-- *分流入城：进入珠江三角洲的河网后，船队才从这里通过珠江的众多水道（如花地河）抵达广州城的码头*
+{% capture body %}
+<div markdown="1">
+从南雄到广州，之所以要先到更那南边的佛山（地图上看，县到了南边，又往折回往北边走），是因为走的是北江这条黄金水道。北江从北向南流，但它并没有直接汇入广州市区，而是先流经了佛山的北缘。水路的自然走向是这样的：
 
-*林则徐由梅关进入广东后，走的路线就是：南雄 → 北江 → 三水 → 佛山 → 广州*。
+- 顺流而下：从南雄出发，上船后顺着浈江向南，到韶关后汇入北江干流，一路南下。
+- 必经之地：北江先流经韶关、清远，到达佛山三水区的思贤滘一带，与西江交汇。
+- 分流入城：进入珠江三角洲的河网后，船队才从这里通过珠江的众多水道（如花地河）抵达广州城的码头
+
+林则徐由梅关进入广东后，走的路线就是：南雄 → 北江 → 三水 → 佛山 → 广州。
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="南雄入广州路线"
+   open=false
+   content=body
+%}
 
 腊月，抵达省城广州，寓靖海门（明清广州城门，今广州越秀区，已废弃）内。除夕，蚊声如雷…
-
-![南京到广州路线 - mapdraw 截图](./route-nanjing-to-guangzhou.jpeg)
-
-[mapdraw-link][_mapdraw_to_guangzhou] 
-
-[geo json data](./route-nanjing-to-guangzhou-Map_Export_20260714235022.geojson)
-
-
-[_mapdraw_to_guangzhou]: https://www.mapdraw.net/#map=7/27.800210/117.784424&data=H4sIAAAAAAAAE22UW0_bZhzGv4uvoyiOExNz9dqOlwMpgQAr59iO7TiO88ZnO05saVNR6VboFYWJMqS1XSdtraBV1ZauzZfBKbnqV5gCBLUjd-_N8_s__8PzdhEHmUZjiIRMr3URC5lGWkgMqSHTayhKxBM4mk6kYhgaTxJ4Akc3YghEppFoZ__87J_o_c_Dvw8G795ED8_O3z-Jjo6Ge_eRIPZ_TCaOTSVRInmJyUwRqTHl1YPo86eLX54MPjwe7vUHp8fRo6cT9Hg8ncpk0kQsScQJLIGj3wOiV_3B0edotx-dPIpePotOTycw0vHMVBpPT8WSmTiewVAMu2YMTo8vnvejnf3BwcPBx70vu78OD36aAEjFMRzHkqlYMh3HCAwniO8AF2-fjvw_e3H-6beRlZ396NWDyeNIxTEMJ1KZSxKWSBLpcTvPXkRnn6PXL7_-uz34Y-vy8WAiIJnBscQlAE2iidTNWj70R3vY2R8e3pugw-KJqRSRiSWxeCKRmEplvpOdfzqMTk-__LkVHe9GD88m6pNpPJ1BRwAUTaUS39SN3v0-PHo8ePtuuP_XjVS7kiLVgAuznGvbS2aQ9VoyjVzrtp5f7f2WwhSkMMuxUF_S6hs9TyQlrgw7NGvQ0J4Tg6LcXLA6MpCDkmYuWnrOEWc1VQewNQ-lOoDmWihSukR55qbvl_j2-jofbLbZHOyuhO0l6K86nAjYkIH14rWVwev-9Qlun9y-o7GthhzY2a6iSEu8ekfmAA8XZN0ETrCg1u6yXrnaYizvR2jPqfayEDKOPS-6lNTbkJ2CFN6tuRTLrbD1fOgV1GaeVbNCreiwJaVKjgcyrhxtn9w-xrELzuZg1hXr_JLAVbRaSand0XJGa9Fd9uFyu15UtLLmLRmtfChUgVDdHPUP4byzLEt3hJDRrPV11Z6zXEbQ59Qwr7lZVin4YUFVi70G8D3K8oqqMuu283wnp3AA8iW3Svt2yddozyh47rzD53oarbmzjaAk-2VNKXtGVg9zfLckQsA3c5BbrlV8tqCwFcGlHGculBZCvwjZnNetAq5dBz67YVZn1e6sHxYsr8hpxV5v0WvMhApVEwt8L-sblOAyQhU4Om2otMGTnEnztWxLpTSOCruMCElozltdMhApX81KOiM1qYZMCxoJxRlP-cFdloKcrFCGXPL4vC-WQ7nCwhlBWHNEoDbzssZ4fP569Bdvn0Zbb0bbv4xutNu_Nfemyfp0U2A7i1CZYfms0Z4N7JzVWJFalWvKl_7Hi_79myBf4b5N45jl8rJHBy3oLYbCmhQ6pGXIQFC6QOB5EJh5VbKAqqyycEa3GZlVgWBwQGh2gMpWVJsUOgKQVA30zAXH0UGPKyudmZay6jiVWiPnBWRXnENu_urh4b1o--Qq4Lec6GazSeu9mr6ocHS3RRqb1R4jsqQtM-0OZYrADUhRohUVmCrdsIBpgXqddgo1gQzCgssWZJ3RNdCWxqm-qjNq_fJbQIKN4D-YnJvjZQYAAA "南京到广州"
 
 ## 后记
 

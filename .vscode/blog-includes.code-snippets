@@ -43,5 +43,15 @@
 			"%}"
 		],
 		"description": "build frontend fold component(details)"
+	},
+	"Post Image with Caption": {
+		"prefix": ">j-postimg",
+		"body": [
+			"<div class=\"post-image\">",
+			"    <img src=\"{% include bef.html path='${1:posts/example/photo.webp}' %}\" alt=\"${2:图片描述}\">",
+			"    <p class=\"caption-short\">${3:图注文字}</p>",
+			"</div>"
+		],
+		"description": "插入带 caption 的博客图片"
 	}
 }
