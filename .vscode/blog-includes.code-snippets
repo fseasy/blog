@@ -44,6 +44,24 @@
 		],
 		"description": "build frontend fold component(details)"
 	},
+		"build frontend callout component(details)": {
+		"scope": "markdown",
+		"prefix": ">j-callout", // add `j-` prefix to avoid miss up with the `hugo` components
+		"body": [
+			"{% capture body %}",
+			"<div markdown=\"1\">", // Must put it here, we can't put it to the fold.html, it will break the structure.
+			"",
+			"</div>",
+			"{% endcapture %}",
+			"",
+			"{% include component/callout.html",
+			"   type=\"note\"",
+			"   border=true",
+			"   content=body",
+			"%}"
+		],
+		"description": "build frontend callout component(details)"
+	},
 	"Post Image with Caption": {
 		"prefix": ">j-postimg",
 		"body": [

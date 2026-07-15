@@ -1,0 +1,47 @@
+{% comment %}
+Callout component for Jekyll
+Supports:
+- type: note / warn / tip / error
+- border: true / false
+- content: captured block (recommended)
+
+Usage:
+{% capture body %}
+<div markdown="1">
+callout content
+</div>
+{% endcapture %}
+
+{% include component/callout.html 
+   type="note" 
+   border=true 
+   content=body 
+%}
+{% endcomment %}
+
+{%- assign type = include.type | default: "note" -%}
+{%- assign border = include.border | default: false -%}
+{%- assign content = include.content -%}
+
+{%- case type -%}
+  {%- when "tip" -%}
+    {%- assign icon_symbol = "icon-tip" -%}
+  {%- when "warn" -%}
+    {%- assign icon_symbol = "icon-warn" -%}
+  {%- when "error" -%}
+    {%- assign icon_symbol = "icon-error" -%}
+  {%- else -%}
+    {%- assign icon_symbol = "icon-note" -%}
+{%- endcase -%}
+
+<div class="callout callout--{{ type }} {% unless border %}no-border{% endunless %}">
+
+  <div class="callout-icon">
+    <svg class="callout-symbol" aria-hidden="true" focusable="false">
+      <use href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#{{ icon_symbol }}" xlink:href="{{ '/assets/site/icons.svg' | asset_digest | relative_url }}#{{ icon_symbol }}"></use>
+    </svg>
+  </div>
+  <div class="callout-content">
+    {{ content | markdownify }}
+  </div>
+</div>

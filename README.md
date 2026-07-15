@@ -164,9 +164,23 @@ For Fseasy blog service.
    - `open`: `true` (默认展开) | `false` (默认折叠)
    - `summary`: 折叠块的标题
 
-   **VSCode**：运行 `>j-fold` 命令可折叠/展开整个 capture 块。
+   **VSCode**：运行 `>j-fold` 命令快捷输入框架。
 
+7. callout 
+   
+   示例如下：
 
+   ```
+   {% include component/callout.html 
+      type="note" 
+      border=true 
+      content="本文在撰写过程中使用了 DeepSeek 辅助，包括所有的事实查询，部分的文字润色。" 
+   %}
+   ```
+   
+   content 也可以用上面的 capture 支持更复杂的 HTML.
+
+   **VSCode**：输入 `>j-callout` 快捷输入框架。
 
 ## 其他
 

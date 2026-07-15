@@ -306,23 +306,49 @@
 
     /* Icon */
     &-icon {
-        font-size: 1.25rem;
-        line-height: 1.25rem;
-        margin-top: 0.15rem;
+        line-height: 1.5;
+        margin: 0.15rem;
         flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        color: var(--callout-color);
+        width: 1rem;
+        height: 1rem;
+
+        svg {
+            display: block;
+            fill: currentColor;
+            stroke: currentColor;
+        }
+
+        &-symbol {
+            fill: currentColor;
+            stroke: none;
+        }
     }
 
     /* Content */
     &-content {
-        >p:first-child {
-            margin-top: 0;
+        > *:first-child {
+            margin-top: 0; // the current. for condition like the directly <p>
+            
+            /* the child if has. for condition: <div><p></p></div> */
+            > *:first-child {
+                margin-top: 0;
+            }
         }
 
-        >p:last-child {
+        > *:last-child {
             margin-bottom: 0;
+
+            /* 移除最后一个子元素的下边距 */
+            > *:last-child {
+                margin-bottom: 0;
+            }
         }
 
-        >ul {
+        ul {
             padding-inline-start: 1rem;
         }
     }
