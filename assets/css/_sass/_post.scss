@@ -258,6 +258,10 @@
     margin-bottom: 0.8rem;
 }
 
+.post-image a {
+    color: var(--text-tertiary);
+}
+
 .post-image .img-float {
     border-left: solid 1px var(--text-secondary);
 }
@@ -270,6 +274,8 @@
     text-align: left;
     padding: 0 3em;
 }
+
+
 
 .content-sep {
     margin-top: 10px;
@@ -313,8 +319,8 @@
         display: flex;
         align-items: center;
         color: var(--callout-color);
-        width: 1rem;
-        height: 1rem;
+        width: 1.25rem;
+        height: 1.25rem;
 
         svg {
             display: block;

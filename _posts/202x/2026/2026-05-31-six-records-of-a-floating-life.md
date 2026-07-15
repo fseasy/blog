@@ -22,7 +22,7 @@ tags:
 {% endcapture %}
 
 {% include component/callout.html
-   type="note"
+   type="warning"
    border=true
    content=body
 %}
@@ -36,7 +36,7 @@ tags:
 {% capture body %}
 <div markdown="1">
 
-女性从 4-8 岁开始，忍受“小脚一双，眼泪一缸“，将脚趾骨折断压向脚底，用长布紧紧裹住直至畸形定型。
+女性从 4 - 8 岁开始，忍受“小脚一双，眼泪一缸“，将脚趾骨折断压向脚底，用长布紧紧裹住直至畸形定型。
 
 这不仅是身体摧残，更是为了将女性束缚在“男外女内“的闺房中，防止越轨或外出。
 
@@ -89,7 +89,7 @@ tags:
 
 ## 坎坷啊坎坷
 
-卷三「坎坷记仇」，看得难受。
+卷三「坎坷记愁」，看得难受。
 
 一方面，家族内关系太淡薄。不说婆媳，父子之间竟然也是随随便便就赶人的节奏。父父子子，伦理教条让平等交流成了不能之事，可悲可悲。
 
@@ -99,7 +99,7 @@ tags:
 
 **绩溪石镜山**很有意思：
 
-> 余年二十有五，应徽州绩溪克明府之召，由武林下“江山船”，过富春山，登子陵钓台。台在山腰，一峰突起，离水十余丈。岂汉时之水竞与峰齐耶？月夜泊界口，有巡检署，“山高月小，水落石出”，此景宛然。黄山仅见其脚，惜未一瞻面目。 
+> 余年二十有五，应徽州绩溪克明府之召，由武林下“江山船”，过富春山，登子陵钓台。台在山腰，一峰突起，离水十余丈。岂汉时之水竞与峰齐耶？月夜泊界口，有巡检署，“山高月小，水落石出”，此景宛然。黄山仅见其脚，惜未一瞻面目。  
 > 绩溪城处于万山之中，弹丸小邑，民情淳朴。近城有石镜山，由山弯中曲折一里许，悬崖急湍，湿翠欲滴。渐高，至山腰，有一方石亭，四面皆陡壁；亭左石削如屏，青色光润，可鉴人形，俗传能照前生。黄巢至此，照为猿猴形，纵火焚之，故不复现。
 
 武林就是杭州；富春山、（严）子陵钓台在杭州桐庐县富春江段，子陵钓台是富春江畔的著名古迹，是富春江-新安江国家级风景名胜区的核心部分。
@@ -123,12 +123,9 @@ tags:
 
 <div class="post-image">
     <img src="{% include bef.html path='posts/2026/six-records-of-a-floating-life/route-nanjing-to-guangzhou.jpeg' %}" alt="沈复从南京到广州的路线 - mapdraw 截图">
-    <p class="caption-short">沈复从南京到广州的路线 - mapdraw 截图</p>
+    <p class="caption-short" markdown="1">沈复从南京到广州的路线 mapdraw 截图，原始数据： [mapdraw-link][_mapdraw_to_guangzhou], [geo json data]({% include bef.html path='posts/2026/six-records-of-a-floating-life/route-nanjing-to-guangzhou-Map_Export_20260714235022.geojson' %}) </p>
 </div>
 
-[mapdraw-link][_mapdraw_to_guangzhou] 
-
-[geo json data]({% include bef.html path='posts/2026/six-records-of-a-floating-life/route-nanjing-to-guangzhou-Map_Export_20260714235022.geojson' %})
 
 [_mapdraw_to_guangzhou]: https://www.mapdraw.net/#map=7/27.800210/117.784424&data=H4sIAAAAAAAAE22UW0_bZhzGv4uvoyiOExNz9dqOlwMpgQAr59iO7TiO88ZnO05saVNR6VboFYWJMqS1XSdtraBV1ZauzZfBKbnqV5gCBLUjd-_N8_s__8PzdhEHmUZjiIRMr3URC5lGWkgMqSHTayhKxBM4mk6kYhgaTxJ4Akc3YghEppFoZ__87J_o_c_Dvw8G795ED8_O3z-Jjo6Ge_eRIPZ_TCaOTSVRInmJyUwRqTHl1YPo86eLX54MPjwe7vUHp8fRo6cT9Hg8ncpk0kQsScQJLIGj3wOiV_3B0edotx-dPIpePotOTycw0vHMVBpPT8WSmTiewVAMu2YMTo8vnvejnf3BwcPBx70vu78OD36aAEjFMRzHkqlYMh3HCAwniO8AF2-fjvw_e3H-6beRlZ396NWDyeNIxTEMJ1KZSxKWSBLpcTvPXkRnn6PXL7_-uz34Y-vy8WAiIJnBscQlAE2iidTNWj70R3vY2R8e3pugw-KJqRSRiSWxeCKRmEplvpOdfzqMTk-__LkVHe9GD88m6pNpPJ1BRwAUTaUS39SN3v0-PHo8ePtuuP_XjVS7kiLVgAuznGvbS2aQ9VoyjVzrtp5f7f2WwhSkMMuxUF_S6hs9TyQlrgw7NGvQ0J4Tg6LcXLA6MpCDkmYuWnrOEWc1VQewNQ-lOoDmWihSukR55qbvl_j2-jofbLbZHOyuhO0l6K86nAjYkIH14rWVwev-9Qlun9y-o7GthhzY2a6iSEu8ekfmAA8XZN0ETrCg1u6yXrnaYizvR2jPqfayEDKOPS-6lNTbkJ2CFN6tuRTLrbD1fOgV1GaeVbNCreiwJaVKjgcyrhxtn9w-xrELzuZg1hXr_JLAVbRaSand0XJGa9Fd9uFyu15UtLLmLRmtfChUgVDdHPUP4byzLEt3hJDRrPV11Z6zXEbQ59Qwr7lZVin4YUFVi70G8D3K8oqqMuu283wnp3AA8iW3Svt2yddozyh47rzD53oarbmzjaAk-2VNKXtGVg9zfLckQsA3c5BbrlV8tqCwFcGlHGculBZCvwjZnNetAq5dBz67YVZn1e6sHxYsr8hpxV5v0WvMhApVEwt8L-sblOAyQhU4Om2otMGTnEnztWxLpTSOCruMCElozltdMhApX81KOiM1qYZMCxoJxRlP-cFdloKcrFCGXPL4vC-WQ7nCwhlBWHNEoDbzssZ4fP569Bdvn0Zbb0bbv4xutNu_Nfemyfp0U2A7i1CZYfms0Z4N7JzVWJFalWvKl_7Hi_79myBf4b5N45jl8rJHBy3oLYbCmhQ6pGXIQFC6QOB5EJh5VbKAqqyycEa3GZlVgWBwQGh2gMpWVJsUOgKQVA30zAXH0UGPKyudmZay6jiVWiPnBWRXnENu_urh4b1o--Qq4Lec6GazSeu9mr6ocHS3RRqb1R4jsqQtM-0OZYrADUhRohUVmCrdsIBpgXqddgo1gQzCgssWZJ3RNdCWxqm-qjNq_fJbQIKN4D-YnJvjZQYAAA "沈复从南京到广州的路线"
 

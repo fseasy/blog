@@ -1,7 +1,7 @@
 {% comment %}
 Callout component for Jekyll
 Supports:
-- type: note / warn / tip / error
+- type: note / warning / tip / error
 - border: true / false
 - content: captured block (recommended)
 
@@ -26,8 +26,8 @@ callout content
 {%- case type -%}
   {%- when "tip" -%}
     {%- assign icon_symbol = "icon-tip" -%}
-  {%- when "warn" -%}
-    {%- assign icon_symbol = "icon-warn" -%}
+  {%- when "warning" -%}
+    {%- assign icon_symbol = "icon-warning" -%}
   {%- when "error" -%}
     {%- assign icon_symbol = "icon-error" -%}
   {%- else -%}

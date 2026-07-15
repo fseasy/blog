@@ -1,7 +1,7 @@
 {% comment %}
 Fold / Callout / Details component for Jekyll
 Supports:
-- type: note / warn / tip / error
+- type: note / warning / tip / error
 - icon: optional SVG
 - border: true / false
 - summary: title text or HTML
@@ -35,8 +35,8 @@ Usage pattern:
   {%- case type -%}
     {%- when "tip" -%}
       {%- assign icon_symbol = "icon-tip" -%}
-    {%- when "warn" -%}
-      {%- assign icon_symbol = "icon-warn" -%}
+    {%- when "warning" -%}
+      {%- assign icon_symbol = "icon-warning" -%}
     {%- when "error" -%}
       {%- assign icon_symbol = "icon-error" -%}
     {%- else -%}
