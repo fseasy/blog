@@ -160,7 +160,7 @@ For Fseasy blog service.
    ```
 
    **参数**：
-   - `type`: `note` | `tip` | `warn` | `error`
+   - `type`: `note` | `tip` | `warning` | `error`
    - `open`: `true` (默认展开) | `false` (默认折叠)
    - `summary`: 折叠块的标题
 
