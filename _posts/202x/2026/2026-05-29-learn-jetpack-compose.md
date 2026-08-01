@@ -520,3 +520,283 @@ IM 应用的最佳实践：“即用即弃，即时拷贝”
 %}
 
 最后，缩略图推荐放到永久目录，自定义删除逻辑，或者给用户清理的选项。放到系统的 cache 目录，其并不可控，而 thumbnail 对 IM 是至关重要的！
+
+## Q: 怎么把路由里的参数，传给 ViewModel?
+
+当前的做法
+
+```kotlin
+// navigation
+composable<MainScreen.TopicTimeline> { backStackEntry ->
+    val route: MainScreen.TopicTimeline = backStackEntry.toRoute()
+    TimelineScreen(
+        topicId = route.topicId,
+        onBack = { navController.popBackStack() },
+        onSettingsClick = { topicId ->
+            navController.navigate(MainScreen.TopicSettings(topicId))
+        })
+
+}
+
+// TimelineScreen
+@Composable
+fun TimelineScreen(
+    topicId: TopicId,
+    onBack: () -> Unit,
+    onSettingsClick: (TopicId) -> Unit,
+    viewModel: TimelineViewModel = hiltViewModel(),
+) {
+    val uiState by viewModel.contentUiState.collectAsState()
+
+    LaunchedEffect(topicId) {
+        viewModel.loadTopic(topicId)
+}
+
+// viewModel
+@HiltViewModel
+class TimelineViewModel @Inject constructor(
+    userRepository: UserRepository,
+    private val topicRepository: TopicRepository,
+    private val messageRepository: MessageRepository,
+    private val storagePathUseCase: StoragePathUseCase,
+    private val sendFileMessageUseCase: SendFileMessageUseCases,
+    @param:ApplicationContext private val context: Context,
+) : ViewModel() {
+  fun loadTopic(topicId: TopicId) {
+  _topicId.value = topicId
+  }
+}
+
+```
+
+是通过 UI LaunchedEffect 传递的，是最佳实践吗？
+
+{% capture body %}
+<div markdown="1">
+通过 LaunchedEffect 在 UI 层接收参数再传给 ViewModel，确实不是最佳实践。
+这样做有几个缺点：
+- UI 与业务逻辑耦合：UI 层变成了“中转站”，不仅要负责渲染，还要负责把路由参数“搬运”给 ViewModel。
+- 生命周期/重绘隐患：LaunchedEffect 会在 Composable 首次进入树时执行，虽然能用，但容易因为重绘（Recomposition）或参数变化引发不必要的二次加载。
+- 代码冗余：NavHost、Screen、ViewModel 三者都在传递同一个 topicId。
+
+🏆 最佳实践：使用 SavedStateHandle
+Android 官方（特别是在使用 Navigation Compose 2.8.0+ 的类型安全路由时）推荐的实践是：让 ViewModel 直接从 SavedStateHandle 中读取路由参数。
+Hilt 会自动将包含路由参数的 SavedStateHandle 注入到 ViewModel 中，你完全不需要在 Composable 里手动传递参数。
+
+1. 修改 ViewModel（核心变化）
+   在 ViewModel 中注入 SavedStateHandle，并使用 savedStateHandle.toRoute<T>() 直接解析出路由对象：
+
+   ```kotlin
+    import androidx.lifecycle.SavedStateHandle
+    import androidx.navigation.toRoute
+
+    @HiltViewModel
+    class TimelineViewModel @Inject constructor(
+        savedStateHandle: SavedStateHandle, // 1. 注入 SavedStateHandle
+        userRepository: UserRepository,
+        private val topicRepository: TopicRepository,
+        private val messageRepository: MessageRepository,
+        private val storagePathUseCase: StoragePathUseCase,
+        private val sendFileMessageUseCase: SendFileMessageUseCases,
+        @param:ApplicationContext private val context: Context,
+    ) : ViewModel() {
+
+        // 2. 直接从 SavedStateHandle 提取类型安全的 Route 对象！
+        private val route: MainScreen.TopicTimeline = savedStateHandle.toRoute()
+        val topicId: TopicId = route.topicId
+
+        init {
+            // 3. 在 init 块中直接加载数据，无需等待 UI 的 LaunchedEffect
+            loadTopic(topicId)
+        }
+   ```
+
+2. 精简 Composable (TimelineScreen)
+   UI 层现在变得非常干净，完全不需要关心 topicId 是什么，也不需要 LaunchedEffect：
+
+3. 精简 NavHost 路由配置
+   在 NavHost 中，你甚至不需要手动 backStackEntry.toRoute() 并传给 Screen 了：
+
+🌟 为什么这是最佳实践？（优势总结）
+
+- 绝对解耦：
+  NavHost 不需要拆解参数。
+  Screen（UI）不需要知道路由参数的存在。
+  ViewModel 依靠 Hilt 自动获取它所需要的数据。
+
+- 抗系统杀进程（Process Death）：
+  SavedStateHandle 中的数据是由系统保存的。如果应用在后台因为内存不足被系统杀掉，用户重新打开时，SavedStateHandle 依然能自动恢复这个 topicId，而不需要重新通过 UI 传递。
+
+- 性能更好，无副作用：
+  移除了 LaunchedEffect，避免了 Compose 首次绘制时的异步“闪烁”或不必要的协程调度，数据在 ViewModel 初始化（init）时就已经开始加载了。
+
+- 单向数据流更纯粹：
+  路由参数作为 ViewModel 的初始输入，ViewModel 产出 UI State，UI 只做纯粹的展示。
+
+
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="Gemini 3.6 flash"
+   open=false
+   content=body
+%}
+
+## Q: ViewModel 生命周期是什么？是导航到页面的那一刻开始，页面完全弹栈时结束吗？是怎么确定的？
+
+{% capture body %}
+<div markdown="1">
+你的理解完全正确！
+它的生命周期确实是：从导航到这个界面的那一刻（入栈）开始，到这个界面完全弹栈（Pop）时结束。
+
+我们可以把 `TimelineViewModel` 的生命周期分为以下几个阶段：
+
+1. 创建（Birth）
+* **触发时机**：当你调用 `navController.navigate(MainScreen.TopicTimeline(...))`。
+* **发生什么**：
+  1. Navigation 在返回栈中压入一个新的 `NavBackStackEntry`。
+  2. Compose 开始渲染 `TimelineScreen`。
+  3. 执行到 `hiltViewModel()`，发现这个 `NavBackStackEntry` 里还没有 `TimelineViewModel`。
+  4. Hilt 实例化 `TimelineViewModel`（执行 `init` 代码块，从 `SavedStateHandle` 读取参数）。
+
+2. 存活与暂停（Life & Pause）
+* **场景 A：屏幕旋转 / 配置变更**
+  * `NavBackStackEntry` 会被系统保留，因此 `TimelineViewModel` **不会**被销毁，数据依然保留。
+* **场景 B：跳转到下一个界面（例如点击进入 `TopicSettings`）**
+  * 此时 `TopicTimeline` 处于**栈顶下方**（被覆盖了）。
+  * **注意**：此时 `TimelineViewModel` **依然存活**，并没有被销毁！因为它的 `NavBackStackEntry` 还在返回栈里。当你从设置页返回时，TimelineViewModel 不需要重新创建，数据依然在。
+
+3. 销毁（Death）
+* **触发时机**：
+  1. 用户点击返回键，或者代码执行了 `navController.popBackStack()`。
+  2. 使用 `popUpTo` 导航，导致 `TopicTimeline` 被清理出了返回栈。
+* **发生什么**：
+  1. 这个 `NavBackStackEntry` 从返回栈中被永久移除并销毁。
+  2. `NavBackStackEntry` 会通知它持有的 `ViewModelStore` 进行清理。
+  3. `TimelineViewModel.onCleared()` 被调用，ViewModel 彻底释放内存。
+
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="Gemini 3.6 flash response"
+   open=false
+   content=body
+%}
+
+
+## Q: currentUserId 是应该通过导航传递，还是通过在 viewModel 内 observe flow?
+
+{% capture body %}
+<div markdown="1">
+**对于“当前登录用户的 `userId`”，强烈建议在 ViewModel 中通过 `UserRepository` / `SessionManager` 监听流（如你的第二种方案），而不是作为导航参数传递。**
+
+只有当 `userId` 代表**“目标用户/其他人”**（例如查看“张三的个人主页”）时，才应该作为导航参数传递。
+
+下面是详细的原因分析和最佳实践说明：
+
+---
+
+一、为什么不建议将“当前用户 ID”放在导航参数中？
+
+1. **违背单一真实数据源 (Single Source of Truth - SSOT)**
+   用户登录状态、Session 信息的控制权应该属于 `UserRepository` 或 `AuthManager`。如果把 `userId` 传进 Route，导航栈（BackStack）就会持有这个状态。
+2. **状态过期/不一致问题 (Stale Data)**
+   如果在深层页面中，用户在后台退出了登录、Token 过期，或者切换了账号：
+   * **导航参数方案**：导航栈里的旧页面依然保存着旧的 `userId`，可能会导致用旧 ID 发起请求或展示脏数据。
+   * **流监听方案**：`UserRepository` 中的 Flow 一旦发出 `null` 或新 `userId`，所有 ViewModel 会自动响应（例如清空数据或触发重定向）。
+3. **路由污染 (Route Pollution)**
+   如果几乎每个页面（Home、Timeline、Settings 等）都需要 `userId`，你就必须在每个 Route 里都加上 `userId` 参数。这会让 Route 定义变得非常冗余且难以维护。
+
+
+二、最佳实践方案
+
+1. 分工明确
+* **导航参数 (Route)**：只传递**页面独有**的、**定位资源**所需的参数（如 `topicId`, `articleId`, `targetUserId`）。
+* **ViewModel / Repository**：负责获取全局的**上下文/状态**（如 `currentUserId`, `networkStatus`, `themeMode`）。
+
+
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="Gemini 3.6 flash"
+   open=false
+   content=body
+%}
+
+## Q: 如果一个 Screen 下面，两个 viewModel 需要互操作，或者 Screen 层面要调用子组件 ViewModel 的操作，该咋做？
+
+最简单的方法，还是把 **Screen 当做多个 ViewModel 的协调器**。
+
+如果需要在 ViewModel 之间做一些互操作，那么可以这么做：
+1. 在 ScreenRoute (smart 组件) 里直接注入 2 个 viewModel: Screen(viewModelA, viewModelB)
+2. 利用已有的两个 viewModel，写好交互操作的 action, 传入到需要的地方
+3. 关键点来了：将 2 个 viewModel 对应的 ScreenRoute, 通过 Lambda 函数传给 ScreenContent (dumb 组件)，这种方式，也就保证了 ScreenContent 还是可以方便 preview 的！
+
+```kotlin
+@Composable
+fun TopicLogScreen(
+    ...
+    timelineViewModel: TimelineViewModel = hiltViewModel(),
+    composerViewModel: MessageComposerViewModel = hiltViewModel(),
+) {
+
+    val focusManager = LocalFocusManager.current
+
+    val handleComposerDismiss = { // 互操作
+        focusManager.clearFocus()
+        composerViewModel.clearInputMode()
+    }
+
+    TopicLogContent(
+        ...
+        // ViewModel 对应的组件，这里通过 lambda 传递
+        timelineSection = {
+            TimelineScreen(
+                // 传递互操作
+                onTapOutside = handleComposerDismiss,
+                onDragList = handleComposerDismiss,
+                timelineViewModel = timelineViewModel,
+            )
+        },
+        composerSection = {
+            MessageComposer(
+                onNavigateBack = onNavigateBack,
+                viewModel = composerViewModel,
+            )
+        },
+        handleComposerDismiss = handleComposerDismiss
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TopicLogContent(
+    ...
+    // 这个 lambda 同样可以接受参数, 所以也可以接受来自 Content 部分的内容
+    timelineSection: @Composable () -> Unit,
+    composerSection: @Composable () -> Unit,
+    // 传递互操作
+    handleComposerDismiss: () -> Unit,
+) {
+
+  Column() {
+    Box(
+      modifier = modifier
+          .weight(1f)
+          .pointerInput(Unit) {
+              detectTapGestures {
+                  handleComposerDismiss()
+              }
+          }) {
+      timelineSection()
+    }
+    composerSection()
+  }
+}
+```
