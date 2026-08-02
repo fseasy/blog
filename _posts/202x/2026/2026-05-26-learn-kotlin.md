@@ -274,3 +274,119 @@ class MediaFileProcessWorker @AssistedInject constructor(
 2. `::` 引用
 
 `.` 去引用函数，在 Kotlin 里是语法错误！
+
+## Q: 捕获 sqldelight 创建 flow 时异常，究竟该用 try-catch 还是再包一层 flow?
+
+原代码：
+
+```Kotlin
+    override fun observeTopicOrNull(topicId: TopicId): Flow<Topic?> =
+        database.topicSelectQueries.getTopicById(topicId)
+            .asFlow()
+            .mapToOneOrNull(dispatcher)
+            .map { it?.toDomain() }
+            .catch { e ->
+                Timber.w(e, "No Topic found for id=${topicId}, emit null")
+                emit(null)
+            }
+```
+
+这个 `Flow.catch` 不能捕获所有的异常，遗漏了：
+
+1. `database.topicSelectQueries.getTopicById(topicId).asFlow()` 同步创建 flow 过程中的异常
+2. `CancellationException` 自动抛出该异常，符合协程规范
+
+为了 100% 稳定，我们要把同步构建的异常捕获，该怎么做？ Gemini 3.6 flash 和 Grok 给出了不同的意见：
+
+{% capture body %}
+<div markdown="1">
+
+```kotlin
+override fun observeTopicPreference(
+    userId: UserId,
+    topicId: TopicId,
+): Flow<TopicPreference?> = flow {
+    // 将 getPreference 的调用移到 flow 内部，延迟到 collect 时执行
+    val queryFlow = database.topicSelectQueries
+        .getPreference(topic_id = topicId, user_id = userId)
+        .asFlow()
+        .mapToOneOrNull(dispatcher)
+        .map { it?.toDomain() }
+    
+    emitAll(queryFlow)
+}.catch { e ->
+    Timber.i(e, "Observe TopicPersonalState failed on id=${topicId}, emit null")
+    emit(null)
+}
+```
+
+思路就是包一层，同步阶段的异常也成 flow 的异常了，可以被 `Flow.catch` 捕获了。
+
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="Gemini 3.6 flash: 用 flow 包裹一层"
+   open=false
+   content=body
+%}
+
+{% capture body %}
+<div markdown="1">
+
+```kotlin
+override fun observeTopicPreference(
+    userId: UserId,
+    topicId: TopicId,
+): Flow<TopicPreference?> {
+    return try {
+        database.topicSelectQueries.getPreference(
+            topic_id = topicId,
+            user_id = userId
+        )
+            .asFlow()
+            .mapToOneOrNull(dispatcher)
+            .map { it?.toDomain() }
+            .catch { e ->
+                Timber.i(e, "Observe TopicPreference failed on id=$topicId, emit null")
+                emit(null)
+            }
+    } catch (e: Exception) {
+        if (e is CancellationException) throw e   // 必须重新抛出
+        // 捕获「构建阶段」的同步异常（极少见）
+        Timber.i(e, "Observe TopicPreference construction failed on id=$topicId, emit null")
+        flowOf(null)          // 或者 flow { emit(null) }
+    }
+}
+```
+
+不推荐：
+
+```kotlin
+return flow {
+    try {
+        emitAll(数据库查询链路)
+    } catch (e: Exception) {
+        emit(null)
+    }
+}
+```
+
+</div>
+{% endcapture %}
+
+
+
+{% include component/fold.html
+   type="note"
+   summary="Grok: 用 try-catch 捕获，不推荐用 flow 包裹"
+   open=false
+   content=body
+%}
+
+问来问去，
+
+1. `try-catch` 最直接，没看到啥副作用，除了 2 个 catch 有点丑
+2. `flow {}` 其实有点 trick, 但它改变了构建 flow 执行的时机；性能上存疑，Grok 说下游多次 collect 时查询构建的部分会被重复执行（Flow -> StateFlow, stateIn 订阅中断、继续的时机），但 Gemini 反驳说大家都一样—重新订阅都要执行一遍监听，差别只在 Query 对象的创建，那个开销忽略不计。哈哈，看着两个交锋还挺有意思的，俺不懂，选择简单直接的吧。
+   
