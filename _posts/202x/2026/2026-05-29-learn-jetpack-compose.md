@@ -801,3 +801,143 @@ private fun TopicLogContent(
 }
 ```
 
+## Q: 事件回调的命名方式
+
+{% capture body %}
+<div markdown="1">
+```kotlin
+@Composable
+fun HomeScreen(
+onClickTopic: (TopicId) -> Unit,
+onClickAppSettings: () -> Unit,
+onClickTopicSettings: (TopicId) -> Unit,
+onCreateTopic: () -> Unit,
+modifier: Modifier = Modifier,
+viewModel: HomeViewModel = hiltViewModel(),
+)
+```
+
+我这个 action 的命名该怎么优化，我都有点迷糊了
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="Question"
+   open=true
+   content=body
+%}
+
+{% capture body %}
+<div markdown="1">
+这里的混淆主要源于两个原因：
+
+1. **命名风格不统一**：有的用了 `onClick` + 名词（如 `onClickTopic`），有的又用了 `onCreate` + 名词（如 `onCreateTopic`）。
+2. **`onCreateTopic` 语义模糊**：它读起来太像 Android 的生命周期方法（比如 `Activity.onCreate`），而不是一个用户触发的回调。
+
+在 Jetpack Compose 和 Google 官方代码库（如 *Now in Android*）中，针对事件/回调（Actions）的命名主要有两种非常规范的优化思路：
+
+---
+
+方案一：`on` + [实体/名词] + [动作/词性] （⭐️ 最推荐，IDE 最友好）
+
+这种模式将**实体名称**前置，最大的好处是：**IDE 的自动补全极其方便**。当你输入 `onTopic` 时，所有和 Topic 相关的回调都会聚在一起。
+
+| 原命名 | 优化后 | 说明 |
+| :--- | :--- | :--- |
+| `onClickTopic` | **`onTopicClick`** | 实体 `Topic` + 动作 `Click` |
+| `onClickTopicSettings` | **`onTopicSettingsClick`** | 实体 `TopicSettings` + 动作 `Click` |
+| `onCreateTopic` | **`onTopicCreate`** 或 **`onTopicCreateClick`** | 避免了像生命周期 `onCreate` |
+| `onClickAppSettings` | **`onAppSettingsClick`** | 实体 `AppSettings` + 动作 `Click` |
+
+**优化后的代码：**
+```kotlin
+@Composable
+fun HomeScreen(
+    onTopicClick: (TopicId) -> Unit,
+    onTopicSettingsClick: (TopicId) -> Unit,
+    onTopicCreate: () -> Unit,
+    onAppSettingsClick: () -> Unit,
+    modifier: Modifier = Modifier,
+)
+```
+
+---
+
+方案二：`on` + [业务意图/动词] + [名词]（表达意图更明确）
+
+如果这些回调大多数是用于**页面跳转**或**触发具体业务**的，可以用更具**业务语义**的动词（如 `Select`, `Open`, `NavigateTo`）替换掉偏低层级的 `Click`。
+
+| 原命名 | 优化后 | 说明 |
+| :--- | :--- | :--- |
+| `onClickTopic` | **`onSelectTopic`** | 表达“选择/点击了某个 Topic” |
+| `onClickTopicSettings` | **`onOpenTopicSettings`** | 表达“打开 Topic 设置” |
+| `onCreateTopic` | **`onAddTopic`** 或 **`onCreateTopic`** | 表达“新增/创建 Topic” |
+| `onClickAppSettings` | **`onOpenAppSettings`** | 表达“打开应用设置” |
+
+**优化后的代码：**
+```kotlin
+@Composable
+fun HomeScreen(
+    onSelectTopic: (TopicId) -> Unit,
+    onOpenTopicSettings: (TopicId) -> Unit,
+    onAddTopic: () -> Unit,
+    onOpenAppSettings: () -> Unit,
+    modifier: Modifier = Modifier,
+)
+```
+
+另外，如果区分 Route (stateful) 层和 Content (stateless) 层，还可以
+
+* 在 UI 组件层：推荐写 **`onTopicClick`** 或 **`onSelectTopic`**。
+* 在导航路由层：可以使用 **`onNavigateToTopic`**。
+
+在 Google 官方的 *Now in Android* 等优秀架构项目中，这两种命名其实是**上下级配合使用**的：
+
+```kotlin
+// 1. 在 NavHost (导航配置层) 声明具体的跳转动作
+NavHost(...) {
+    composable("home") {
+        HomeRoute(
+            // 这一层明确知道是要执行 Navigation
+            onNavigateToTopic = { topicId -> 
+                navController.navigate("topic/$topicId") 
+            }
+        )
+    }
+}
+
+// 2. 在 HomeRoute (中转层/容器层)
+@Composable
+fun HomeRoute(
+    onNavigateToTopic: (TopicId) -> Unit, // 上层传进来的是“跳转”
+    viewModel: HomeViewModel = hiltViewModel()
+) {
+    HomeScreen(
+        // 传递给 UI 层时，转译为 UI 事件“选择 Topic”
+        onSelectTopic = onNavigateToTopic 
+    )
+}
+
+// 3. 在 HomeScreen (纯 UI 组件层)
+@Composable
+fun HomeScreen(
+    onSelectTopic: (TopicId) -> Unit, // 纯 UI 层只关心“选择了哪个 Topic”
+    modifier: Modifier = Modifier
+) {
+    TopicItem(
+        onClick = { onSelectTopic(topic.id) }
+    )
+}
+```
+
+
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="Gemini 3.6 Flash"
+   open=false
+   content=body
+%}
