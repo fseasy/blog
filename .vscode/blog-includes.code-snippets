@@ -38,7 +38,7 @@
 			"{% include component/fold.html",
 			"   type=\"note\"",
 			"   summary=\"Notes\"",
-			"   open=false",
+			"   open=true",
 			"   content=body",
 			"%}"
 		],

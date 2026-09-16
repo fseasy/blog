@@ -43,7 +43,7 @@ tags: 资本主义 失去土地的农民 找不到工作的人
 {% include component/fold.html
    type="note"
    summary="DeepSeek 给出的现实里的时代背景：双重灾难，经济崩溃与生态浩劫"
-   open=false
+   open=true
    content=body
 %}
 
@@ -82,7 +82,7 @@ tags: 资本主义 失去土地的农民 找不到工作的人
 {% capture body %}
 <div markdown="1">
 
-1. 书名直接取自美国废奴运动者朱莉娅·沃德·豪于1862年创作的《共和国战歌 / *Battle Hymn of the Republic* / *Mine Eyes Have seen the Glory*》。其中一句歌词是：
+1. 书名直接取自《共和国战歌 / *Battle Hymn of the Republic* / *Mine Eyes Have seen the Glory*》开头部分的歌词：
 
   > Mine eyes have seen the glory of the coming of the Lord;
   > He is trampling out the vintage(n, 葡萄酒*的产地/年份*) where the grapes of wrath are stored;
@@ -91,7 +91,7 @@ tags: 资本主义 失去土地的农民 找不到工作的人
 
   斯坦贝克当时正为小说标题发愁，他的第一任妻子卡萝提出了“愤怒的葡萄”这个建议，斯坦贝克认为这是个“绝妙的书名”。
 
-2. 「葡萄」是《圣经》里反复出现的意向：爬满藤蔓的葡萄就像大地上的子民。葡萄被扔进巨大的容器中捣碎、搅拌——为了酿出香醇的葡萄美酒供富人享受；寓意着渺小的劳苦大众在资本构筑的社会熔炉里被收割和压榨[1][^1]。从这个意义上说，“愤怒的葡萄”就指代愤怒的底层人民。
+2. 「葡萄」是《圣经》里反复出现的意向：爬满藤蔓的葡萄就像大地上的子民。葡萄被扔进巨大的容器中捣碎、搅拌——为了酿出香醇的葡萄美酒供富人享受；寓意着渺小的劳苦大众在资本构筑的社会熔炉里被收割和压榨[^1]。从这个意义上说，“愤怒的葡萄”就指代愤怒的底层人民。
 
 [^1]: 杨靖 \| 葡萄为何愤怒：美国大萧条时期的文学 https://m.thepaper.cn/newsDetail_forward_2849594#1
 </div>
@@ -100,7 +100,7 @@ tags: 资本主义 失去土地的农民 找不到工作的人
 {% include component/fold.html
    type="note"
    summary="书名里「葡萄」的由来"
-   open=false
+   open=true
    content=body
 %}
 
@@ -156,6 +156,6 @@ John Steinbeck (born February 27, 1902, Salinas, California, U.S.—died Decembe
 {% include component/fold.html
    type="note"
    summary="John Steinbeck Biography (from britannica.com)"
-   open=false
+   open=true
    content=body
 %}
