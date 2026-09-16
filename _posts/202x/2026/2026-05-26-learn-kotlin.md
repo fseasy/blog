@@ -390,3 +390,18 @@ return flow {
 1. `try-catch` 最直接，没看到啥副作用，除了 2 个 catch 有点丑
 2. `flow {}` 其实有点 trick, 但它改变了构建 flow 执行的时机；性能上存疑，Grok 说下游多次 collect 时查询构建的部分会被重复执行（Flow -> StateFlow, stateIn 订阅中断、继续的时机），但 Gemini 反驳说大家都一样—重新订阅都要执行一遍监听，差别只在 Query 对象的创建，那个开销忽略不计。哈哈，看着两个交锋还挺有意思的，俺不懂，选择简单直接的吧。
    
+## 语法强化
+
+### 函数参数以 lambda 传参时，如果函数参数大于 1 个，lambda 就不能省略参数了
+
+
+```Kotlin
+fun testFun(dualProcess: (Int, Int) -> Unit) {}
+
+// Valid Example
+testFun(add = {_, _ ->})
+```
+
+- 参数数量为 0：`{}` 合法
+- 参数数量为 1：`{}` 也合法，因为那个唯一的参数会被隐式命名为 it，你不用它也没关系
+- 参数数量 ≥ 2：`{}` 不合法，必须显式写参数

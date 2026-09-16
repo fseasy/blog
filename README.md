@@ -207,6 +207,17 @@ For Fseasy blog service.
   
   - 发现 Prism 渲染的bug：`c++` 不能被正确渲染，`cpp` 可以。后续用 `cpp` 表达。
 
+## 通用的基础语法
+
+
+1. Note:
+   
+   ```markdown
+   这是一段文字，这里有一个脚注[^1]。 这里是另一段文字，带另一个脚注[^note]。
+
+   [^1]: 这是第一个脚注的内容。
+   [^note]: 这是第二个脚注的内容。
+   ```
 
 [curly_braces_tex]: https://tex.stackexchange.com/questions/123050/quick-question-about-curly-braces-not-showing-up
 
