@@ -275,6 +275,115 @@ class MediaFileProcessWorker @AssistedInject constructor(
 
 `.` 去引用函数，在 Kotlin 里是语法错误！
 
+## Smart Cast 局限性：用 when 检查了属性类型，但父对象却不能再 smart cast！
+
+Example
+
+```kotlin
+// 内容：多态类型
+sealed interface MessageContentUiModel {
+    data class Text(val text: String) : MessageContentUiModel
+    data class Image(val width: Int, val height: Int) : MessageContentUiModel
+    data class Video(...) : MessageContentUiModel
+}
+
+// 消息壳：通用字段 + 协变泛型内容
+data class MessageUiModel<out T : MessageContentUiModel>(
+    val id: MessageId,
+    val sender: MessageSenderUiModel,
+    val content: T,
+    val createdAt: Instant,
+)
+
+// 列表/通用场景下的顶层类型
+typealias AnyMessageUiModel = MessageUiModel<MessageContentUiModel>
+
+// 业务下游：严格要求必须是图片消息
+data class ImageFullScreenUiModel(
+    val message: MessageUiModel<MessageContentUiModel.Image>,
+    val path: AbsolutePathModel,
+)
+```
+
+```kotlin
+
+// 要放进容器，必须得用 AnyMessageUiModel 做类型擦除
+val messages: List<AnyMessageUiModel> = listOf(...)
+
+// 渲染时，各个函数要求接受具体的类型，这时 AnyMessageUiModel 不能再自动 narrow
+@Composable 
+fun MessageBubble(message: AnyMessageUiModel) {
+
+when (val content = message.content) {
+    is MessageContentUiModel.Image -> {
+        //  编译器成功把 content 推导为 MessageContentUiModel.Image
+        println(content.width)
+
+        // ❌ 编译报错！Type mismatch:
+        // Required: MessageUiModel<MessageContentUiModel.Image>
+        // Found: AnyMessageUiModel 
+        //      => content smart cast 成功，但是父类型不能转换，
+        //         永远是传入的 AnyMessageUiModel
+        val fullScreen = ImageFullScreenUiModel(
+            message = message, // 这里报错！
+            path = path
+        )
+    }
+}
+}
+```
+
+既然 message 是一个不可变对象（所有属性都是 val），而它的 content 已经证实是 Image 了，为什么编译器不能顺理成章地将 message 逆向推导为 MessageUiModel<Image>？
+
+{% capture body %}
+<div markdown="1">
+
+- 局部流敏感分析（Flow-Sensitive Analysis）：Kotlin 的智能类型转换是针对被检查的独立局部变量生效的。当执行 content is Image 时，编译器只在当前作用域内收窄了 content 的类型符号表。
+- 缺乏“跨属性逆向推导”（No Cross-Property Reverse Smart Cast）：编译器不会因为内部某个 val 属性的类型收窄，就自动推导其封闭类（Enclosing Class）的泛型实参。
+- 泛型擦除与不可逆性：从面向对象类型系统来看，`MessageUiModel<Image>` 是 `MessageUiModel<MessageContentUiModel>` 的子类型（由于 out 协变）。Kotlin 现存规则不会因为子对象的属性匹配而自动将父引用向下转型（Downcast）。
+
+</div>
+{% endcapture %}
+
+{% include component/fold.html
+   type="note"
+   summary="Smart Cast 局限"
+   open=true
+   content=body
+%}
+
+解决方法：
+
+1. 把 `MessageUiModel` 改为 sealed interface... 这样能解决问题，但是冗余代码一大堆
+2. 没办法，强转
+   
+   ```
+   @Suppress("UNCHECKED_CAST")
+   fun <T : MessageContentUiModel> AnyMessageUiModel.narrow(): MessageUiModel<T> =
+    this as MessageUiModel<T>
+   ```
+
+   但担心 typo 导致莫名其妙崩掉…
+
+3. 不要 `MessageUiModel` 了，拆分成 2 个小类型：上述问题能解决，但传参麻烦。
+
+最后选了强转，寄希望于测试能发现问题吧… 好在 Kotlin 有 target-typing, 不用强制写 `<T>`，所以 typo 的问题概率还是很低的。
+
+
+```kotlin
+when (val content = item.message.content) {
+    is MessageContentUiModel.Image -> {
+        // 利用 target-typing 目标类型推导，无需显式写出泛型参数
+        val fullScreen = ImageFullScreenUiModel(
+            message = item.message.narrow(),
+            path = path
+        )
+        ImageBubble(message = item.message.narrow())
+    }
+    ...
+}
+```
+
 ## Q: 捕获 sqldelight 创建 flow 时异常，究竟该用 try-catch 还是再包一层 flow?
 
 原代码：
