@@ -1,6 +1,6 @@
 ---
 layout: post
-title: EarthBound (Mother 2) 游玩记录
+title: 「EarthBound (Mother 2)」 游玩记录
 date: 2026-05-23
 categories: WLR  
 tags: EarthBound Mother-2 有意思的游戏 lunamos

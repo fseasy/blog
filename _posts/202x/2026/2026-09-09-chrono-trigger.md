@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Chrono Trigger 游玩记录
+title: 「Chrono Trigger」 游玩记录
 date: 2026-09-09
 categories: WLR
 tags: 有意思的游戏 lunamos
