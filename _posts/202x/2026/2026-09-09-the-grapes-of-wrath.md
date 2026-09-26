@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 听《愤怒的葡萄 The Grapes of Wrath》记录
+title: 《愤怒的葡萄 The Grapes of Wrath》记录
 date: 2026-09-09
 categories: WLR
 tags: 资本主义 失去土地的农民 找不到工作的人
