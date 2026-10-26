@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 挺《明朝那些事儿》
+title: 听《明朝那些事儿》
 date: 2026-10-10
 categories: WLR
 tags:

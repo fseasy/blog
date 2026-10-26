@@ -57,6 +57,41 @@ var count by remember { mutableStateOf(0) }
 
 而  `{ mutableStateOf(0) }` 就是尾随 Lambda, remember 的第一个参数，省略了圆括号。
 
+## 中缀函数 infix
+
+infix 是 Kotlin 的一个函数修饰符，作用是：允许这个函数用中缀形式调用，即省略点号和括号。
+
+infix 只是一种语法糖（调用风格），让代码更像自然语言。如常见的 ：
+
+```
+// 1. to —— 构造 Pair
+val p = "key" to 1            // 等价 "key".to(1)
+
+// 2. until / downTo / step —— 区间
+for (i in 0 until 10) {}      // 0.until(10)
+for (i in 10 downTo 0) {}     // 10.downTo(0)
+for (i in 0..10 step 2) {}    // (0..10).step(2)
+
+// 3. and / or / xor —— 位运算
+val m = a and b
+val n = x or y
+
+// 4. shl / shr / ushr —— 移位
+val v = 1 shl 3
+
+// 5. in / !in —— 包含判断（其实是 operator，非 infix）
+if (x in list) {}
+
+// 6. matches —— 正则
+val ok = "abc" matches Regex("a.*")
+
+// 7. Modifier.then
+modifier then element
+```
+
+挺有意思的。
+
+
 ## 带接收者的函数类型 (Function literal with receiver )
 
 ```Kotlin
